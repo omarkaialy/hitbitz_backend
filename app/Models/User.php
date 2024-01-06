@@ -43,5 +43,20 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-    ];
+    ];public function quizzes()
+    {
+        return $this->belongsToMany(Quiz::class, 'user_quiz')
+            ->withPivot('completed')
+            ->withTimestamps();
+    }
+    public function friends()
+{
+    return $this->belongsToMany(User::class, 'friendships', 'user_id', 'friend_id')
+                ->wherePivot('accepted', true);
+}
+public function roadmaps()
+    {
+        return $this->belongsToMany(Roadmap::class);
+    }
+
 }
