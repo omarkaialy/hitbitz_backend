@@ -24,7 +24,7 @@ class AuthController extends Controller
             $token = Auth::attempt(['user_name' => $req->userName, 'password' => $req->password]);
             if ( $token) {
                 $user = Auth::user();
-                return ApiResponse::success([
+                 return ApiResponse::success([
                     'user' => $user,
                     'access_token' => $token
                 ], 200);
