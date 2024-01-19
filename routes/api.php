@@ -1,8 +1,11 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use App\Helpers\ApiResponse;
 use App\Http\Controllers\Auth\AuthController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,8 +20,16 @@ use App\Http\Controllers\Auth\AuthController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::resource('types', App\Http\Controllers\TypeController::class);
-
-Route::post('/login',[AuthController::class,'login']);
-Route::post('/logout',[AuthController::class,'logout']);
-Route::post('/register',[AuthController::class,'register']);
+Route::group(['prefix' => 'admin'], function () {
+    Route::post('/login', [AuthController::class, 'loginAdmin']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
+Route::group(['prefix' => 'user'], function () {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/register', [AuthController::class, 'register']);
+});
+Route::get('/migrate', function () {
+    Artisan::call('migrate:fresh --seed');
+    return (ApiResponse::success(null, 200));
+});

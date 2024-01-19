@@ -22,15 +22,14 @@ class AuthController extends Controller
             ]);
 
             $token = Auth::attempt(['user_name' => $req->userName, 'password' => $req->password]);
-            if ( $token) {
+            if ($token) {
                 $user = Auth::user();
-                 return ApiResponse::success([
+                return ApiResponse::success([
                     'user' => $user,
                     'access_token' => $token
                 ], 200);
-            }
-            else{
-                return ApiResponse::error(401,'Please Check Your Password And Try Again' );
+            } else {
+                return ApiResponse::error(401, 'Please Check Your Password And Try Again');
             }
         } catch (\Throwable$e) {
 
@@ -39,7 +38,32 @@ class AuthController extends Controller
         }
 
     }
+    public function loginAdmin(Request $req){
+        try {  $req->validate(['userName' => 'required|alpha_dash|min:4|exists:users,user_name',
+            'password' => 'required|min:6'
+        ]);
 
+            $token = Auth::attempt(['user_name' => $req->userName, 'password' => $req->password]);
+            if ($token) {
+                $user = Auth::user();
+                if($user->hasRole(['super_admin'])) {
+                    return ApiResponse::success([
+                        'user' => $user,
+                        'access_token' => $token
+                    ], 200);
+                }
+                else {
+                    return ApiResponse::error(401, 'Please Check Your Password And Try Again');
+                }            } else {
+                return ApiResponse::error(401, 'Please Check Your Password And Try Again');
+            }
+
+
+        }catch(\Throwable $throwable){
+            return ApiResponse::error(401, 'Please Check Your UserName');
+        }
+
+    }
     public function logout()
     {
         try {
@@ -67,13 +91,13 @@ class AuthController extends Controller
             $user->password = Hash::make($req->password);
             $user->email = $req->email;
             $user->birth_date = date($req->birthDate);
-
+            $user->assignRole('user');
             $res = $user->save();
             $token = Auth::attempt(['user_name' => $req->userName, 'password' => $req->password]);
             if (!$token) {
                 return ApiResponse::error('unAuthorized', null, 401);
             } else {
-                return ApiResponse::success(['user' => $user, 'access_token' => $token], 'success', 200);
+                return ApiResponse::success(['user' => $user, 'access_token' => $token], 200, 'user signed successfully');
             }
 
         } catch (\Throwable $exception) {
