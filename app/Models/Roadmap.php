@@ -8,15 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class Roadmap extends Model
 {
     use HasFactory;
-    public function roadmappable()
+
+
+
+    public function subcategory()
     {
-        return $this->morphTo();
+        return $this->belongsTo(Subcategory::class);
     }
 
     public function levels()
     {
         return $this->hasMany(Level::class);
     }
+
     public function users()
     {
         return $this->belongsToMany(User::class);

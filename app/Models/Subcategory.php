@@ -12,8 +12,8 @@ class Subcategory extends Model
     {
         return $this->belongsTo(Category::class);
     }
-    public function roadmaps()
+    public function roadmap()
     {
-        return $this->morphMany(Roadmap::class, 'roadmappable');
+        return $this->hasMany(Roadmap::class);
     }
 }
