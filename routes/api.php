@@ -28,6 +28,10 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/verify',[AuthController::class,'verifyEmail']);
+    Route::post('/resend',[AuthController::class,'resendOtp']);
+    Route::post('/forgetPassword',[AuthController::class,'forgetPassword']);
+    Route::post('/resetPassword',[AuthController::class,'resetPassword']);
 });
 Route::get('/migrate', function () {
     Artisan::call('migrate:fresh --seed');

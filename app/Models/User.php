@@ -9,9 +9,9 @@ use Illuminate\Notifications\Notifiable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject,MustVerifyEmail
 {
-    use  HasFactory, Notifiable ,HasRoles;
+    use  HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -48,25 +48,31 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->getKey();
     }
+
     public function getJWTCustomClaims()
     {
         return [];
     }
+
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-    ];public function quizzes()
+    ];
+
+    public function quizzes()
     {
         return $this->belongsToMany(Quiz::class, 'user_quiz')
             ->withPivot('completed')
             ->withTimestamps();
     }
+
     public function friends()
-{
-    return $this->belongsToMany(User::class, 'friendships', 'user_id', 'friend_id')
-                ->wherePivot('accepted', true);
-}
-public function roadmaps()
+    {
+        return $this->belongsToMany(User::class, 'friendships', 'user_id', 'friend_id')
+            ->wherePivot('accepted', true);
+    }
+
+    public function roadmap()
     {
         return $this->belongsToMany(Roadmap::class);
     }

@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\SendOtp;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Ichtrojan\Otp\Otp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Throwable;
 
 class AuthController extends Controller
 
@@ -31,45 +35,49 @@ class AuthController extends Controller
             } else {
                 return ApiResponse::error(401, 'Please Check Your Password And Try Again');
             }
-        } catch (\Throwable$e) {
+        } catch (Throwable$e) {
 
             return ApiResponse::error(401, $e->getMessage());
 
         }
 
     }
-    public function loginAdmin(Request $req){
-        try {  $req->validate(['userName' => 'required|alpha_dash|min:4|exists:users,user_name',
-            'password' => 'required|min:6'
-        ]);
+
+    public function loginAdmin(Request $req)
+    {
+        try {
+            $req->validate(['userName' => 'required|alpha_dash|min:4|exists:users,user_name',
+                'password' => 'required|min:6'
+            ]);
 
             $token = Auth::attempt(['user_name' => $req->userName, 'password' => $req->password]);
             if ($token) {
                 $user = Auth::user();
-                if($user->hasRole(['super_admin'])) {
+                if ($user->hasRole(['super_admin'])) {
                     return ApiResponse::success([
                         'user' => $user,
                         'access_token' => $token
                     ], 200);
-                }
-                else {
+                } else {
                     return ApiResponse::error(401, 'Please Check Your Password And Try Again');
-                }            } else {
+                }
+            } else {
                 return ApiResponse::error(401, 'Please Check Your Password And Try Again');
             }
 
 
-        }catch(\Throwable $throwable){
+        } catch (Throwable $throwable) {
             return ApiResponse::error(401, 'Please Check Your UserName');
         }
 
     }
+
     public function logout()
     {
         try {
             Auth::logout();
             return ApiResponse::success(null, 200);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
 
             return ApiResponse::error(401, $e->getMessage());
         }
@@ -92,16 +100,75 @@ class AuthController extends Controller
             $user->email = $req->email;
             $user->birth_date = date($req->birthDate);
             $user->assignRole('user');
-            $res = $user->save();
-            $token = Auth::attempt(['user_name' => $req->userName, 'password' => $req->password]);
+            $user->save();
+            $token = Auth::attempt(['user_name' => $user->user_name, 'password' => $req->password]);
             if (!$token) {
-                return ApiResponse::error('unAuthorized', null, 401);
+                return ApiResponse::error(401, 'UnAuthorized');
             } else {
-                return ApiResponse::success(['user' => $user, 'access_token' => $token], 200, 'user signed successfully');
+                event(new SendOtp($req->email));
+                return ApiResponse::success(['user' => $user, 'access_token' => $token], 200, 'Otp Send Successfully');
             }
 
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             return ApiResponse::error(426, $exception->getMessage(), null);
         }
     }
+
+    public function verifyEmail(Request $request)
+    {
+        $request->validate(['code' => 'required|min:4|max:4']);
+
+        $user = Auth::user();
+
+        $otp = (new Otp)->validate($user->email, $request->code);
+        if ($otp->status == false) {
+            return ApiResponse::error(401, $otp->message);
+
+        } else {
+            $user->email_verified_at = now();
+            $user->save();
+            return ApiResponse::success(null, 200, 'Successfully Verified');
+        }
+
+    }
+
+    public function forgetPassword(Request $request)
+    {
+        $validatedData = Validator::make($request->all(), ['email' => 'required|exists:users,users.email']);
+        if ($validatedData->valid()) {
+            event(new SendOtp($request->email, true));
+            return ApiResponse::success(null, 200, 'Otp Send');
+        } else {
+            return ApiResponse::error(425, 'User Not Found');
+        }
+
+
+    }
+
+    public function resendOtp(Request $request)
+    {
+        event(new SendOtp($request->email));
+return ApiResponse::success(null,200,'Otp Snet Successfully');
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $validated = Validator::make($request->all(), ['newPassword' => 'required|min:6', 'code' => 'required|min:4|max:4']);
+        if ($validated->valid()) {
+            $otp = (new Otp)->validate($request->email, $request->code);
+            if ($otp->status == true) {
+                $user = User::where('email', $request->email)->first();
+                $user->password = Hash::make($request->newPassword);
+                $user->save();
+                return ApiResponse::success(null, 200, 'Password Reseted Successfully');
+            } else {
+
+                return ApiResponse::error(425, 'Wrong Code Please Try Again');
+            }
+
+        } else {
+            return ApiResponse::error(425, 'Please  Validate Your Inputs');
+        }
+    }
+
 }
