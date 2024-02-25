@@ -23,6 +23,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'admin'], function () {
     Route::post('/login', [AuthController::class, 'loginAdmin']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/roadmaps/store', [\App\Http\Controllers\RoadmapController::class, 'store']);
+    Route::post('/categories/store', [\App\Http\Controllers\CategoryController::class, 'store']);
+    Route::post('/subcategories/store', [\App\Http\Controllers\SubcategoryController::class, 'store']);
+
 });
 Route::group(['prefix' => 'user'], function () {
     Route::post('/login', [AuthController::class, 'login']);
@@ -32,6 +36,12 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('/resend',[AuthController::class,'resendOtp']);
     Route::post('/forgetPassword',[AuthController::class,'forgetPassword']);
     Route::post('/resetPassword',[AuthController::class,'resetPassword']);
+});
+
+Route::group(['prefix' => 'user'], function () {
+    Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index']);
+    Route::get('/roadmaps', [\App\Http\Controllers\RoadmapController::class, 'index']);
+
 });
 Route::get('/migrate', function () {
     Artisan::call('migrate:fresh --seed');

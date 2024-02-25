@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ApiResponse;
+use App\Models\Subcategory;
 use Illuminate\Http\Request;
 
 class SubcategoryController extends Controller
@@ -27,7 +29,11 @@ class SubcategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $subCategory=new Subcategory();
+        $subCategory->name=$request->name;
+        $subCategory->category()->associate($request->categoryId);
+        $subCategory->save();
+        return ApiResponse::success($subCategory,200,'Created Successfully');
     }
 
     /**

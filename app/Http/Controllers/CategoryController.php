@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ApiResponse;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -11,7 +13,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::get();
+        return ApiResponse::success($categories, 200, 'This Is Categories');
     }
 
     /**
@@ -27,7 +30,11 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $category = new Category();
+        $category->name=$request->name;
+        $category->type()->associate($request->typeId);
+        $category->save();
+return ApiResponse::success($category,200,'Category Created Successfully');
     }
 
     /**

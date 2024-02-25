@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ApiResponse;
+use App\Models\Roadmap;
 use Illuminate\Http\Request;
 
 class RoadmapController extends Controller
@@ -9,9 +11,11 @@ class RoadmapController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+
+       $roadmaps= Roadmap::all();
+       return ApiResponse::success($roadmaps,200,'This Is All Roadmaps');
     }
 
     /**
@@ -27,8 +31,16 @@ class RoadmapController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate(['name'=>'required|min:4', 'subcategoryId'=>'required','description'=>'required|min:25']);
+ $roadmap = new Roadmap();
+ $roadmap->name= $request->name;
+ $roadmap->description= $request->description;
+ $roadmap->subcategory()->associate($request->subcategoryId);
+ $roadmap->rate= 0;
+
+ $roadmap->save();
+
+    return ApiResponse::success($roadmap ,200,'Roadmap Created Successfully');}
 
     /**
      * Display the specified resource.

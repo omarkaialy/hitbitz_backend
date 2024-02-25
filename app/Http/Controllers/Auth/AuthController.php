@@ -28,10 +28,8 @@ class AuthController extends Controller
             $token = Auth::attempt(['user_name' => $req->userName, 'password' => $req->password]);
             if ($token) {
                 $user = Auth::user();
-                return ApiResponse::success([
-                    'user' => $user,
-                    'access_token' => $token
-                ], 200);
+                $user->access_token = $token;
+                return ApiResponse::success($user, 200);
             } else {
                 return ApiResponse::error(401, 'Please Check Your Password And Try Again');
             }
@@ -53,11 +51,10 @@ class AuthController extends Controller
             $token = Auth::attempt(['user_name' => $req->userName, 'password' => $req->password]);
             if ($token) {
                 $user = Auth::user();
+                $user->access_token=$token;
                 if ($user->hasRole(['super_admin'])) {
-                    return ApiResponse::success([
-                        'user' => $user,
-                        'access_token' => $token
-                    ], 200);
+                    return ApiResponse::success( $user,
+                         200);
                 } else {
                     return ApiResponse::error(401, 'Please Check Your Password And Try Again');
                 }
@@ -105,8 +102,9 @@ class AuthController extends Controller
             if (!$token) {
                 return ApiResponse::error(401, 'UnAuthorized');
             } else {
-                event(new SendOtp($req->email));
-                return ApiResponse::success(['user' => $user, 'access_token' => $token], 200, 'Otp Send Successfully');
+//                event(new SendOtp($req->email));
+               $user->access_token=$token;
+                return ApiResponse::success($user, 200, 'Otp Send Successfully');
             }
 
         } catch (Throwable $exception) {
