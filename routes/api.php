@@ -21,11 +21,24 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::group(['prefix' => 'admin'], function () {
+    Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index']);
+    Route::get('/roadmaps', [\App\Http\Controllers\RoadmapController::class, 'index']);
+    Route::get('/levels', [\App\Http\Controllers\LevelController::class, 'index']);
+
+});Route::group(['prefix' => 'admin'], function () {
     Route::post('/login', [AuthController::class, 'loginAdmin']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/roadmaps/store', [\App\Http\Controllers\RoadmapController::class, 'store']);
+    Route::delete('/roadmaps/{roadmap}', [\App\Http\Controllers\RoadmapController::class, 'destroy']);
     Route::post('/categories/store', [\App\Http\Controllers\CategoryController::class, 'store']);
+    Route::delete('/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'destroy']);
     Route::post('/subcategories/store', [\App\Http\Controllers\SubcategoryController::class, 'store']);
+    Route::delete('/subcategories/{subcategory}', [\App\Http\Controllers\SubcategoryController::class, 'destroy']);
+    Route::post('/levels/store', [\App\Http\Controllers\LevelController::class, 'store']);
+    Route::delete('/levels/{level}', [\App\Http\Controllers\LevelController::class, 'destroy']);
+    Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index']);
+    Route::get('/roadmaps', [\App\Http\Controllers\RoadmapController::class, 'index']);
+    Route::get('/levels', [\App\Http\Controllers\LevelController::class, 'index']);
 
 });
 Route::group(['prefix' => 'user'], function () {
@@ -41,6 +54,7 @@ Route::group(['prefix' => 'user'], function () {
 Route::group(['prefix' => 'user'], function () {
     Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index']);
     Route::get('/roadmaps', [\App\Http\Controllers\RoadmapController::class, 'index']);
+    Route::get('/levels', [\App\Http\Controllers\LevelController::class, 'index']);
 
 });
 Route::get('/migrate', function () {

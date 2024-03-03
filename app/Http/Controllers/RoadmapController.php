@@ -69,8 +69,12 @@ class RoadmapController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Roadmap $roadmap)
     {
+
+        $roadmap->delete();
+        return ApiResponse::success(null,200,'deleted');
+
         //
     }
 }

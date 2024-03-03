@@ -10,8 +10,7 @@ return new class extends Migration
     {
         Schema::create('levels', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('roadmap_id');
-            $table->foreign('roadmap_id')->references('id')->on('roadmaps')->onDelete('cascade');
+            $table->foreignId('roadmap_id')->constrained('roadmaps')->on('roadmaps');
             $table->string('name');
             // Add other fields related to levels
 

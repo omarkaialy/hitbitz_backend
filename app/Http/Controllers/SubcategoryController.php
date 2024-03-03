@@ -63,8 +63,10 @@ class SubcategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Subcategory $subcategory)
     {
-        //
+        $subcategory->delete();
+        return ApiResponse::success(null,200,'deleted');
+
     }
 }

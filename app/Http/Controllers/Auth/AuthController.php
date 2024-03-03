@@ -53,7 +53,7 @@ class AuthController extends Controller
                 $user = Auth::user();
                 $user->access_token=$token;
                 if ($user->hasRole(['super_admin'])) {
-                    return ApiResponse::success( $user,
+                    return ApiResponse::success( $user  ,
                          200);
                 } else {
                     return ApiResponse::error(401, 'Please Check Your Password And Try Again');

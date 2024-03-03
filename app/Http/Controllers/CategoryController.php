@@ -64,8 +64,10 @@ return ApiResponse::success($category,200,'Category Created Successfully');
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return ApiResponse::success(null,200,'deleted');
+
     }
 }
