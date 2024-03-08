@@ -41,6 +41,7 @@ class CategoryController extends Controller
         $category->type()->associate($request->typeId);
         $category->save();
         $this->imageService->storeImage($category, $request->image, 'categories');
+
         return ApiResponse::success($category, 200, 'Category Created Successfully');
     }
 
