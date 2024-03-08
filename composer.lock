@@ -4,8 +4,79 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "89ccf64ef1d5ff700566057fbe565c3e",
+    "content-hash": "543a048ef4bbf776dd069d00dc6555d7",
     "packages": [
+        {
+            "name": "bepsvpt/blurhash",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bepsvpt/blurhash.git",
+                "reference": "66d35c85ebe0ca96f2a9af2b319edaa6bc5338f2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bepsvpt/blurhash/zipball/66d35c85ebe0ca96f2a9af2b319edaa6bc5338f2",
+                "reference": "66d35c85ebe0ca96f2a9af2b319edaa6bc5338f2",
+                "shasum": ""
+            },
+            "require": {
+                "ext-exif": "*",
+                "illuminate/support": "^8.0 || ^9.0 || ^10.0 || ^11.0",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "ergebnis/composer-normalize": "^2.42",
+                "jcupitt/vips": "^2.3",
+                "larastan/larastan": "^2.8",
+                "laravel/pint": "^1.13",
+                "orchestra/testbench": "^6.42 || ^7.40 || ^8.21",
+                "phpunit/phpunit": "^9.6"
+            },
+            "suggest": {
+                "ext-ffi": "Required to use php-vips driver.",
+                "ext-gd": "Required to use GD driver.",
+                "ext-imagick": "Required to use Imagick driver.",
+                "jcupitt/vips": "Required to use php-vips driver."
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "BlurHash": "Bepsvpt\\Blurhash\\Facades\\BlurHash"
+                    },
+                    "providers": [
+                        "Bepsvpt\\Blurhash\\BlurHashServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Bepsvpt\\Blurhash\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "bepsvpt",
+                    "email": "6ibrl@cpp.tw"
+                }
+            ],
+            "description": "A PHP implementation of BlurHash with Laravel integration.",
+            "homepage": "https://github.com/bepsvpt/blurhash",
+            "keywords": [
+                "blurhash",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/bepsvpt/blurhash/issues",
+                "source": "https://github.com/bepsvpt/blurhash/tree/3.0.0"
+            },
+            "time": "2024-02-09T17:36:54+00:00"
+        },
         {
             "name": "brick/math",
             "version": "0.11.0",
@@ -4055,6 +4126,79 @@
                 }
             ],
             "time": "2023-12-24T06:58:02+00:00"
+        },
+        {
+            "name": "spatie/laravel-query-builder",
+            "version": "5.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-query-builder.git",
+                "reference": "8d8b527a68d4651b7860d9993a33b8d4774a9d72"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-query-builder/zipball/8d8b527a68d4651b7860d9993a33b8d4774a9d72",
+                "reference": "8d8b527a68d4651b7860d9993a33b8d4774a9d72",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^10.0|^11.0",
+                "illuminate/http": "^10.0|^11.0",
+                "illuminate/support": "^10.0|^11.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.11"
+            },
+            "require-dev": {
+                "ext-json": "*",
+                "mockery/mockery": "^1.4",
+                "orchestra/testbench": "^7.0|^8.0",
+                "pestphp/pest": "^2.0",
+                "spatie/invade": "^2.0",
+                "spatie/laravel-ray": "^1.28"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Spatie\\QueryBuilder\\QueryBuilderServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\QueryBuilder\\": "src",
+                    "Spatie\\QueryBuilder\\Database\\Factories\\": "database/factories"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alex Vanderbist",
+                    "email": "alex@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Easily build Eloquent queries from API requests",
+            "homepage": "https://github.com/spatie/laravel-query-builder",
+            "keywords": [
+                "laravel-query-builder",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/laravel-query-builder/issues",
+                "source": "https://github.com/spatie/laravel-query-builder"
+            },
+            "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                }
+            ],
+            "time": "2024-02-06T20:07:16+00:00"
         },
         {
             "name": "spatie/temporary-directory",

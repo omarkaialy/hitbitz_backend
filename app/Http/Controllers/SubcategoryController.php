@@ -4,15 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ApiResponse;
 use App\Models\Subcategory;
+use App\Services\ImageService;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class SubcategoryController extends Controller
+{public function __construct(protected ImageService $imageService)
 {
+}
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $subCategories = QueryBuilder::for(Subcategory::with(['media']) )->defaultSort('-created_at') ->allowedFilters(['category_id'])->Paginate(request()->perPage);
+ return ApiResponse::success($subCategories,200,'Here Is All SubCategories');
         //
     }
 
@@ -29,11 +35,13 @@ class SubcategoryController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate(['name'=>'required','image'=>'required']);
         $subCategory=new Subcategory();
         $subCategory->name=$request->name;
         $subCategory->category()->associate($request->categoryId);
         $subCategory->save();
-        return ApiResponse::success($subCategory,200,'Created Successfully');
+        $this->imageService->storeImage($subCategory,$request->image,'subCategories');
+          return ApiResponse::success($subCategory,200,'Created Successfully');
     }
 
     /**

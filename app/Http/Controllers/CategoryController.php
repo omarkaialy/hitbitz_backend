@@ -4,16 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ApiResponse;
 use App\Models\Category;
+use App\Services\ImageService;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class CategoryController extends Controller
 {
+    public function __construct(protected ImageService $imageService)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $categories = Category::get();
+        $categories = QueryBuilder::for(Category::query()->with(['media']))->defaultSort('-created_at')->Paginate(request()->perPage);
         return ApiResponse::success($categories, 200, 'This Is Categories');
     }
 
@@ -31,10 +37,11 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $category = new Category();
-        $category->name=$request->name;
+        $category->name = $request->name;
         $category->type()->associate($request->typeId);
         $category->save();
-return ApiResponse::success($category,200,'Category Created Successfully');
+        $this->imageService->storeImage($category, $request->image, 'categories');
+        return ApiResponse::success($category, 200, 'Category Created Successfully');
     }
 
     /**
@@ -67,7 +74,7 @@ return ApiResponse::success($category,200,'Category Created Successfully');
     public function destroy(Category $category)
     {
         $category->delete();
-        return ApiResponse::success(null,200,'deleted');
+        return ApiResponse::success(null, 200, 'deleted');
 
     }
 }

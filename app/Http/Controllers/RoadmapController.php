@@ -4,18 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ApiResponse;
 use App\Models\Roadmap;
+use App\Services\ImageService;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class RoadmapController extends Controller
 {
+    public function __construct(protected ImageService $imageService){}
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
 
-       $roadmaps= Roadmap::all();
-       return ApiResponse::success($roadmaps,200,'This Is All Roadmaps');
+        $roadmaps = QueryBuilder::for(Roadmap::with(['media']))->defaultSort('-updated_at')->Paginate(request()->perPage);
+        return ApiResponse::success($roadmaps, 200, 'This Is All Roadmaps');
     }
 
     /**
@@ -31,16 +34,17 @@ class RoadmapController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(['name'=>'required|min:4', 'subcategoryId'=>'required','description'=>'required|min:25']);
- $roadmap = new Roadmap();
- $roadmap->name= $request->name;
- $roadmap->description= $request->description;
- $roadmap->subcategory()->associate($request->subcategoryId);
- $roadmap->rate= 0;
+        $request->validate(['name' => 'required|min:4','image'=>'required', 'subcategoryId' => 'required', 'description' => 'required|min:10']);
+        $roadmap = new Roadmap();
+        $roadmap->name = $request->name;
+        $roadmap->description = $request->description;
+        $roadmap->subcategory()->associate($request->subcategoryId);
+        $roadmap->rate = 0;
 
- $roadmap->save();
-
-    return ApiResponse::success($roadmap ,200,'Roadmap Created Successfully');}
+        $roadmap->save();
+    $this->imageService->storeImage($roadmap,$request->image,'roadMaps');
+        return ApiResponse::success($roadmap, 200, 'Roadmap Created Successfully');
+    }
 
     /**
      * Display the specified resource.
@@ -73,7 +77,7 @@ class RoadmapController extends Controller
     {
 
         $roadmap->delete();
-        return ApiResponse::success(null,200,'deleted');
+        return ApiResponse::success(null, 200, 'deleted');
 
         //
     }

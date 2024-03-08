@@ -20,12 +20,17 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::group([], function () {
+    Route::post('uploadImage', [\App\Http\Controllers\ImageController::class, 'store']);
+});
 Route::group(['prefix' => 'admin'], function () {
     Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index']);
+    Route::get('/subcategories', [\App\Http\Controllers\SubcategoryController::class, 'index']);
     Route::get('/roadmaps', [\App\Http\Controllers\RoadmapController::class, 'index']);
     Route::get('/levels', [\App\Http\Controllers\LevelController::class, 'index']);
 
-});Route::group(['prefix' => 'admin'], function () {
+});
+Route::group(['prefix' => 'admin'], function () {
     Route::post('/login', [AuthController::class, 'loginAdmin']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/roadmaps/store', [\App\Http\Controllers\RoadmapController::class, 'store']);
@@ -45,10 +50,10 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/verify',[AuthController::class,'verifyEmail']);
-    Route::post('/resend',[AuthController::class,'resendOtp']);
-    Route::post('/forgetPassword',[AuthController::class,'forgetPassword']);
-    Route::post('/resetPassword',[AuthController::class,'resetPassword']);
+    Route::post('/verify', [AuthController::class, 'verifyEmail']);
+    Route::post('/resend', [AuthController::class, 'resendOtp']);
+    Route::post('/forgetPassword', [AuthController::class, 'forgetPassword']);
+    Route::post('/resetPassword', [AuthController::class, 'resetPassword']);
 });
 
 Route::group(['prefix' => 'user'], function () {
