@@ -20,7 +20,8 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = QueryBuilder::for(Category::query()->with(['media']))->defaultSort('-created_at')->Paginate(request()->perPage);
-        return ApiResponse::success($categories->data, 200, 'This Is Categories');
+
+        return ApiResponse::success($categories->items(), 200, 'This Is Categories');
     }
 
     /**
