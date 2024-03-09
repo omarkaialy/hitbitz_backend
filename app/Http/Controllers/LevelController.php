@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Helpers\ApiResponse;
 use App\Models\Level;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class LevelController extends Controller
 {
@@ -13,12 +15,8 @@ class LevelController extends Controller
      */
     public function index()
     {
-        $levels = Level::query()->with([
-            'roadmap'=> function ($query){
-            $query->select('id','name','subcategory_id');
-            }
-        ])->get();
-        return ApiResponse::success($levels,200,'Here Is All Levels');
+        $levels = QueryBuilder::for(Level::query()->with(['roadmap']))->allowedFilters([ AllowedFilter::exact('roadmap_id', 'roadmap_id')])->defaultSort('-updated_at')->Paginate(request()->perPage);
+        return ApiResponse::success($levels->items(), 200, 'Here Is All Levels');
     }
 
     /**
@@ -35,11 +33,11 @@ class LevelController extends Controller
     public function store(Request $request)
     {
 
-       $level = new Level();
-       $level->name=$request->name;
-        $level->roadmap()->associate($request->roadmapId) ;
-       $level->save();
-       return ApiResponse::success($level,200,'Created Successfully');
+        $level = new Level();
+        $level->name = $request->name;
+        $level->roadmap()->associate($request->roadmapId);
+        $level->save();
+        return ApiResponse::success($level, 200, 'Created Successfully');
     }
 
     /**
@@ -72,7 +70,7 @@ class LevelController extends Controller
     public function destroy(Level $level)
     {
         $level->delete();
-        return ApiResponse::success(null,200,'deleted');
+        return ApiResponse::success(null, 200, 'deleted');
 
         //
     }
