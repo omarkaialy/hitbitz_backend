@@ -18,7 +18,7 @@ class SubcategoryController extends Controller
     public function index()
     {
         $subCategories = QueryBuilder::for(Subcategory::with(['media']) )->defaultSort('-created_at') ->allowedFilters(['category_id'])->Paginate(request()->perPage);
- return ApiResponse::success($subCategories,200,'Here Is All SubCategories');
+ return ApiResponse::success($subCategories->items(),200,'Here Is All SubCategories');
         //
     }
 
@@ -41,7 +41,7 @@ class SubcategoryController extends Controller
         $subCategory->category()->associate($request->categoryId);
         $subCategory->save();
         $this->imageService->storeImage($subCategory,$request->image,'subCategories');
-          return ApiResponse::success($subCategory->items(),200,'Created Successfully');
+          return ApiResponse::success($subCategory,200,'Created Successfully');
     }
 
     /**
