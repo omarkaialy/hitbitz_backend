@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::group([], function () {
     Route::post('uploadImage', [\App\Http\Controllers\ImageController::class, 'store']);
+    Route::post('upload64Image', [\App\Http\Controllers\ImageController::class, 'uploadImage64']);
 });
 Route::group(['prefix' => 'admin'], function () {
     Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index']);

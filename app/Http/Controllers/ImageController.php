@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ApiResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Spatie\MediaLibrary\Conversions\ImageGenerators\Image;
 
 class ImageController extends Controller
 {
@@ -22,4 +24,17 @@ class ImageController extends Controller
 
     }
     //
+    public function uploadImage64(Request $request) {
+        $filename = time() . '_' . random_int(100000000, 999999999) . '.' . 'png';
+        $image = $request->image;
+        $image = str_replace('data:image/png;base64,','',$image);
+        $image = str_replace(' ','+',$image);
+        Storage::disk('public')->put($filename,base64_decode($image));
+
+
+        return ApiResponse::success($filename,200);
+
+    }
+
+
 }
