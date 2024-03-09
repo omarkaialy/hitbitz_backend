@@ -18,7 +18,7 @@ class RoadmapController extends Controller
     {
 
         $roadmaps = QueryBuilder::for(Roadmap::with(['media']))->defaultSort('-updated_at')->Paginate(request()->perPage);
-        return ApiResponse::success($roadmaps, 200, 'This Is All Roadmaps');
+        return ApiResponse::success($roadmaps->data, 200, 'This Is All Roadmaps');
     }
 
     /**

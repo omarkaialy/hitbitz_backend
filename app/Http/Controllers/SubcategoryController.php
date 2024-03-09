@@ -41,7 +41,7 @@ class SubcategoryController extends Controller
         $subCategory->category()->associate($request->categoryId);
         $subCategory->save();
         $this->imageService->storeImage($subCategory,$request->image,'subCategories');
-          return ApiResponse::success($subCategory,200,'Created Successfully');
+          return ApiResponse::success($subCategory->data,200,'Created Successfully');
     }
 
     /**

@@ -8,7 +8,7 @@ class ApiResponse
     {
         return response()->json([
             'status' => true,
-            'message' => $message, 'data' => $data,
+            'message' => $message, 'data'=> $data,
         ], $status);
     }
 
