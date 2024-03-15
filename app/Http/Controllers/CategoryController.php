@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ApiResponse;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Services\ImageService;
 use Illuminate\Http\Request;
@@ -19,9 +20,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = QueryBuilder::for(Category::query()->with(['media']))->defaultSort('-created_at')->Paginate(request()->perPage);
+        $categories = QueryBuilder::for(Category::query()->with(['media']))->allowedFilters('name')->defaultSort('-created_at')->Paginate(request()->perPage);
 
-        return ApiResponse::success($categories->items(), 200, 'This Is Categories');
+        return ApiResponse::success( CategoryResource::collection($categories->items()), 200, 'This Is Categories');
     }
 
     /**

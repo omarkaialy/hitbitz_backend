@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ApiResponse;
+use App\Http\Resources\SubCategoryResource;
 use App\Models\Subcategory;
 use App\Services\ImageService;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class SubcategoryController extends Controller
     public function index()
     {
         $subCategories = QueryBuilder::for(Subcategory::with(['media']) )->defaultSort('-created_at') ->allowedFilters(['category_id'])->Paginate(request()->perPage);
- return ApiResponse::success($subCategories->items(),200,'Here Is All SubCategories');
+ return ApiResponse::success(SubCategoryResource::collection( $subCategories->items()),200,'Here Is All SubCategories');
         //
     }
 

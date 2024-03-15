@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ApiResponse;
+use App\Http\Resources\RoadmapResource;
 use App\Models\Roadmap;
 use App\Services\ImageService;
 use Illuminate\Http\Request;
@@ -17,8 +18,8 @@ class RoadmapController extends Controller
     public function index(Request $request)
     {
 
-        $roadmaps = QueryBuilder::for(Roadmap::with(['media']))->defaultSort('-updated_at')->Paginate(request()->perPage);
-        return ApiResponse::success($roadmaps->items(), 200, 'This Is All Roadmaps');
+        $roadmaps = QueryBuilder::for(Roadmap::with(['media']))->allowedFilters(['name','subcategory_id'] )->defaultSort('-updated_at')->Paginate(request()->perPage);
+            return ApiResponse::success(RoadmapResource::collection($roadmaps->items()), 200, 'This Is All Roadmaps');
     }
 
     /**
