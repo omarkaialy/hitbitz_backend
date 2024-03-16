@@ -20,9 +20,15 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = QueryBuilder::for(Category::query()->with(['media']))->allowedFilters('name')->defaultSort('-created_at')->Paginate(request()->perPage);
+        $categories = QueryBuilder::for(Category::query()->with(['media'])->whereNull('parent_id'))->allowedFilters('name')->defaultSort('-created_at')->Paginate(request()->perPage);
 
-        return ApiResponse::success( CategoryResource::collection($categories->items()), 200, 'This Is Categories');
+        return ApiResponse::success(CategoryResource::collection($categories->items()), 200, 'This Is Categories');
+    }
+    public function indexSubs()
+    {
+        $categories = QueryBuilder::for(Category::query()->with(['media'])->whereNotNull('parent_id'))->allowedFilters('name')->defaultSort('-created_at')->Paginate(request()->perPage);
+
+        return ApiResponse::success(CategoryResource::collection($categories->items()), 200, 'This Is Categories');
     }
 
     /**
@@ -38,12 +44,15 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        if (isset($request->typeId) && isset($request->parentId)) return ApiResponse::error(421, 'TypeId And Parent Id Are Both Setted');
+        else if (!isset($request->typeId) && !isset($request->parentId)) return ApiResponse::error(421, 'TypeId And Parent Id Are Both Not Setted');
+
         $category = new Category();
         $category->name = $request->name;
-        $category->type()->associate($request->typeId);
+        if (isset($request->parentId)) $category->parent()->associate($request->parentId);
+        if (isset($request->typeId)) $category->type()->associate($request->typeId);
         $category->save();
         $this->imageService->storeImage($category, $request->image, 'categories');
-
         return ApiResponse::success($category, 200, 'Category Created Successfully');
     }
 

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ApiResponse;
+use App\Models\LevelDetail;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class LevelDetailController extends Controller
 {
@@ -11,7 +14,8 @@ class LevelDetailController extends Controller
      */
     public function index()
     {
-        //
+       $levelDetails = QueryBuilder::for(LevelDetail::query()->with())->allowedFilters(['level_id'])->defaultSort('-created_at')->Paginate(request()->perPage);
+    return ApiResponse::success($levelDetails->items());
     }
 
     /**

@@ -9,17 +9,29 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Category extends Model implements HasMedia
 {
-    use HasFactory , InteractsWithMedia;
+    use HasFactory, InteractsWithMedia;
+
     public function type()
     {
         return $this->belongsTo(Type::class);
     }
-    public function subcategories()
+
+    public function parent()
     {
-        return $this->hasMany(Subcategory::class);
+        return $this->belongsTo(Category::class, 'parent_id');
     }
-     public function roadmaps()
+
+    public function childrenRecursive()
     {
-        return $this->morphMany(Roadmap::class, 'roadmappable');
+        return $this->childrens()->with('childrenRecursive');
+    }
+
+    public function childrens()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
+    }
+    public function roadmap()
+    {
+        return $this->hasMany(Roadmap::class);
     }
 }

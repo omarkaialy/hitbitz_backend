@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Type;
 use App\Helpers\ApiResponse;
 use Illuminate\Http\Request;
+use Throwable;
 
 class TypeController extends Controller
 {
@@ -20,7 +21,7 @@ class TypeController extends Controller
     return  ApiResponse::success( $types,'Success' );
 
 }
- catch (\Throwable $th) {
+ catch (Throwable $th) {
 
     return ApiResponse::error('Failed');
 

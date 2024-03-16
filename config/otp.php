@@ -1,5 +1,7 @@
 <?php
 
+use SadiqSalau\LaravelOtp\OtpNotification;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -39,5 +41,5 @@ return [
     | Notification to use for OTP
     |
     */
-    'notification' => \SadiqSalau\LaravelOtp\OtpNotification::class,
+    'notification' => OtpNotification::class,
 ];

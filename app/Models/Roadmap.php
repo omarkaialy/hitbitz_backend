@@ -13,9 +13,9 @@ class Roadmap extends Model implements  HasMedia
 
 
 
-    public function subcategory()
+    public function category()
     {
-        return $this->belongsTo(Subcategory::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function levels()

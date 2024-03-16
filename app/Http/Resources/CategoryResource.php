@@ -14,14 +14,25 @@ class CategoryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        if( $this->type->id==1) $type='تعليمي';else $type= 'مهني';
-        return [
-            'id'=> $this-> id,
-            'name' => $this->name,
-            'type'=>$type,
-            'image'=> MediaResource::make($this,'categories')
-
-    ];
-
+        if (isset($this->type->id))
+            if ($this->type->id == 1) $type = 'تعليمي'; else $type = 'مهني';
+        else $type = null;
+        if (isset($this->parent->id))
+            if ($this->parent->id == 1) $parnet = 'تعليمي'; else $parnet = 'مهني';
+        else $parnet = null;
+        if (is_null($type)) {
+            return [
+                'id' => $this->id,
+                'name' => $this->name,
+                'image' => MediaResource::make($this, 'categories'),
+                'parent_id' => $this->parent
+            ];
+        } else {
+            return ['id' => $this->id,
+                'name' => $this->name,
+                'type' => $type,
+                'image' => MediaResource::make($this, 'categories'),
+            ];
+        }
     }
 }

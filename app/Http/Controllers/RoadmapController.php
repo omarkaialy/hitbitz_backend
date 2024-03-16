@@ -11,15 +11,19 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class RoadmapController extends Controller
 {
-    public function __construct(protected ImageService $imageService){}
+    public function __construct(protected ImageService $imageService)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
 
-        $roadmaps = QueryBuilder::for(Roadmap::with(['media']))->allowedFilters(['name','subcategory_id'] )->defaultSort('-updated_at')->Paginate(request()->perPage);
-            return ApiResponse::success(RoadmapResource::collection($roadmaps->items()), 200, 'This Is All Roadmaps');
+        $roadmaps = QueryBuilder::for(Roadmap::query()->with(['media']))->allowedFilters(['name', 'subcategory_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
+
+        return ApiResponse::success(RoadmapResource::collection($roadmaps->items()), 200, 'This Is All Roadmaps');
     }
 
     /**
@@ -35,7 +39,7 @@ class RoadmapController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(['name' => 'required|min:4','image'=>'required', 'subcategoryId' => 'required', 'description' => 'required|min:10']);
+        $request->validate(['name' => 'required|min:4', 'image' => 'required', 'subcategoryId' => 'required', 'description' => 'required|min:10']);
         $roadmap = new Roadmap();
         $roadmap->name = $request->name;
         $roadmap->description = $request->description;
@@ -43,7 +47,7 @@ class RoadmapController extends Controller
         $roadmap->rate = 0;
 
         $roadmap->save();
-    $this->imageService->storeImage($roadmap,$request->image,'roadMaps');
+        $this->imageService->storeImage($roadmap, $request->image, 'roadMaps');
         return ApiResponse::success($roadmap, 200, 'Roadmap Created Successfully');
     }
 

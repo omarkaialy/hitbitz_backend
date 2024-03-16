@@ -10,8 +10,8 @@ return new class extends Migration {
         Schema::create('roadmaps', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->unsignedBigInteger('subcategory_id');
-            $table->foreign('subcategory_id')->references('id')->on('subcategories')->onDelete('cascade');
+            $table->unsignedBigInteger('category_id');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->unsignedDouble('rate')->default(0);
             $table->timestamps();
             $table->longText('description');
