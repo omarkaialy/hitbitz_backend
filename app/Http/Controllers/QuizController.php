@@ -2,32 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ApiResponse;
+use App\Models\Quiz;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class QuizController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        //
+        $quizes = QueryBuilder::for(Quiz::query()->with(['levelDetail']))->allowedFilters(['level_detail_id'])->defaultSort('-created_at')->Paginate(request()->perPage);
+        return ApiResponse::success($quizes->items(),200);
+
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate(['name' => 'required|min:4', 'stepId' => 'required']);
+        $quiz = new Quiz();
+        $quiz->name = $request->name;
+        $quiz->levelDetail()->associate($request->stepId);
+        $quiz->save();
+        return ApiResponse::success($quiz, 200, 'Quiz Created Successfully');
+
+
     }
 
     /**
@@ -57,8 +61,10 @@ class QuizController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Quiz $quiz)
     {
+        $quiz->delete();
+        return ApiResponse::success(null,200,'Deleted Successfully');
         //
     }
 }

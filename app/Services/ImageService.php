@@ -23,7 +23,7 @@ class ImageService
 
                 $mediaModel = $model->addMedia(public_path('images/temp') . '/' . $image)->preservingOriginal()->toMediaCollection($collection);
             }
-            $mediaModel->setCustomProperty('hash' , $hash);
+            $mediaModel->setCustomProperty('hash', $hash);
             $mediaModel->save();
         } catch (Exception $e) {
             throw $e;

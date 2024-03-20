@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ApiResponse;
+use App\Models\Question;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class QuestionController extends Controller
 {
@@ -11,7 +15,8 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        //
+        $questions = QueryBuilder::for(Question::query()->with(['quiz']))->allowedFilters([AllowedFilter::exact('quiz_id')])->defaultSort('-updated_at')->Paginate();
+        return ApiResponse::success($questions->items(), 200);
     }
 
     /**

@@ -11,11 +11,10 @@ return new class extends Migration
         Schema::create('quizzes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('level_detail_id');
-            // Add other fields for quizzes
-
+            $table->foreign('level_detail_id')->references('id')->on('level_details')->onDelete('cascade');
+            $table->string('name');
             $table->timestamps();
 
-            $table->foreign('level_detail_id')->references('id')->on('level_details')->onDelete('cascade');
         });
     }
 

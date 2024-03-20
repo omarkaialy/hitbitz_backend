@@ -13,7 +13,7 @@ return new class extends Migration
             $table->unsignedBigInteger('level_id');
             $table->foreign('level_id')->references('id')->on('levels')->onDelete('cascade');
             // Add fields specific to level details
-            $table->string('detail_name');
+            $table->string('name');
             $table->text('description')->nullable();
             $table->timestamps();
         });

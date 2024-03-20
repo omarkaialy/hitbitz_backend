@@ -16,10 +16,7 @@ return new class extends Migration
             $table->json('choices'); // Or you can create separate choice tables
             $table->text('hint')->nullable();
             $table->string('correct_answer');
-            // Add a field for image or file path
-
             $table->timestamps();
-
             $table->foreign('quiz_id')->references('id')->on('quizzes')->onDelete('cascade');
         });
     }

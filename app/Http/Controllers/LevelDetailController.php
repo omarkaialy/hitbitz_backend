@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\ApiResponse;
 use App\Models\LevelDetail;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class LevelDetailController extends Controller
@@ -14,8 +15,8 @@ class LevelDetailController extends Controller
      */
     public function index()
     {
-       $levelDetails = QueryBuilder::for(LevelDetail::query()->with())->allowedFilters(['level_id'])->defaultSort('-created_at')->Paginate(request()->perPage);
-    return ApiResponse::success($levelDetails->items());
+        $levelDetails = QueryBuilder::for(LevelDetail::query()->with(['level']))->allowedFilters([ AllowedFilter::exact('level_id')])->defaultSort('-created_at')->Paginate(request()->perPage);
+        return ApiResponse::success($levelDetails->items(), 200);
     }
 
     /**
@@ -31,7 +32,15 @@ class LevelDetailController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate(['name' => 'required|min:5', 'levelId' => 'required', 'description' => 'required']);
+
+        $details = new LevelDetail();
+        $details->description = $request->description;
+        $details->name = $request->name;
+        $details->level()->associate($request->levelId);
+        $details->save();
+        return ApiResponse::success($details, 200);
+
     }
 
     /**
@@ -61,8 +70,10 @@ class LevelDetailController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(LevelDetail $levelDetail)
     {
-        //
+
+        $levelDetail->delete();
+        return ApiResponse::success(null, 200, 'Deleted Successfully');
     }
 }

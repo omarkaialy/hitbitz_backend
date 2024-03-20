@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ApiResponse;
 use App\Http\Resources\RoadmapResource;
+use App\Models\Category;
 use App\Models\Roadmap;
 use App\Services\ImageService;
 use Illuminate\Http\Request;
@@ -20,8 +21,25 @@ class RoadmapController extends Controller
      */
     public function index(Request $request)
     {
+        $category = Category::find($request->categoryId);
+        if (!is_null($category)&&!$category) {
+            return ApiResponse::error(421, 'This category isn\'t Exist');
+        }
+        else if (!is_null($category) &&!is_null($category->parent_id)) {
+            $roadmaps = QueryBuilder::for(Roadmap::query()->with(['media']))->allowedFilters(['name', 'category_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
 
-        $roadmaps = QueryBuilder::for(Roadmap::query()->with(['media']))->allowedFilters(['name', 'subcategory_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
+        } else if(!is_null($category)){
+            $ids = [];
+            $categories = $category->childrens;
+            foreach ($categories as $e) {
+                $ids[] = $e->id;
+
+            }
+            $roadmaps = QueryBuilder::for(Roadmap::query()->with(['media'])->whereIn('category_id', $ids,))->allowedFilters(['name', 'category_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
+
+        }else {$roadmaps = QueryBuilder::for(Roadmap::query()->with(['media'])  )->allowedFilters(['name', 'category_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
+        }
+
 
         return ApiResponse::success(RoadmapResource::collection($roadmaps->items()), 200, 'This Is All Roadmaps');
     }
@@ -39,11 +57,11 @@ class RoadmapController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(['name' => 'required|min:4', 'image' => 'required', 'subcategoryId' => 'required', 'description' => 'required|min:10']);
+        $request->validate(['name' => 'required|min:4', 'image' => 'required', 'categoryId' => 'required', 'description' => 'required|min:10']);
         $roadmap = new Roadmap();
         $roadmap->name = $request->name;
         $roadmap->description = $request->description;
-        $roadmap->subcategory()->associate($request->subcategoryId);
+        $roadmap->category()->associate($request->categoryId);
         $roadmap->rate = 0;
 
         $roadmap->save();
