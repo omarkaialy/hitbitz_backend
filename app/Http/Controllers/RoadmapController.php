@@ -26,7 +26,7 @@ class RoadmapController extends Controller
             return ApiResponse::error(421, 'This category isn\'t Exist');
         }
         else if (!is_null($category) &&!is_null($category->parent_id)) {
-            $roadmaps = QueryBuilder::for(Roadmap::query()->with(['media']))->allowedFilters(['name', 'category_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
+            $roadmaps = QueryBuilder::for(Roadmap::query()->with(['media','category']))->allowedFilters(['name', 'category_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
 
         } else if(!is_null($category)){
             $ids = [];
@@ -35,9 +35,9 @@ class RoadmapController extends Controller
                 $ids[] = $e->id;
 
             }
-            $roadmaps = QueryBuilder::for(Roadmap::query()->with(['media'])->whereIn('category_id', $ids,))->allowedFilters(['name', 'category_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
+            $roadmaps = QueryBuilder::for(Roadmap::query()->with(['media','category'])->whereIn('category_id', $ids,))->allowedFilters(['name', 'category_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
 
-        }else {$roadmaps = QueryBuilder::for(Roadmap::query()->with(['media'])  )->allowedFilters(['name', 'category_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
+        }else {$roadmaps = QueryBuilder::for(Roadmap::query()->with(['media','category'])  )->allowedFilters(['name', 'category_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
         }
 
 
