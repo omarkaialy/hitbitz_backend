@@ -14,7 +14,7 @@ return new class extends Migration
             $table->integer('current_level')->default(1);
             $table->boolean('completed')->default(false);
             $table->timestamps();
-
+            $table->boolean('favored')->default(false);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('roadmap_id')->references('id')->on('roadmaps')->onDelete('cascade');
 

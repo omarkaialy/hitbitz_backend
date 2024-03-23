@@ -7,10 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Roadmap extends Model implements  HasMedia
+class Roadmap extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
-
 
 
     public function category()
@@ -25,6 +24,13 @@ class Roadmap extends Model implements  HasMedia
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)->withTimestamps();
     }
+
+    public function favorites()
+    {
+        return $this->hasMany(UserRoadmap::class, 'roadmap_id');
+    }
+
+
 }

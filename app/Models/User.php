@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements JWTSubject,MustVerifyEmail
+class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
     use  HasFactory, Notifiable, HasRoles;
 
@@ -38,6 +38,10 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
         'password',
         'remember_token',
     ];
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
 
     /**
      * The attributes that should be cast.
@@ -54,11 +58,6 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
         return [];
     }
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
-
     public function quizzes()
     {
         return $this->belongsToMany(Quiz::class, 'user_quiz')
@@ -74,7 +73,16 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
 
     public function roadmap()
     {
-        return $this->belongsToMany(Roadmap::class);
+        return $this->hasMany(Roadmap::class);
     }
 
+    public function favorites()
+    {
+        return $this->hasMany(UserRoadmap::class, 'user_id');
+    }
+
+    public function favoriteRoadmaps()
+    {
+        return $this->belongsToMany(Roadmap::class, 'user_roadmap', 'user_id', 'roadmap_id')->withTimestamps();
+    }
 }

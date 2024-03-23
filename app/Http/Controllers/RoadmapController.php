@@ -22,26 +22,32 @@ class RoadmapController extends Controller
     public function index(Request $request)
     {
         $category = Category::find($request->categoryId);
-        if (!is_null($category)&&!$category) {
+        if (!is_null($category) && !$category) {
             return ApiResponse::error(421, 'This category isn\'t Exist');
-        }
-        else if (!is_null($category) &&!is_null($category->parent_id)) {
-            $roadmaps = QueryBuilder::for(Roadmap::query()->with(['media','category']))->allowedFilters(['name', 'category_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
+        } else if (!is_null($category) && !is_null($category->parent_id)) {
+            $roadmaps = QueryBuilder::for(Roadmap::query()->with(['media', 'category']))->allowedFilters(['name', 'category_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
 
-        } else if(!is_null($category)){
+        } else if (!is_null($category)) {
             $ids = [];
             $categories = $category->childrens;
             foreach ($categories as $e) {
                 $ids[] = $e->id;
 
             }
-            $roadmaps = QueryBuilder::for(Roadmap::query()->with(['media','category'])->whereIn('category_id', $ids,))->allowedFilters(['name', 'category_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
+            $roadmaps = QueryBuilder::for(Roadmap::query()->with(['media', 'category'])->whereIn('category_id', $ids,))->allowedFilters(['name', 'category_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
 
-        }else {$roadmaps = QueryBuilder::for(Roadmap::query()->with(['media','category'])  )->allowedFilters(['name', 'category_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
+        } else {
+            $roadmaps = QueryBuilder::for(Roadmap::query()->with(['media', 'category']))->allowedFilters(['name', 'category_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
         }
 
 
         return ApiResponse::success(RoadmapResource::collection($roadmaps->items()), 200, 'This Is All Roadmaps');
+    }
+
+    public function indexFavorites()
+    {
+        $favorites = auth()->user()->favoriteRoadmaps()->with(['media'])->get();
+    return ApiResponse::success(RoadmapResource::collection($favorites),200);
     }
 
     /**

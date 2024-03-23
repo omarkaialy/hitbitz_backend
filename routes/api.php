@@ -74,6 +74,8 @@ Route::group(['prefix' => 'user'], function () {
 Route::group(['prefix' => 'user'], function () {
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/roadmaps', [RoadmapController::class, 'index']);
+    Route::get('/roadmaps/favorites', [RoadmapController::class, 'indexFavorites']);
+    Route::get('/roadmaps/{roadmap}', [\App\Http\Controllers\UserController::class,'toggleFavorite']);
     Route::get('/levels', [LevelController::class, 'index']);
     Route::get('/levelStep', [LevelDetailController::class, 'index']);
 
