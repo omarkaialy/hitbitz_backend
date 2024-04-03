@@ -14,7 +14,7 @@ class Roadmap extends Model implements HasMedia
 
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class)->whereNotNull('parent_id');
     }
 
     public function levels()

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+
+use App\Enums\CategoryTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
@@ -11,14 +13,13 @@ class Category extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
 
-    public function type()
-    {
-        return $this->belongsTo(Type::class);
-    }
+    protected $casts = [
+        'type' => CategoryTypeEnum::class
+    ];
 
     public function parent()
     {
-        return $this->belongsTo(Category::class, 'parent_id');
+        return $this->belongsTo(Category::class, 'parent_id')->whereNotNull('type');
     }
 
     public function childrenRecursive()
@@ -30,6 +31,7 @@ class Category extends Model implements HasMedia
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
+
     public function roadmap()
     {
         return $this->hasMany(Roadmap::class);

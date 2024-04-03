@@ -56,7 +56,7 @@ class MediaResource
     {
         return [
 //             'id'                => null,
-            'media_url'         => env('AppUrl').'/storage/'.'default.jpg',
+            'media_url'         => config('app.url') . '/storage/' . 'default.jpg',
             'hash'              => 'KGGc.IRk1k?]fP%MC9t6-U',
 //             'order'             => null,
         ];

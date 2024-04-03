@@ -67,12 +67,15 @@ class RoadmapController extends Controller
         $roadmap = new Roadmap();
         $roadmap->name = $request->name;
         $roadmap->description = $request->description;
-        $roadmap->category()->associate($request->categoryId);
         $roadmap->rate = 0;
+        $category = Category::findOrFail($request->categoryId);
+        if ($category->childrens()->exists())
+            return ApiResponse::error(400, 'Cannot Associate Roadmap To Parent Category');
+        $roadmap->category()->associate($category);
 
         $roadmap->save();
         $this->imageService->storeImage($roadmap, $request->image, 'roadMaps');
-        return ApiResponse::success($roadmap, 200, 'Roadmap Created Successfully');
+        return ApiResponse::success(RoadmapResource::make($roadmap), 200, 'Roadmap Created Successfully');
     }
 
     /**
@@ -80,7 +83,11 @@ class RoadmapController extends Controller
      */
     public function show(string $id)
     {
-        //
+
+        $roadmap = Roadmap::query()->where('id', $id)->get();
+        if ($roadmap->isEmpty())
+            return ApiResponse::error(404, 'Not Found');
+        return ApiResponse::success(RoadmapResource::make($roadmap->first()), 200);
     }
 
     /**

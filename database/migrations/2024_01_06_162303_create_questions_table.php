@@ -11,9 +11,8 @@ return new class extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('quiz_id');
-            $table->string('type');
+            $table->integer('type');
             $table->string('title');
-            $table->json('choices'); // Or you can create separate choice tables
             $table->text('hint')->nullable();
             $table->string('correct_answer');
             $table->timestamps();
