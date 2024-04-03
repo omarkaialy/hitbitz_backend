@@ -15,17 +15,13 @@ class CategoryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        if (isset($this->type)) $type = $this->type;
-        else $type = null;
-        if (isset($this->parent->id))
-            if ($this->parent->id == 1) $parnet = 'تعليمي'; else $parnet = 'مهني';
-        else $parnet = null;
+        $type = $this->type ?? null;
         if (is_null($type)) {
             return [
                 'id' => $this->id,
                 'name' => $this->name,
                 'image' => MediaResource::make($this, 'categories'),
-                'parent_id' => $this::make($this->parent)
+                'parent_id' => $this->parent->id,
             ];
         } else {
             return [

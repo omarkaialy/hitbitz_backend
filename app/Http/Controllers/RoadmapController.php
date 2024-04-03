@@ -14,6 +14,8 @@ class RoadmapController extends Controller
 {
     public function __construct(protected ImageService $imageService)
     {
+    $this->middleware('superAdmin')->only(['store','destroy','update']);
+    $this->middleware('auth')->only(['index','show']);
     }
 
     /**
@@ -84,7 +86,7 @@ class RoadmapController extends Controller
     public function show(string $id)
     {
 
-        $roadmap = Roadmap::query()->where('id', $id)->get();
+        $roadmap = Roadmap::query()->where('id', $id)->with(['media','category'])->get();
         if ($roadmap->isEmpty())
             return ApiResponse::error(404, 'Not Found');
         return ApiResponse::success(RoadmapResource::make($roadmap->first()), 200);

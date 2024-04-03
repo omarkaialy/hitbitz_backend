@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+
+    public function __construct()
+    {
+        // Apply middleware to specific methods
+        $this->middleware('auth')->only(['toggleFavorite']);
+     }
     /**
      * Display a listing of the resource.
      */
@@ -18,7 +24,10 @@ class UserController extends Controller
     }
     public function toggleFavorite(Roadmap $roadmap)
     {
+
+
         $user = Auth::user();
+
         $user->favoriteRoadmaps()->toggle($roadmap->id);
         return ApiResponse::success(null,200,'Favorite Status Changed');
     }
