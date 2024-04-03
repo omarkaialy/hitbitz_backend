@@ -25,7 +25,7 @@ class CategoryResource extends JsonResource
                 'id' => $this->id,
                 'name' => $this->name,
                 'image' => MediaResource::make($this, 'categories'),
-                'parent_id' => $this->parent
+                'parent_id' => $this::make($this->parent)
             ];
         } else {
             return ['id' => $this->id,

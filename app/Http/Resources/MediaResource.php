@@ -55,10 +55,10 @@ class MediaResource
     public static function defaultMedia($model, $collection)
     {
         return [
-            // 'id'                => null,
-            'media_url'         => $model->getMediaCollection($collection)?->fallbackUrl,
-            'hash'              => 'K5Ps#Ct7_2~qj[IVWBfQM|',
-            // 'order'             => null,
+//             'id'                => null,
+            'media_url'         => env('AppUrl').'/storage/'.'default.jpg',
+            'hash'              => 'KGGc.IRk1k?]fP%MC9t6-U',
+//             'order'             => null,
         ];
     }
 }

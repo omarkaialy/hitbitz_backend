@@ -15,7 +15,7 @@ class LevelDetailController extends Controller
      */
     public function index()
     {
-        $levelDetails = QueryBuilder::for(LevelDetail::query()->with(['level']))->allowedFilters([ AllowedFilter::exact('level_id')])->defaultSort('-created_at')->Paginate(request()->perPage);
+        $levelDetails = QueryBuilder::for(LevelDetail::query()->with(['level']))->allowedFilters([ AllowedFilter::exact('level_id')])->defaultSort('created_at')->Paginate(request()->perPage);
         return ApiResponse::success($levelDetails->items(), 200);
     }
 

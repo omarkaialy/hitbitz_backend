@@ -16,9 +16,10 @@ class RoadmapResource extends JsonResource
     {
         return [
             'id'=>$this->id,
-            'media'=>MediaResource::make($this,'roadmaps'),
+            'media'=>MediaResource::make($this,'roadMaps'),
             'name'=>$this->name,
-            'category'=>$this->category,
+            'description'=> $this->description,
+            'category'=>CategoryResource::make($this->category),
             'rate'=>$this->rate,
         ];
     }
