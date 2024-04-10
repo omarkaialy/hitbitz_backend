@@ -10,16 +10,20 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Question extends Model implements HasMedia
 {
-    use HasFactory , InteractsWithMedia;
-    protected $casts=[
-        'type'=>QuestionTypeEnum::class
+    use HasFactory, InteractsWithMedia;
+
+    protected $casts = [
+        'type' => QuestionTypeEnum::class
     ];
 
     public function quiz()
     {
         return $this->belongsTo(Quiz::class);
     }
-    public function choices(){
+
+    public function choices()
+    {
+
         return $this->hasMany(Choices::class);
     }
 

@@ -56,6 +56,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/levelStep', [LevelDetailController::class, 'index']);
     Route::get('/quizzes', [QuizController::class, 'index']);
     Route::get('/questions', [QuestionController::class, 'index']);
+    Route::post('/questions/store', [QuestionController::class, 'store']);
     Route::post('/quizzes/store', [QuizController::class, 'store']);
     Route::delete('/quizzes/{quiz}', [QuizController::class, 'destroy']);
 

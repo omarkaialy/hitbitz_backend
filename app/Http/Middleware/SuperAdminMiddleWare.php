@@ -21,7 +21,7 @@ class SuperAdminMiddleWare
             return ApiResponse::error(401,'UnAuthorized');
         }
 
-        if (Auth::user()){
+        if (Auth::user()->hasRole('super_admin')){
             return $next($request);
 
 

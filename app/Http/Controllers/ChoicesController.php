@@ -2,11 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ApiResponse;
+use App\Http\Resources\ChoicesResource;
 use App\Models\Choices;
+use App\Models\Question;
+use App\Services\ImageService;
 use Illuminate\Http\Request;
 
 class ChoicesController extends Controller
 {
+    public function __construct(protected ImageService $imageService
+    )
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -26,9 +35,17 @@ class ChoicesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Question $question)
     {
-        //
+        $choice = new Choices();
+        $choice->title = $request->title;
+        $choice->question()->associate($question->id);
+        $choice->correct = $request->
+        $choice->save();
+        if ($request->has('image')) {
+            $this->imageService->storeImage($choice, $request->image, 'choices');
+        }
+        return ApiResponse::success(ChoicesResource::make($choice), 200);
     }
 
     /**

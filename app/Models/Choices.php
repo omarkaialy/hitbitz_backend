@@ -10,6 +10,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class Choices extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
+    protected $fillable =['title','correct','order'];
     public function question(){
         return $this->belongsTo(Question::class);
     }

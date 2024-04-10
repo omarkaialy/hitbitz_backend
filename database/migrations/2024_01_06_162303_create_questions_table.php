@@ -13,8 +13,7 @@ return new class extends Migration
             $table->unsignedBigInteger('quiz_id');
             $table->integer('type');
             $table->string('title');
-            $table->text('hint')->nullable();
-            $table->string('correct_answer');
+            $table->integer('isTrue')->nullable();
             $table->timestamps();
             $table->foreign('quiz_id')->references('id')->on('quizzes')->onDelete('cascade');
         });
