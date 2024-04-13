@@ -8,6 +8,7 @@ use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Services\ImageService;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class CategoryController extends Controller
@@ -21,14 +22,26 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = QueryBuilder::for(Category::query()->with(['media'])->whereNull('parent_id'))->allowedFilters('name')->defaultSort('-created_at')->Paginate(request()->perPage);
+        $categories = QueryBuilder::for(Category::query()->with(['media'])
+            ->whereNull('parent_id'))
+            ->allowedFilters([
+                'name',
+                AllowedFilter::exact('type'),
+            ])->defaultSort('-created_at')->Paginate(request()->perPage);
 
         return ApiResponse::success(CategoryResource::collection($categories->items()), 200, 'This Is Categories');
     }
 
     public function indexSubs()
     {
-        $categories = QueryBuilder::for(Category::query()->with(['media'])->whereNotNull('parent_id'))->allowedFilters('name')->defaultSort('-created_at')->Paginate(request()->perPage);
+        $categories = QueryBuilder::for(Category::query()->with(['media'])
+            ->whereNotNull('parent_id'))
+            ->allowedFilters(
+                [
+                    'name',
+                    AllowedFilter::exact('parent_id'),
+                ]
+            )->defaultSort('-created_at')->Paginate(request()->perPage);
 
         return ApiResponse::success(CategoryResource::collection($categories->items()), 200, 'This Is Categories');
     }

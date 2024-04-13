@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ApiResponse;
+use App\Http\Resources\QuestionResource;
+use App\Http\Resources\QuizResource;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class QuizController extends Controller
@@ -12,8 +15,8 @@ class QuizController extends Controller
 
     public function index()
     {
-        $quizes = QueryBuilder::for(Quiz::query()->with(['levelDetail']))->allowedFilters(['level_detail_id'])->defaultSort('-created_at')->Paginate(request()->perPage);
-        return ApiResponse::success($quizes->items(),200);
+        $quizes = QueryBuilder::for(Quiz::query()->with(['levelDetail']))->allowedFilters([AllowedFilter::exact('level_detail_id')])->defaultSort('-created_at')->Paginate(request()->perPage);
+        return ApiResponse::success($quizes->items(), 200);
 
     }
 
@@ -39,7 +42,9 @@ class QuizController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $quiz =
+            Quiz::with(['questions'])->findOrFail($id);
+        return  ApiResponse::success(QuizResource::make( $quiz),200) ;
     }
 
     /**
@@ -64,7 +69,7 @@ class QuizController extends Controller
     public function destroy(Quiz $quiz)
     {
         $quiz->delete();
-        return ApiResponse::success(null,200,'Deleted Successfully');
+        return ApiResponse::success(null, 200, 'Deleted Successfully');
         //
     }
 }

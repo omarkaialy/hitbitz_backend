@@ -21,14 +21,13 @@ class QuestionResource extends JsonResource
             'type' => $this->type,
         ];
         if ($this->type == QuestionTypeEnum::tfQuiz) {
-
             $data['correctAnswer'] = [$this->isTrue];
         } else {
             $data['answers'] = ChoicesResource::collection($this->choices);
         }
 
         if (isset($this->media)) {
-            $data['media'] = MediaResource::make($this, 'questions');
+            $data['media'] = MediaResource::make($this, 'questions',false);
         }
 
         return $data;

@@ -9,7 +9,6 @@ use App\Http\Controllers\LevelDetailController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RoadmapController;
-use App\Http\Controllers\SubcategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -39,8 +38,6 @@ Route::group(['prefix' => 'admin'], function () {
     Route::delete('/roadmaps/{roadmap}', [RoadmapController::class, 'destroy']);
     Route::post('/categories/store', [CategoryController::class, 'store']);
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
-    Route::post('/subcategories/store', [SubcategoryController::class, 'store']);
-    Route::delete('/subcategories/{subcategory}', [SubcategoryController::class, 'destroy']);
     Route::post('/levels/store', [LevelController::class, 'store']);
     Route::delete('/levels/{level}', [LevelController::class, 'destroy']);
     Route::get('/categories', [CategoryController::class, 'index']);
@@ -74,13 +71,18 @@ Route::group(['prefix' => 'user'], function () {
 
 Route::group(['prefix' => 'user'], function () {
     Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('/subcategories', [CategoryController::class, 'indexSubs']);
     Route::get('/categories/{category}', [CategoryController::class, 'show']);
     Route::get('/roadmaps', [RoadmapController::class, 'index']);
     Route::get('/roadmaps/{roadmap}', [RoadmapController::class, 'show']);
-    Route::get('/roadmaps/favorites', [RoadmapController::class, 'indexFavorites']);
-    Route::get('/roadmaps/{roadmap}/toggleFavorite', [\App\Http\Controllers\UserController::class,'toggleFavorite']);
+    Route::get('/roadmaps/favorites/index', [RoadmapController::class, 'indexFavorites']);
+    Route::get('/roadmaps/{roadmap}/toggleFavorite', [\App\Http\Controllers\UserController::class, 'toggleFavorite']);
     Route::get('/levels', [LevelController::class, 'index']);
     Route::get('/levelStep', [LevelDetailController::class, 'index']);
+    Route::get('/questions', [QuestionController::class, 'index']);
+    Route::get('/quizzes/{id}', [QuizController::class, 'show']);
+    Route::get('/quizzes', [QuizController::class, 'index']);
+
 
 });
 Route::get('/migrate', function () {

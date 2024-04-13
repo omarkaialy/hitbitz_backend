@@ -8,7 +8,7 @@ class MediaResource
 {
 
 
-    public static function make($model, $collection = null): array
+    public static function make($model, $collection = null,$hasDefault=true): array
     {
         if ($model instanceof Media){
             return [
@@ -21,8 +21,11 @@ class MediaResource
 
         $media = $model->getFirstMedia($collection);
 
-        if (!isset($media)) {
+        if (!isset($media) ) {
+            if ($hasDefault)
             return self::defaultMedia($model, $collection);
+        else
+            return [];
         }
 
         return [

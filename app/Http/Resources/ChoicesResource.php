@@ -20,7 +20,7 @@ class ChoicesResource extends JsonResource
 
         ];
         if (isset($this->image)) {
-            $data['image'] = MediaResource::make($this->image);
+            $data['image'] = MediaResource::make($this->image,'choices',false);
         }
         if (isset($this->order)) {
             $data['order'] = $this->order;

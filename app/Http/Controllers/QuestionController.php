@@ -34,7 +34,7 @@ class QuestionController extends Controller
         $question->title = $request->title;
         $question->quiz()->associate($request->quizId);
         $question->type = $request->type;
-        if (isset($question->isTrue)) {
+        if (isset($request->isTrue)) {
             $question->isTrue = $request->isTrue;
         }
 
