@@ -38,6 +38,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::delete('/roadmaps/{roadmap}', [RoadmapController::class, 'destroy']);
     Route::post('/categories/store', [CategoryController::class, 'store']);
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
+    Route::get('/categories/{id}', [CategoryController::class, 'show']);
     Route::post('/levels/store', [LevelController::class, 'store']);
     Route::delete('/levels/{level}', [LevelController::class, 'destroy']);
     Route::get('/categories', [CategoryController::class, 'index']);

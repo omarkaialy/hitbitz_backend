@@ -38,32 +38,15 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => public_path('images/temp'),
+            'root' => storage_path('images/temp'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
             'throw' => false,
         ],
-        'images' => [
-            'driver' => 'local',
-            'root' => public_path('images'),
-            'url' => env('APP_URL').'/storage',
-            'visibility' => 'public',
-            'throw' => false,
-        ],
-        'audios' => [
-            'driver' => 'local',
-            'root' => public_path('audios'),
-            'url' => env('APP_URL').'/storage',
-            'visibility' => 'public',
-            'throw' => false,
-        ],
-        'videos' => [
-            'driver' => 'local',
-            'root' => public_path('videos'),
-            'url' => env('APP_URL').'/storage',
-            'visibility' => 'public',
-            'throw' => false,
-        ],
+      'media'=>[   'driver' => 'local',
+          'root'   => public_path('media'),
+          'url'    => env('APP_URL').'/media',
+      ],
 
         's3' => [
             'driver' => 's3',

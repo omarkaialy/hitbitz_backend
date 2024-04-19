@@ -59,15 +59,15 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        if (isset($request->type) && isset($request->parentId)) return ApiResponse::error(421, 'TypeId And Parent Id Are Both Setted');
-        else if (!isset($request->type) && !isset($request->parentId)) return ApiResponse::error(421, 'TypeId And Parent Id Are Both Not Setted');
+        if (isset($request->type) && isset($request->parentId)) return ApiResponse::error(419, 'TypeId And Parent Id Are Both Setted');
+        else if (!isset($request->type) && !isset($request->parentId)) return ApiResponse::error(419, 'TypeId And Parent Id Are Both Not Setted');
 
         $category = new Category();
         $category->name = $request->name;
         if (isset($request->parentId)) {
             $parent = Category::findOrFail($request->parentId);
             if ($parent->parent_id !== null) {
-                return ApiResponse::error(400, 'Cannot Associate To A SubCategory');
+                return ApiResponse::error(419, 'Cannot Associate To A SubCategory');
             }
             $category->parent()->associate($request->parentId);
         }
@@ -83,8 +83,9 @@ class CategoryController extends Controller
      */
     public function show(string $category)
     {
-        $catego = Category::query()->where('id', $category)->with(['media'])->get()->first();
-        return ApiResponse::success(CategoryResource::show($catego), 200);
+        $catego = Category::query()->where('id', $category)->with(['media','childrens'])->get()->first();
+
+        return ApiResponse::success(CategoryResource::make($catego)->withChildrens(), 200);
 
     }
 

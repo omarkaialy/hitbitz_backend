@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ApiResponse;
-use App\Http\Requests\StoreRoadmap;
+use App\Http\Requests\StoreRoadmapRequest;
 use App\Http\Resources\RoadmapResource;
 use App\Models\Category;
 use App\Models\Roadmap;
@@ -64,7 +64,7 @@ class RoadmapController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRoadmap $request)
+    public function store(StoreRoadmapRequest $request)
     {
         $roadmap = new Roadmap();
         $roadmap->name = $request->name;
