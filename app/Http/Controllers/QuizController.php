@@ -16,7 +16,7 @@ class QuizController extends Controller
     public function index()
     {
         $quizes = QueryBuilder::for(Quiz::query()->with(['levelDetail']))->allowedFilters([AllowedFilter::exact('level_detail_id')])->defaultSort('-created_at')->Paginate(request()->perPage);
-        return ApiResponse::success($quizes->items(), 200);
+        return ApiResponse::success(QuizResource::collection( $quizes->items()), 200);
 
     }
 
@@ -44,7 +44,7 @@ class QuizController extends Controller
     {
         $quiz =
             Quiz::with(['questions'])->findOrFail($id);
-        return  ApiResponse::success(QuizResource::make( $quiz),200) ;
+        return  ApiResponse::success(QuizResource::make($quiz)->withQuestions(),200) ;
     }
 
     /**

@@ -18,6 +18,14 @@ class QuizResource extends JsonResource
             'id' => $this->id,
             'name'=>$this->name,
             'step_id'=>$this->level_detail_id,
+
+        ];
+    }
+    public function withQuestions(){
+        return [
+            'id' => $this->id,
+            'name'=>$this->name,
+            'step_id'=>$this->level_detail_id,
             'questions'=> QuestionResource::collection($this->questions)
 
         ];
