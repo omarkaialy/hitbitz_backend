@@ -23,8 +23,8 @@ class StoreRoadmapRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required','min:4','unique:roadmaps,name'],
-            'image' => ['required',new ImageExists($this->image)],
+            'name' => ['required', 'min:4', 'unique:roadmaps,name'],
+            'image' => ['required', new ImageExists($this->image)],
             'categoryId' => 'required|exists:categories,id',
             'description' => 'required|min:10'
         ];
@@ -33,7 +33,7 @@ class StoreRoadmapRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.unique:roadmaps,name'=>'name has already been taken' ,
+            'name.unique:roadmaps,name' => 'name has already been taken',
             'name.required' => 'name is required',
             'name.min:4' => 'name length should at least be 4 character',
             'image.required' => 'image is required',
