@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Enums\CategoryTypeEnum;
 use App\Helpers\ApiResponse;
+use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use App\Rules\OneOf;
 use App\Services\ImageService;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -57,25 +59,28 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        if (isset($request->type) && isset($request->parentId)) return ApiResponse::error(419, 'TypeId And Parent Id Are Both Setted');
-        else if (!isset($request->type) && !isset($request->parentId)) return ApiResponse::error(419, 'TypeId And Parent Id Are Both Not Setted');
+    public function store(CategoryStoreRequest $request)
+    {   try {
+
 
         $category = new Category();
-        $category->name = $request->name;
-        if (isset($request->parentId)) {
-            $parent = Category::findOrFail($request->parentId);
-            if ($parent->parent_id !== null) {
-                return ApiResponse::error(419, 'Cannot Associate To A SubCategory');
+            $category->name = $request->name;
+            if (isset($request->parentId)) {
+                $parent = Category::findOrFail($request->parentId);
+                if ($parent->parent_id !== null) {
+                    return ApiResponse::error(419, 'Cannot Associate To A SubCategory');
+                }
+                $category->parent()->associate($request->parentId);
             }
-            $category->parent()->associate($request->parentId);
+
+            if (isset($request->type)) $category->type = CategoryTypeEnum::from($request->type);
+            $category->save();
+            $this->imageService->storeImage($category, $request->image, 'categories');
+            return ApiResponse::success(CategoryResource::make($category), 200, 'Category Created Successfully');
+        } catch (\Throwable $e) {
+            return ApiResponse::error(419, $e);
         }
 
-        if (isset($request->type)) $category->type = CategoryTypeEnum::from($request->type);
-        $category->save();
-        $this->imageService->storeImage($category, $request->image, 'categories');
-        return ApiResponse::success(CategoryResource::make($category), 200, 'Category Created Successfully');
     }
 
     /**
@@ -83,7 +88,7 @@ class CategoryController extends Controller
      */
     public function show(string $category)
     {
-        $catego = Category::query()->where('id', $category)->with(['media','childrens'])->get()->first();
+        $catego = Category::query()->where('id', $category)->with(['media', 'childrens'])->get()->first();
 
         return ApiResponse::success(CategoryResource::make($catego)->withChildrens(), 200);
 

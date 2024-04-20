@@ -11,12 +11,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenBlacklistedException;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
+use PHPOpenSourceSaver\JWTAuth\Http\Parser\Parser;
+use PHPOpenSourceSaver\JWTAuth\JWT;
+use PHPOpenSourceSaver\JWTAuth\Manager;
 use Throwable;
 
 class AuthController extends Controller
 
 {
     //
+    public function validateToken(Request $request)
+    {
+$token = $request->bearerToken();
+
+    }
+
     public function login(Request $req)
     {
         try {

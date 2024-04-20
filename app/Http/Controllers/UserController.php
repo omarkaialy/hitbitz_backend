@@ -27,7 +27,6 @@ class UserController extends Controller
 
 
         $user = Auth::user();
-
         $user->favoriteRoadmaps()->toggle($roadmap->id);
         return ApiResponse::success(null,200,'Favorite Status Changed');
     }
