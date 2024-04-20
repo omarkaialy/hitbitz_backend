@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\ImageExists;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRoadmapRequest extends FormRequest
@@ -11,7 +12,7 @@ class StoreRoadmapRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->user()->hasRole( 'super_admin');
+        return auth()->user()->hasRole('super_admin');
     }
 
     /**
@@ -22,10 +23,24 @@ class StoreRoadmapRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|min:4',
-            'image' => 'required',
-            'categoryId' => 'required',
+            'name' => ['required','min:4','unique:roadmaps,name'],
+            'image' => ['required',new ImageExists($this->image)],
+            'categoryId' => 'required|exists:categories,id',
             'description' => 'required|min:10'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.unique:roadmaps,name'=>'name has already been taken' ,
+            'name.required' => 'name is required',
+            'name.min:4' => 'name length should at least be 4 character',
+            'image.required' => 'image is required',
+            'categoryId.required' => 'categoryId is required',
+            'categoryId.exists:categories,id' => 'category is not exists',
+            'description.max:20' => 'description should be at least 20 character',
+            'description.required' => 'description is required',
         ];
     }
 }

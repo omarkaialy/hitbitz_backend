@@ -15,8 +15,8 @@ class RoadmapController extends Controller
 {
     public function __construct(protected ImageService $imageService)
     {
-    $this->middleware('superAdmin')->only(['store','destroy','update']);
-    $this->middleware('auth')->only(['index','show']);
+        $this->middleware('superAdmin')->only(['store', 'destroy', 'update']);
+        $this->middleware('auth')->only(['index', 'show']);
     }
 
     /**
@@ -66,18 +66,22 @@ class RoadmapController extends Controller
      */
     public function store(StoreRoadmapRequest $request)
     {
-        $roadmap = new Roadmap();
-        $roadmap->name = $request->name;
-        $roadmap->description = $request->description;
-        $roadmap->rate = 0;
-        $category = Category::findOrFail($request->categoryId);
-        if ($category->childrens()->exists())
-            return ApiResponse::error(400, 'Cannot Associate Roadmap To Parent Category');
-        $roadmap->category()->associate($category);
+        try {
+            $roadmap = new Roadmap();
+            $roadmap->name = $request->name;
+            $roadmap->description = $request->description;
+            $roadmap->rate = 0;
+            $category = Category::findOrFail($request->categoryId);
+            if ($category->childrens()->exists())
+                return ApiResponse::error(400, 'Cannot Associate Roadmap To Parent Category');
+            $roadmap->category()->associate($category->id);
 
-        $roadmap->save();
-        $this->imageService->storeImage($roadmap, $request->image, 'roadMaps');
-        return ApiResponse::success(RoadmapResource::make($roadmap), 200, 'Roadmap Created Successfully');
+            $roadmap->save();
+            $this->imageService->storeImage($roadmap, $request->image, 'roadMaps');
+            return ApiResponse::success(RoadmapResource::make($roadmap), 200, 'Roadmap Created Successfully');
+        } catch (\Exception $e) {
+            return ApiResponse::error(419, $e);
+        }
     }
 
     /**
@@ -86,7 +90,7 @@ class RoadmapController extends Controller
     public function show(string $id)
     {
 
-        $roadmap = Roadmap::query()->where('id', $id)->with(['media','category'])->get();
+        $roadmap = Roadmap::query()->where('id', $id)->with(['media', 'category'])->get();
         if ($roadmap->isEmpty())
             return ApiResponse::error(404, 'Not Found');
         return ApiResponse::success(RoadmapResource::make($roadmap->first()), 200);
