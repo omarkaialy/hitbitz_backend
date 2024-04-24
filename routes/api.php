@@ -84,6 +84,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::get('/questions', [QuestionController::class, 'index']);
     Route::get('/quizzes/{id}', [QuizController::class, 'show']);
     Route::get('/quizzes', [QuizController::class, 'index']);
+Route::post('/makeSuggestion',[\App\Http\Controllers\SuggestionController::class,'store']);
 
 
 });
