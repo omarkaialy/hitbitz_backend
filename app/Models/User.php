@@ -61,7 +61,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function quizzes()
     {
         return $this->belongsToMany(Quiz::class, 'user_quiz')
-            ->withPivot('completed')
+            ->withPivot(['completed','score','id'])
             ->withTimestamps();
     }
 

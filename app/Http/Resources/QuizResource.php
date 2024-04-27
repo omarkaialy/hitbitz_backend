@@ -30,4 +30,11 @@ class QuizResource extends JsonResource
 
         ];
     }
+    public function withUserPivot(){
+        return [
+            'id'=>$this->pivot->id,
+            'completed'=>$this->pivot->completed,
+            'score'=>$this->pivot->score,
+        ];
+    }
 }
