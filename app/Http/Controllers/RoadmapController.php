@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ApiResponse;
+use App\Http\Middleware\CheckRole;
 use App\Http\Requests\StoreRoadmapRequest;
 use App\Http\Resources\RoadmapResource;
 use App\Models\Category;
@@ -14,10 +15,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 class RoadmapController extends Controller
 {
     public function __construct(protected ImageService $imageService)
-    {
-        $this->middleware('superAdmin')->only(['store', 'destroy', 'update']);
-        $this->middleware('auth')->only(['index', 'show']);
-    }
+    {}
 
     /**
      * Display a listing of the resource.

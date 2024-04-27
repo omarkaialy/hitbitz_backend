@@ -57,8 +57,9 @@ class AuthController extends Controller
             $token = Auth::attempt(['user_name' => $req->userName, 'password' => $req->password]);
             if ($token) {
                 $user = Auth::user();
-                $user->access_token = $token;
-                if ($user->hasRole(['super_admin'])) {
+                $user->token = $token;
+                if ($user->hasRole(['super_admin','admin'])) {
+               $user->save();
                     return ApiResponse::success(UserResource::make($user),
                         200);
                 } else {

@@ -2,7 +2,9 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\AdminMiddleWare;
 use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\CheckRole;
 use App\Http\Middleware\Cors;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
@@ -46,6 +48,7 @@ class Kernel extends HttpKernel
         ValidatePostSize::class,
         TrimStrings::class,
         ConvertEmptyStringsToNull::class,
+
     ];
 
     /**
@@ -65,8 +68,9 @@ class Kernel extends HttpKernel
 
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            ThrottleRequests::class.':api',
+            ThrottleRequests::class . ':api',
             SubstituteBindings::class,
+            Cors::class
         ],
     ];
 
@@ -89,7 +93,7 @@ class Kernel extends HttpKernel
         'signed' => ValidateSignature::class,
         'throttle' => ThrottleRequests::class,
         'verified' => EnsureEmailIsVerified::class,
-        'superAdmin'=>SuperAdminMiddleWare::class,
-        'cors'=>Cors::class
-    ];
+        'cors' => Cors::class,
+        'role'=>CheckRole::class
+        ];
 }

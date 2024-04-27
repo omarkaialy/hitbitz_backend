@@ -13,9 +13,11 @@ class CategoryStoreRequest extends FormRequest
     public function authorize(): bool
     {
         if ($this->has('parentId')) {
-            return auth()->user()->hasRole(['super_admin', 'admin']);
-        } else
+            return auth()->user()->hasRole('super_admin|admin');
+        } else {
             return auth()->user()->hasRole('super_admin');
+        }
+
     }
 
     /**
@@ -44,4 +46,5 @@ class CategoryStoreRequest extends FormRequest
             'image.required' => 'image is required',
         ];
     }
+
 }

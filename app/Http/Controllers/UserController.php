@@ -13,23 +13,26 @@ class UserController extends Controller
     public function __construct()
     {
         // Apply middleware to specific methods
-        $this->middleware('auth')->only(['toggleFavorite']);
-     }
+        $this->middleware('auth')->only(['toggleFavorite', 'indexReferals']);
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function indexReferals()
     {
-        return ApiResponse::success(['numOfReferees'=>count(Auth::user()->referees)],200);
+        return ApiResponse::success(['numOfReferees' => count(Auth::user()->referees)], 200);
     }
+
     public function toggleFavorite(Roadmap $roadmap)
     {
 
 
         $user = Auth::user();
         $user->favoriteRoadmaps()->toggle($roadmap->id);
-        return ApiResponse::success(null,200,'Favorite Status Changed');
+        return ApiResponse::success(null, 200, 'Favorite Status Changed');
     }
+
     /**
      * Show the form for creating a new resource.
      */

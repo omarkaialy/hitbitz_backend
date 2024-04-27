@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
     {
         $superAdmin = new User();
         $superAdmin->user_name='superAdmin';
-        $superAdmin->email='admin@hitbitz.com';
+        $superAdmin->email='superAdmin@hitbitz.com';
         $superAdmin->password='12345678';
         $superAdmin->full_name='superAdmin';
         $superAdmin->assignRole('super_admin');
