@@ -12,7 +12,7 @@ class StoreRoadmapRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->user()->hasRole('super_admin');
+        return auth()->user()->hasRole(['super_admin','admin']);
     }
 
     /**

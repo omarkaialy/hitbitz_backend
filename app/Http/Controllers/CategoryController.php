@@ -7,7 +7,6 @@ use App\Helpers\ApiResponse;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
-use App\Rules\OneOf;
 use App\Services\ImageService;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -60,10 +59,11 @@ class CategoryController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(CategoryStoreRequest $request)
-    {   try {
+    {
+        try {
 
 
-        $category = new Category();
+            $category = new Category();
             $category->name = $request->name;
             if (isset($request->parentId)) {
                 $parent = Category::findOrFail($request->parentId);

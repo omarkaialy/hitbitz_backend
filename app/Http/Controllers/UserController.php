@@ -18,9 +18,9 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function indexReferals()
     {
-        //
+        return ApiResponse::success(['numOfReferees'=>count(Auth::user()->referees)],200);
     }
     public function toggleFavorite(Roadmap $roadmap)
     {

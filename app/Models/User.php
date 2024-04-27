@@ -85,4 +85,14 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     {
         return $this->belongsToMany(Roadmap::class, 'user_roadmap', 'user_id', 'roadmap_id')->withTimestamps();
     }
+    public function referees()
+    {
+        return $this->hasMany(User::class, 'referrer_id');
+    }
+
+    // Define the inverse relationship where one user belongs to a referrer
+    public function referrer()
+    {
+        return $this->belongsTo(User::class, 'referrer_id');
+    }
 }
