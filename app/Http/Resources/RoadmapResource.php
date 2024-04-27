@@ -14,13 +14,33 @@ class RoadmapResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
-            'id'=>$this->id,
-            'media'=>MediaResource::make($this,'roadMaps'),
-            'name'=>$this->name,
-            'description'=> $this->description,
-            'category'=>CategoryResource::make($this->category),
-            'rate'=>$this->rate,
+        $data = [
+            'id' => $this->id,
+            'media' => MediaResource::make($this, 'roadMaps'),
+            'name' => $this->name,
+            'description' => $this->description,
+            'rate' => $this->rate,
         ];
+        return $data;
     }
+
+    public function withPivots()
+    {
+        $data = [
+            'id' => $this->id,
+            'media' => MediaResource::make($this, 'roadMaps'),
+            'name' => $this->name,
+            'description' => $this->description,
+            'rate' => $this->rate,
+        ];
+        if (isset($this->category)) {
+            $data['category'] = CategoryResource::make($this->category);
+        }
+        if (isset($this->levels)) {
+            $data['levels'] = LevelResource::collection($this->levels);
+        }
+        return $data;
+    }
+
+
 }

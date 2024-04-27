@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ApiResponse;
+use App\Http\Resources\LevelResource;
 use App\Models\Level;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -16,7 +17,7 @@ class LevelController extends Controller
     public function index()
     {
         $levels = QueryBuilder::for(Level::query()->with(['roadmap']))->allowedFilters([ AllowedFilter::exact('roadmap_id', 'roadmap_id')])->defaultSort('-updated_at')->Paginate(request()->perPage);
-        return ApiResponse::success($levels->items(), 200, 'Here Is All Levels');
+        return ApiResponse::success(LevelResource::collection( $levels->items()), 200, 'Here Is All Levels');
     }
 
     /**
@@ -45,7 +46,8 @@ class LevelController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $level= Level::query()->where('id','=',$id)->with(['roadmap','levelDetails'])->get()->first();
+return ApiResponse::success(LevelResource::make($level)->withRoadmap(),200);
     }
 
     /**

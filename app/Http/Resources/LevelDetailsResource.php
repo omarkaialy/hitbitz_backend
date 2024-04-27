@@ -5,10 +5,8 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class LevelResource extends JsonResource
+class LevelDetailsResource extends JsonResource
 {
-
-
     /**
      * Transform the resource into an array.
      *
@@ -19,20 +17,18 @@ class LevelResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'description' => $this->descirption
         ];
     }
 
-
-    public function withRoadmap()
+    public function withLevel()
     {
         $data = [
             'id' => $this->id,
             'name' => $this->name,
+            'description' => $this->descirption
         ];
-        $data['roadmap'] = RoadmapResource::make($this->roadmap);
-        $data['level_details'] = $this->levelDetails->map(function ($levelDetails) {
-            return LevelDetailsResource::make($levelDetails);
-        });
+        $data['level'] = LevelResource::make($this->level);
         return $data;
     }
 }

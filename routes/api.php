@@ -36,11 +36,13 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/roadmaps/store', [RoadmapController::class, 'store']);
     Route::delete('/roadmaps/{roadmap}', [RoadmapController::class, 'destroy']);
+    Route::get('/roadmaps/{roadmap}', [RoadmapController::class, 'show']);
     Route::post('/categories/store', [CategoryController::class, 'store']);
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
     Route::get('/categories/{id}', [CategoryController::class, 'show']);
     Route::post('/levels/store', [LevelController::class, 'store']);
     Route::delete('/levels/{level}', [LevelController::class, 'destroy']);
+    Route::get('/levels/{id}', [LevelController::class, 'show']);
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/roadmaps', [RoadmapController::class, 'index']);
     Route::get('/levels', [LevelController::class, 'index']);

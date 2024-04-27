@@ -88,10 +88,10 @@ class RoadmapController extends Controller
     public function show(string $id)
     {
 
-        $roadmap = Roadmap::query()->where('id', $id)->with(['media', 'category'])->get();
+        $roadmap = Roadmap::query()->where('id', $id)->with(['media', 'category','levels'])->get();
         if ($roadmap->isEmpty())
             return ApiResponse::error(404, 'Not Found');
-        return ApiResponse::success(RoadmapResource::make($roadmap->first()), 200);
+        return ApiResponse::success(RoadmapResource::make($roadmap->first())->withPivots(), 200);
     }
 
     /**
