@@ -16,7 +16,7 @@ class ChoicesFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->title(),
+            'title' => $this->faker->realText(20),
             'correct' => $this->faker->boolean(),
             'order' => $this->faker->randomDigit(),
 //            'question_id' => Question::query()->get()->random()->id,

@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('roadmap_id')->constrained('roadmaps')->on('roadmaps');
             $table->string('name');
+            $table->integer('order');
             // Add other fields related to levels
 
             $table->timestamps();

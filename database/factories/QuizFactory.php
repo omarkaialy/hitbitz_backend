@@ -16,10 +16,13 @@ class QuizFactory extends Factory
      * @return array<string, mixed>
      */
     public function definition(): array
-    {
+    {static $order=1;
         return [
-            'name' => $this->faker->text(100),
+            'name' => $this->faker->realText(100),
             'level_detail_id' => LevelDetail::query()->get()->random()->id,
+            'order'=>$order++,
+            'description'=>$this->faker->paragraph,
+            'required_degree'=>random_int(60,90)
         ];
     }
 }

@@ -17,10 +17,13 @@ class LevelDetailFactory extends Factory
      */
     public function definition(): array
     {
+        static  $order = 1;
         return [
             'name'=>$this->faker->name(),
             'description'=>$this->faker->paragraph(2),
             'level_id'=> Level::query()->get()->random()->id,
-        ];
+            'order'=>$order++,
+            'duration'=>random_int(1,5),
+         ];
     }
 }

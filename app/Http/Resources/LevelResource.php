@@ -19,6 +19,7 @@ class LevelResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'order'=>$this->order
         ];
     }
 
@@ -28,6 +29,7 @@ class LevelResource extends JsonResource
         $data = [
             'id' => $this->id,
             'name' => $this->name,
+            'order'=>$this->order
         ];
         $data['roadmap'] = RoadmapResource::make($this->roadmap);
         $data['level_details'] = $this->levelDetails->map(function ($levelDetails) {

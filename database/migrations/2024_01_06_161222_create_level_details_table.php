@@ -15,6 +15,8 @@ return new class extends Migration
             // Add fields specific to level details
             $table->string('name');
             $table->text('description')->nullable();
+            $table->integer('order');
+            $table->integer('duration');
             $table->timestamps();
         });
     }

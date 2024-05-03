@@ -26,7 +26,7 @@ class RoadmapController extends Controller
         if (!is_null($category) && !$category) {
             return ApiResponse::error(421, 'This category isn\'t Exist');
         } else if (!is_null($category) && !is_null($category->parent_id)) {
-            $roadmaps = QueryBuilder::for(Roadmap::query()->with(['media', 'category']))->allowedFilters(['name', 'category_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
+            $roadmaps = QueryBuilder::for(Roadmap::query()->with(['media']))->allowedFilters(['name', 'category_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
 
         } else if (!is_null($category)) {
             $ids = [];
@@ -35,10 +35,10 @@ class RoadmapController extends Controller
                 $ids[] = $e->id;
 
             }
-            $roadmaps = QueryBuilder::for(Roadmap::query()->with(['media', 'category'])->whereIn('category_id', $ids,))->allowedFilters(['name', 'category_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
+            $roadmaps = QueryBuilder::for(Roadmap::query()->with(['media'])->whereIn('category_id', $ids,))->allowedFilters(['name', 'category_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
 
         } else {
-            $roadmaps = QueryBuilder::for(Roadmap::query()->with(['media', 'category']))->allowedFilters(['name', 'category_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
+            $roadmaps = QueryBuilder::for(Roadmap::query()->with(['media']))->allowedFilters(['name', 'category_id'])->defaultSort('-updated_at')->Paginate(request()->perPage);
         }
 
 
@@ -50,6 +50,7 @@ class RoadmapController extends Controller
         $favorites = auth()->user()->favoriteRoadmaps()->with(['media'])->get();
         return ApiResponse::success(RoadmapResource::collection($favorites), 200);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -91,7 +92,7 @@ class RoadmapController extends Controller
         $roadmap = Roadmap::query()->where('id', $id)->with(['media', 'category','levels'])->get();
         if ($roadmap->isEmpty())
             return ApiResponse::error(404, 'Not Found');
-        return ApiResponse::success(RoadmapResource::make($roadmap->first())->withPivots(), 200);
+        return ApiResponse::success(RoadmapResource::make($roadmap->first()), 200);
     }
 
     /**

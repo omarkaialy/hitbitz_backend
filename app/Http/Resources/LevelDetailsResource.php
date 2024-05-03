@@ -17,7 +17,10 @@ class LevelDetailsResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'description' => $this->descirption
+            'description' => $this->descirption,
+            'order'=>$this->order,
+            'duration'=>$this->duration
+
         ];
     }
 
@@ -26,7 +29,9 @@ class LevelDetailsResource extends JsonResource
         $data = [
             'id' => $this->id,
             'name' => $this->name,
-            'description' => $this->descirption
+            'description' => $this->descirption,
+            'order'=>$this->order,
+            'duration'=>$this->duration
         ];
         $data['level'] = LevelResource::make($this->level);
         return $data;

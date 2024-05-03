@@ -17,9 +17,11 @@ class LevelFactory extends Factory
      */
     public function definition(): array
     {
+        static $order = 1;
         return [
-         'name'=> $this->faker->name(),
-            'roadmap_id'=> Roadmap::query()->get()->random()->id,
+            'name' => $this->faker->name(),
+            'roadmap_id' => Roadmap::query()->get()->random()->id,
+            'order' => $order++,
         ];
     }
 }

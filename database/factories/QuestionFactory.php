@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Enums\QuestionTypeEnum;
 use App\Models\Quiz;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,13 +17,14 @@ class QuestionFactory extends Factory
      */
     public function definition(): array
     {
-        $data= [
-            'quiz_id' => Quiz::query()->get()->random()->id,
-            'type' => random_int(1, 5),
-            'title' => fake()->name(),
-        ];
-        if($data['type']==1){
-            $data['isTrue']= $this->faker->boolean() ;
+        $data = [
+            'quiz_id' => Quiz::query()->whereNot('id','=',1)->get()->random()->id,
+            'type' => random_int(1, 6),
+            'title' => fake()->text(30),
+
+            ];
+        if ($data['type'] == 1) {
+            $data['isTrue'] = $this->faker->boolean();
         }
         return $data;
     }
