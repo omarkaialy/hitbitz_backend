@@ -23,7 +23,7 @@ class QuestionResource extends JsonResource
         if ($this->type == QuestionTypeEnum::tfQuiz) {
             $data['correctAnswer'] = [$this->isTrue];
         } else {
-            $data['answers'] = ChoicesResource::collection($this->choices);
+            $data['answers'] = ChoicesResource::collection($this->choices->shuffle()    );
         }
 
         if (isset($this->media)) {

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->integer('current_level')->default(1);
             $table->integer('completed')->default(0);
             $table->integer('rate')->default(0);
+            $table->integer('progress')->default(0);
             $table->timestamps();
             $table->boolean('favored')->default(false);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

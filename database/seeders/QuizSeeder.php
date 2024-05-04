@@ -57,12 +57,40 @@ class QuizSeeder extends Seeder
             }
             $index = $index + 1;
         }
+        $answers = [
+            ['title' => 'Column(', 'correct' => true],
+            ['title' => 'children:[', 'correct' => false],
+            ['title' => 'Text(\'data\',)', 'correct' => false],
+            ['title' => '],),', 'correct' => false],
+        ];
+
+        $question = new Question();
+        $question->title = 'Order This Statements To Make A Correct Widget';
+        $question->type = 5;
+        $question->quiz()->associate(1);
+        $question->save();
+        $index = 0;
+        foreach ($answers as $answer) {
+            Choices::create(['question_id' => $question->id,
+                'title' => $answer['title'],
+                'order' => $index + 1
+            ]);
+            $index = $index + 1;
+        }
+
         $question = new Question();
         $question->title = "True or False: A column widget is only useful for displaying text content.";
         $question->type = 1;
         $question->isTrue = true;
         $question->quiz()->associate(1);
         $question->save();
+
+        $question = new Question();
+        $question->title = "...... Widget Is Used To Layout Other Widgets Vertically";
+        $question->type = 4;
+        $question->quiz()->associate(1);
+        $question->save();
+        Choices::create(['title'=>'column','question_id'=>$question->id]);
         Quiz::factory()->count(10)->create();
         Question::factory()->count(50)->create();
     }

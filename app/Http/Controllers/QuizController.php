@@ -65,7 +65,7 @@ class QuizController extends Controller
 
             // Attach or update the pivot record
             $score = request()->score;
-            $completed = $score >= 60 ? 1 : 0;
+            $completed = $score >= $quiz->required_degree ? 1 : 0;
 
             if ($quizUser) {
                 $quiz->users()->updateExistingPivot($user->id, compact('score', 'completed'));

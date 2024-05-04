@@ -16,27 +16,32 @@ class QuizResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name'=>$this->name,
-            'step_id'=>$this->level_detail_id,
-            'order'=>$this->order
+            'name' => $this->name,
+            'step_id' => $this->level_detail_id,
+            'order' => $this->order,
 
         ];
     }
-    public function withQuestions(){
+
+    public function withQuestions()
+    {
         return [
             'id' => $this->id,
-            'name'=>$this->name,
-            'step_id'=>$this->level_detail_id,
-            'order'=>$this->order,
-            'questions'=> QuestionResource::collection($this->questions)
+            'name' => $this->name,
+            'step_id' => $this->level_detail_id,
+            'order' => $this->order, 'required_degree' => $this->required_degree
+            ,
+            'questions' => QuestionResource::collection($this->questions)
 
         ];
     }
-    public function withUserPivot(){
+
+    public function withUserPivot()
+    {
         return [
-            'id'=>$this->pivot->id,
-            'completed'=>$this->pivot->completed,
-            'score'=>$this->pivot->score,
+            'id' => $this->pivot->id,
+            'completed' => $this->pivot->completed,
+            'score' => $this->pivot->score,
         ];
     }
 }
