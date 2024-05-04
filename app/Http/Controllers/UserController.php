@@ -29,8 +29,44 @@ class UserController extends Controller
 
 
         $user = Auth::user();
-        $user->favoriteRoadmaps()->toggle($roadmap->id);
+        if ($user->userRoadmap()->where('roadmap_id', $roadmap->id)->exists()) {
+            // If the user has already favorited the roadmap, update the pivot table
+            if ($user->userRoadmap()->where('roadmap_id', $roadmap->id)->get()->first()->pivot->favored == 1) {
+                $user->userRoadmap()->updateExistingPivot($roadmap->id, ['favored' => false]);
+            } else {
+                $user->userRoadmap()->updateExistingPivot($roadmap->id, ['favored' => true]);
+            }
+        } else {
+            // If the user hasn't favorited the roadmap yet, add it to the pivot table
+            $user->userRoadmap()->attach($roadmap->id, ['favored' => true]);
+        }
         return ApiResponse::success(null, 200, 'Favorite Status Changed');
+    }
+
+    public function rateRoadmap(Roadmap $roadmap)
+    {
+        $user = Auth::user();
+        if ($user->userRoadmap()->where('roadmap_id', '=', $roadmap->id)->exists()
+            && $user->userRoadmap()->where('roadmap_id', '=', $roadmap->id)->get()->first()->pivot->rate == 0) {
+            $user->userRoadmap()->updateExistingPivot($roadmap->id, ['rate' => \request()->rate]);
+            $roadmap->rate = $roadmap->userRoadmap()->average('rate');
+            $roadmap->save();
+            return ApiResponse::success(null, 200, 'Rated Successfully');
+        } else {
+            return ApiResponse::error(400, 'You Can\'t Rate This Roadmap');
+        }
+    }
+
+    public function startRoadmap(Roadmap $roadmap)
+    {
+        $user = Auth::user();
+        if ($user->userRoadmap()->where('roadmap_id', '=', $roadmap->id)->exists()) {
+            return ApiResponse::error(400, 'You Already Started This Roadmap');
+        } else {
+            return ApiResponse::success($user->userRoadmap()->attach($roadmap, ['completed' => 0]), 200);
+
+        }
+
     }
 
     /**

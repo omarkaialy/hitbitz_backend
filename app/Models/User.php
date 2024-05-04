@@ -61,7 +61,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     public function quizzes()
     {
         return $this->belongsToMany(Quiz::class, 'user_quiz')
-            ->withPivot(['completed','score','id'])
+            ->withPivot(['completed', 'score', 'id'])
             ->withTimestamps();
     }
 
@@ -71,20 +71,15 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
             ->wherePivot('accepted', true);
     }
 
-    public function roadmap()
+
+
+    public function userRoadmap()
     {
-        return $this->hasMany(Roadmap::class);
+        return $this->
+        belongsToMany(Roadmap::class, 'user_roadmap', 'user_id', 'roadmap_id')
+            ->withTimestamps()->withPivot(['favored','completed','current_level','rate']);
     }
 
-    public function favorites()
-    {
-        return $this->hasMany(UserRoadmap::class, 'user_id');
-    }
-
-    public function favoriteRoadmaps()
-    {
-        return $this->belongsToMany(Roadmap::class, 'user_roadmap', 'user_id', 'roadmap_id')->withTimestamps();
-    }
     public function referees()
     {
         return $this->hasMany(User::class, 'referrer_id');

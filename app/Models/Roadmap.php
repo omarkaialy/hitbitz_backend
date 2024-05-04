@@ -22,12 +22,9 @@ class Roadmap extends Model implements HasMedia
         return $this->hasMany(Level::class);
     }
 
-    public function users()
-    {
-        return $this->belongsToMany(User::class)->withTimestamps();
-    }
 
-    public function favorites()
+
+    public function userRoadmap()
     {
         return $this->hasMany(UserRoadmap::class, 'roadmap_id');
     }

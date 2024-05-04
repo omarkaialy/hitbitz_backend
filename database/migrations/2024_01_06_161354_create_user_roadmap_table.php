@@ -13,7 +13,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('roadmap_id');
             $table->integer('current_level')->default(1);
-            $table->integer('completed')->default(1);
+            $table->integer('completed')->default(0);
             $table->integer('rate')->default(0);
             $table->timestamps();
             $table->boolean('favored')->default(false);

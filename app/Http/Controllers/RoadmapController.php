@@ -47,7 +47,7 @@ class RoadmapController extends Controller
 
     public function indexFavorites()
     {
-        $favorites = auth()->user()->favoriteRoadmaps()->with(['media'])->get();
+        $favorites = auth()->user()->userRoadmap()->where('favored','=',true)->with(['media'])->get();
         return ApiResponse::success(RoadmapResource::collection($favorites), 200);
     }
 
