@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\SuggestionTypeEnum;
 use App\Helpers\ApiResponse;
+use App\Http\Resources\SuggestionResource;
 use App\Models\Suggestion;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -15,9 +16,8 @@ class SuggestionController extends Controller
      */
     public function index()
     {
-        $suggestion = QueryBuilder::for(Suggestion::query()->get())
-            ->paginate();
-        return ApiResponse::success($suggestion->items(), 200);
+        $suggestion = QueryBuilder::for( Suggestion::query())->paginate();
+        return ApiResponse::success(SuggestionResource::collection($suggestion->items()), 200);
     }
 
     /**

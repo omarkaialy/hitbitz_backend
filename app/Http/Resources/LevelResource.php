@@ -19,7 +19,10 @@ class LevelResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'order'=>$this->order
+            'order'=>$this->order,
+            'level_details' => $this->levelDetails->map(function ($levelDetails) {
+                return LevelDetailsResource::make($levelDetails);
+            })
         ];
     }
 

@@ -49,6 +49,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/levelStep', [LevelDetailController::class, 'index']);
     Route::post('/levelStep/store', [LevelDetailController::class, 'store']);
     Route::delete('/levelStep/{levelDetail}', [LevelDetailController::class, 'destroy']);
+    Route::get('/levelStep/{id}', [LevelDetailController::class, 'show']);
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/subcategories', [CategoryController::class, 'indexSubs']);
     Route::get('/roadmaps', [RoadmapController::class, 'index']);
@@ -59,6 +60,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/questions/store', [QuestionController::class, 'store']);
     Route::post('/quizzes/store', [QuizController::class, 'store']);
     Route::delete('/quizzes/{quiz}', [QuizController::class, 'destroy']);
+    Route::get('/suggestions', [\App\Http\Controllers\SuggestionController::class, 'index']);
 
 });
 Route::group(['prefix' => 'user'], function () {

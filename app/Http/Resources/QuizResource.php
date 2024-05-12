@@ -17,6 +17,7 @@ class QuizResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'description' => $this->description,
             'step_id' => $this->level_detail_id,
             'order' => $this->order,
 

@@ -14,26 +14,15 @@ class LevelDetailsResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'description' => $this->descirption,
-            'order'=>$this->order,
-            'duration'=>$this->duration
-
-        ];
-    }
-
-    public function withLevel()
-    {
         $data = [
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->descirption,
-            'order'=>$this->order,
-            'duration'=>$this->duration
+            'order' => $this->order,
+            'duration' => $this->duration
         ];
-        $data['level'] = LevelResource::make($this->level);
+        $data['quizzes'] = QuizResource::collection($this->quizzes);
+        $data['level'] = LevelResource::make($this->whenLoaded('level'));
         return $data;
     }
 }
