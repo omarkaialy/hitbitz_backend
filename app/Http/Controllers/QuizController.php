@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ApiResponse;
 use App\Http\Resources\QuizResource;
+use App\Models\LevelDetail;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,10 +28,13 @@ class QuizController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(['name' => 'required|min:4', 'stepId' => 'required']);
+        $request->validate(['name' => 'required|min:4', 'stepId' => 'required', 'description' => 'required', 'requiredDegree' => 'required|min:1|max:100']);
         $quiz = new Quiz();
         $quiz->name = $request->name;
+        $quiz->required_degree = $request->requiredDegree;
+        $quiz->description = $request->description;
         $quiz->levelDetail()->associate($request->stepId);
+        $quiz->order = LevelDetail::find($request->stepId)->quizzes()->get()->count();
         $quiz->save();
         return ApiResponse::success($quiz, 200, 'Quiz Created Successfully');
 
@@ -74,7 +78,7 @@ class QuizController extends Controller
             }
 
             // Retrieve the updated response
-            $response = QuizResource::make( $quiz->users()->where('user_id', $user->id)->with('quizzes')->first())->withUserPivot();
+            $response = QuizResource::make($quiz->users()->where('user_id', $user->id)->with('quizzes')->first())->withUserPivot();
 
             return ApiResponse::success($response, 200);
         } catch (\Throwable $exception) {

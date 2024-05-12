@@ -20,6 +20,8 @@ class QuizResource extends JsonResource
             'description' => $this->description,
             'step_id' => $this->level_detail_id,
             'order' => $this->order,
+            'required_degree' => $this->required_degree,
+
 
         ];
     }
@@ -30,8 +32,8 @@ class QuizResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'step_id' => $this->level_detail_id,
-            'order' => $this->order, 'required_degree' => $this->required_degree
-            ,
+            'order' => $this->order,
+            'required_degree' => $this->required_degree,
             'questions' => QuestionResource::collection($this->questions)
 
         ];

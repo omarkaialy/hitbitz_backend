@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ApiResponse;
-use App\Http\Middleware\CheckRole;
 use App\Http\Requests\StoreRoadmapRequest;
 use App\Http\Resources\RoadmapResource;
 use App\Models\Category;
@@ -15,7 +14,8 @@ use Spatie\QueryBuilder\QueryBuilder;
 class RoadmapController extends Controller
 {
     public function __construct(protected ImageService $imageService)
-    {}
+    {
+    }
 
     /**
      * Display a listing of the resource.
@@ -47,7 +47,7 @@ class RoadmapController extends Controller
 
     public function indexFavorites()
     {
-        $favorites = auth()->user()->userRoadmap()->where('favored','=',true)->with(['media'])->get();
+        $favorites = auth()->user()->userRoadmap()->where('favored', '=', true)->with(['media'])->get();
         return ApiResponse::success(RoadmapResource::collection($favorites), 200);
     }
 
@@ -89,7 +89,7 @@ class RoadmapController extends Controller
     public function show(string $id)
     {
 
-        $roadmap = Roadmap::query()->where('id', $id)->with(['media', 'category','levels'])->get();
+        $roadmap = Roadmap::query()->where('id', $id)->with(['media', 'category', 'levels'])->get();
         if ($roadmap->isEmpty())
             return ApiResponse::error(404, 'Not Found');
         return ApiResponse::success(RoadmapResource::make($roadmap->first()), 200);
@@ -116,9 +116,15 @@ class RoadmapController extends Controller
      */
     public function destroy(Roadmap $roadmap)
     {
+        try {
 
-        $roadmap->delete();
-        return ApiResponse::success(null, 200, 'deleted');
+            $roadmap->delete();
+            return ApiResponse::success(null, 200, 'deleted');
+        } catch (\Throwable $exception) {
+            if ($exception->getCode() == 23000)
+                return ApiResponse::error(422, 'Cannot delete roadmap because it is associated with existing levels');
+        }
+        return response()->json(['error' => 'Failed to delete the roadmap'], 500);
 
         //
     }
