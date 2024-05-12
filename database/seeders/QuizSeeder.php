@@ -29,7 +29,7 @@ class QuizSeeder extends Seeder
             ['title' => 'Improved content organization', 'correct' => false],
             ['title' => 'Enhanced user engagement', 'correct' => false],
             ['title' => 'Efficient use of screen space', 'correct' => false],
-            ['title' => 'All of the above', 'correct' => true],
+            ['title' => 'Render Text On Screens', 'correct' => false],
         ],
             [
                 ['title' => 'To ensure compatibility with older browsers', 'correct' => false],

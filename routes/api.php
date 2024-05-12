@@ -60,6 +60,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/questions/store', [QuestionController::class, 'store']);
     Route::post('/quizzes/store', [QuizController::class, 'store']);
     Route::delete('/quizzes/{quiz}', [QuizController::class, 'destroy']);
+    Route::get('/quizzes/{id}', [QuizController::class, 'show']);
     Route::get('/suggestions', [\App\Http\Controllers\SuggestionController::class, 'index']);
 
 });

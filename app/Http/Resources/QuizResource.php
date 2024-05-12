@@ -32,7 +32,8 @@ class QuizResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'step_id' => $this->level_detail_id,
-            'order' => $this->order,
+            'order' => $this->order, 'description' => $this->description,
+
             'required_degree' => $this->required_degree,
             'questions' => QuestionResource::collection($this->questions)
 
