@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\LevelDetailController;
+use App\Http\Controllers\PushNotificationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RoadmapController;
@@ -32,6 +33,7 @@ Route::group([], function () {
     Route::post('upload64Image', [ImageController::class, 'uploadImage64']);
 });
 Route::group(['prefix' => 'admin'], function () {
+    Route::get('/send-notification', [PushNotificationController::class, 'sendPushNotification']);
     Route::post('/login', [AuthController::class, 'loginAdmin']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/roadmaps/store', [RoadmapController::class, 'store']);
