@@ -6,7 +6,6 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\LevelDetailController;
-use App\Http\Controllers\PushNotificationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RoadmapController;
@@ -33,7 +32,7 @@ Route::group([], function () {
     Route::post('upload64Image', [ImageController::class, 'uploadImage64']);
 });
 Route::group(['prefix' => 'admin'], function () {
-    Route::get('/send-notification', [PushNotificationController::class, 'sendPushNotification']);
+    Route::post('/send-notification', [\App\Http\Controllers\NotificationController::class, 'store']);
     Route::post('/login', [AuthController::class, 'loginAdmin']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/roadmaps/store', [RoadmapController::class, 'store']);
@@ -96,13 +95,12 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('/quizzes/{quiz}/complete', [QuizController::class, 'complete'])->middleware('auth');
     Route::post('/makeSuggestion', [\App\Http\Controllers\SuggestionController::class, 'store']);
     Route::get('/myReferrals', [\App\Http\Controllers\UserController::class, 'indexReferals']);
-
-
+    Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index']);
 });
 Route::get('/migrate', function () {
     Artisan::call('migrate:fresh --seed');
     return (ApiResponse::success(null, 200));
 });
-Route::get('/migrate-test',function (){
-    return ApiResponse::success(null,200);
+Route::get('/migrate-test', function () {
+    return ApiResponse::success(null, 200);
 });

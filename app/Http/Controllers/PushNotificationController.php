@@ -9,23 +9,28 @@ use Kreait\Firebase\Messaging\CloudMessage;
 class PushNotificationController extends Controller
 {
 
-    public function sendPushNotification()
+    public function sendPushNotification(string $title,string $body,string $topic)
     {
-        $firebase = (new Factory)
-            ->withServiceAccount(config_path('firebase_credentials.json'));
+        try {
+            $firebase = (new Factory)
+                ->withServiceAccount(config_path('firebase_credentials.json'));
 
-        $messaging = $firebase->createMessaging();
+            $messaging = $firebase->createMessaging();
 
-        $message = CloudMessage::fromArray([
-            'notification' => [
-                'title' => 'Hello from Firebase!',
-                'body' => 'This is a test notification.'
-            ],
-            'topic' => 'global'
-        ]);
+            $message = CloudMessage::fromArray([
+                'notification' => [
+                    'title' => $title,
+                    'body' => $body
+                ],
+                'topic' => $topic
+            ]);
 
-        $messaging->send($message);
+            $messaging->send($message);
 
-        return response()->json(['message' => 'Push notification sent successfully']);
+            return true;
+        }
+    catch (\Exception $exception){
+            return $exception;
+    }
     }
 }
