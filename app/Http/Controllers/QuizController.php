@@ -55,7 +55,7 @@ class QuizController extends Controller
     {
         try {
             // Validate the request data
-            request()->validate([
+            $validatedData = request()->validate([
                 'score' => 'required|integer|min:0|max:100',
             ]);
 
@@ -68,7 +68,7 @@ class QuizController extends Controller
             }
 
             // Attach or update the pivot record
-            $score = request()->score;
+            $score = $validatedData['score'];
             $completed = $score >= $quiz->required_degree ? 1 : 0;
 
             if ($quizUser) {
@@ -77,13 +77,58 @@ class QuizController extends Controller
                 $quiz->users()->attach($user->id, compact('score', 'completed'));
             }
 
+            // Update user roadmap
+            $roadmapId = $quiz->levelDetail->level->roadmap->id;
+            $userRoadmap = $user->userRoadmap()->where('roadmap_id', $roadmapId)->first();
+            if (!$userRoadmap) {
+                $user->userRoadmap()->attach($roadmapId, ['completed' => 0]);
+                $userRoadmap = $user->userRoadmap()->where('roadmap_id', $roadmapId)->first();
+            }
+
+            // Calculate progress
+            $steps = $userRoadmap ? $userRoadmap->levels->flatMap->levelDetails->pluck('id')->toArray() : [];
+            $quizzes = Quiz::whereIn('level_detail_id', $steps)->get();
+            $completedQuizzes = $quizzes->filter(function ($quizz) use ($user) {
+                return $quizz->users()->where('user_id', $user->id)->exists();
+            })->count();
+            $progress = count($quizzes) > 0 ? $completedQuizzes / count($quizzes) : 0;
+            $allQuizzesCompleted = $user->quizzes()->whereIn('level_detail_id', $userRoadmap->levels->flatMap->levelDetails->pluck('id'))->wherePivot('completed', 0)->doesntExist();
+
+            $user->userRoadmap()->sync([$roadmapId => ['completed' => $allQuizzesCompleted ? 1 : 0]], false);
+
+            // Update user roadmap progress
+            $user->userRoadmap()->sync([$roadmapId => ['progress' => $progress * 100]], false);
+            // Check if user completed all quizzes in the current level
+            $currentLevelSteps = $user->quizzes()->where('level_detail_id', $quiz->levelDetail->id)->get();
+            $allQuizzesCompleted = $currentLevelSteps->every(function ($quiz) {
+                return $quiz->pivot->completed == 1;
+            });
+
+            if ($allQuizzesCompleted) {
+                // Get the next level
+                $nextLevel = $userRoadmap->levels()
+                    ->where('order', '>', $userRoadmap->pivot->current_step)
+                    ->first();
+                if ($nextLevel) {
+                    $user->userRoadmap()->sync([$roadmapId => ['current_step' => $nextLevel->order]], false);
+                } else {
+                    $nextLevel = $userRoadmap->levels()->where('order', '>', $userRoadmap->pivot->current_level)->orderBy('order')->first();
+                }
+                if ($nextLevel) {
+                    $user->userRoadmap()->sync([$roadmapId => ['current_level' => $nextLevel->order]], false);
+                } else {
+                    $user->userRoadmap()->sync([$roadmapId => ['completed' => 1]], false);
+
+                }
+            }
+
             // Retrieve the updated response
             $response = QuizResource::make($quiz->users()->where('user_id', $user->id)->with('quizzes')->first())->withUserPivot();
-
             return ApiResponse::success($response, 200);
         } catch (\Throwable $exception) {
             return ApiResponse::error(419, $exception->getMessage(), [$exception->getMessage()]);
         }
+
 
     }
 

@@ -38,6 +38,7 @@ class LevelController extends Controller
 
         $level = new Level();
         $level->name = $request->name;
+        $level->order = $request->order;
         $level->roadmap()->associate($request->roadmapId);
         $level->save();
         return ApiResponse::success($level, 200, 'Created Successfully');

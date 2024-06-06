@@ -10,9 +10,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('user_roadmap', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('roadmap_id');
             $table->integer('current_level')->default(1);
+            $table->integer('current_step')->default(1);
             $table->integer('completed')->default(0);
             $table->integer('rate')->default(0);
             $table->integer('progress')->default(0);

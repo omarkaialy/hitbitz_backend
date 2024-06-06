@@ -77,7 +77,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     {
         return $this->
         belongsToMany(Roadmap::class, 'user_roadmap', 'user_id', 'roadmap_id')
-            ->withTimestamps()->withPivot(['favored','completed','current_level','rate']);
+            ->withTimestamps()->withPivot(['favored','completed','current_level','rate','progress','current_step']);
     }
 
     public function referees()

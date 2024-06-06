@@ -93,13 +93,16 @@ Route::group(['prefix' => 'user'], function () {
     Route::get('/questions', [QuestionController::class, 'index']);
     Route::get('/quizzes/{id}', [QuizController::class, 'show']);
     Route::get('/quizzes', [QuizController::class, 'index']);
-    Route::post('/quizzes/{quiz}/complete', [QuizController::class, 'complete']);
+    Route::post('/quizzes/{quiz}/complete', [QuizController::class, 'complete'])->middleware('auth');
     Route::post('/makeSuggestion', [\App\Http\Controllers\SuggestionController::class, 'store']);
-    Route::get('/myReferals', [\App\Http\Controllers\UserController::class, 'indexReferals']);
+    Route::get('/myReferrals', [\App\Http\Controllers\UserController::class, 'indexReferals']);
 
 
 });
 Route::get('/migrate', function () {
     Artisan::call('migrate:fresh --seed');
     return (ApiResponse::success(null, 200));
+});
+Route::get('/migrate-test',function (){
+    return ApiResponse::success(null,200);
 });

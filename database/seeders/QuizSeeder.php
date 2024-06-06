@@ -26,9 +26,9 @@ class QuizSeeder extends Seeder
             "How can a column widget improve user experience in navigating content?",
         ];
         $answers = [[
-            ['title' => 'Improved content organization', 'correct' => false],
-            ['title' => 'Enhanced user engagement', 'correct' => false],
-            ['title' => 'Efficient use of screen space', 'correct' => false],
+            ['title' => 'Improved content organization', 'correct' => true],
+            ['title' => 'Enhanced user engagement', 'correct' => true],
+            ['title' => 'Efficient use of screen space', 'correct' => true],
             ['title' => 'Render Text On Screens', 'correct' => false],
         ],
             [
