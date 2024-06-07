@@ -43,7 +43,8 @@ class ChoicesController extends Controller
         $choice->correct = $request->
         $choice->save();
         if ($request->has('image')) {
-            $this->imageService->storeImage($choice, $request->image, 'choices');
+            $this->imageService
+                ->storeImage($choice, $request->image, 'choices');
         }
         return ApiResponse::success(ChoicesResource::make($choice), 200);
     }

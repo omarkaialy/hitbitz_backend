@@ -23,12 +23,14 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = QueryBuilder::for(Category::query()->with(['media'])
+        $categories = QueryBuilder::for(Category::query()
+            ->with(['media'])
             ->whereNull('parent_id'))
             ->allowedFilters([
                 'name',
                 AllowedFilter::exact('type'),
-            ])->defaultSort('-created_at')->Paginate(request()->perPage);
+            ])->defaultSort('-created_at')
+            ->Paginate(request()->perPage);
 
         return ApiResponse::success(CategoryResource::collection($categories->items()), 200, 'This Is Categories');
     }
@@ -42,7 +44,8 @@ class CategoryController extends Controller
                     'name',
                     AllowedFilter::exact('parent_id'),
                 ]
-            )->defaultSort('-created_at')->Paginate(request()->perPage);
+            )->defaultSort('-created_at')
+            ->Paginate(request()->perPage);
 
         return ApiResponse::success(CategoryResource::collection($categories->items()), 200, 'This Is Categories');
     }

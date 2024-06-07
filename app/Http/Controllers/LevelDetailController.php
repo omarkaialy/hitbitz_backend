@@ -16,7 +16,10 @@ class LevelDetailController extends Controller
      */
     public function index()
     {
-        $levelDetails = QueryBuilder::for(LevelDetail::query())->allowedFilters([AllowedFilter::exact('level_id')])->defaultSort('created_at')->Paginate(request()->perPage);
+        $levelDetails = QueryBuilder::for(LevelDetail::query())
+            ->allowedFilters([AllowedFilter::exact('level_id')])
+            ->defaultSort('created_at')
+            ->Paginate(request()->perPage);
         return ApiResponse::success(LevelDetailsResource::collection($levelDetails->items()), 200);
     }
 
@@ -33,7 +36,10 @@ class LevelDetailController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(['name' => 'required|min:5', 'levelId' => 'required', 'description' => 'required']);
+        $request->validate(['name' => 'required|min:5',
+            'levelId' => 'required',
+            'description' => 'required'
+        ]);
 
         $details = new LevelDetail();
         $details->description = $request->description;
@@ -53,7 +59,9 @@ class LevelDetailController extends Controller
     {
         try {
 
-            $step = LevelDetail::query()->where('id', '=', $id)->with(['level', 'quizzes'])->get()->first();
+            $step = LevelDetail::query()->where('id', '=', $id)
+                ->with(['level', 'quizzes'])
+                ->get()->first();
             return ApiResponse::success(LevelDetailsResource::make($step), 200);
         } catch (\Throwable $e) {
             return ApiResponse::error(419, $e->getMessage());

@@ -16,7 +16,10 @@ class QuizController extends Controller
 
     public function index()
     {
-        $quizes = QueryBuilder::for(Quiz::query()->with(['levelDetail']))->allowedFilters([AllowedFilter::exact('level_detail_id')])->defaultSort('-created_at')->Paginate(request()->perPage);
+        $quizes = QueryBuilder::for(Quiz::query()->with(['levelDetail']))
+            ->allowedFilters([AllowedFilter::exact('level_detail_id')])
+            ->defaultSort('-created_at')
+            ->Paginate(request()->perPage);
         return ApiResponse::success(QuizResource::collection($quizes->items()), 200);
 
     }
@@ -79,7 +82,8 @@ class QuizController extends Controller
 
             // Update user roadmap
             $roadmapId = $quiz->levelDetail->level->roadmap->id;
-            $userRoadmap = $user->userRoadmap()->where('roadmap_id', $roadmapId)->first();
+            $userRoadmap = $user->userRoadmap()
+                ->where('roadmap_id', $roadmapId)->first();
             if (!$userRoadmap) {
                 $user->userRoadmap()->attach($roadmapId, ['completed' => 0]);
                 $userRoadmap = $user->userRoadmap()->where('roadmap_id', $roadmapId)->first();
@@ -123,7 +127,7 @@ class QuizController extends Controller
             }
 
             // Retrieve the updated response
-            $response = QuizResource::make($quiz->users()->where('user_id', $user->id)->with('quizzes')->first())->withUserPivot();
+            $response = $user->userRoadmap()->where('roadmap_id','=',$roadmapId)->get()->first();
             return ApiResponse::success($response, 200);
         } catch (\Throwable $exception) {
             return ApiResponse::error(419, $exception->getMessage(), [$exception->getMessage()]);

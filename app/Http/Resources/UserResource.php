@@ -28,6 +28,10 @@ class UserResource extends JsonResource
         if (isset($this->token)) {
             $data['access_token'] = $this->token;
         }
+
+        if ($this->roles) {
+            $data['role']= $this->whenLoaded('roles')->first()->name   ;
+        }
         return $data;
     }
 }

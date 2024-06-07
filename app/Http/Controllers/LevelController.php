@@ -16,8 +16,11 @@ class LevelController extends Controller
      */
     public function index()
     {
-        $levels = QueryBuilder::for(Level::query()->with(['roadmap']))->allowedFilters([AllowedFilter::exact('roadmap_id', 'roadmap_id')])->defaultSort('-updated_at')->Paginate(request()->perPage);
-        return ApiResponse::success(collect($levels->items())->map(function ($level){
+        $levels = QueryBuilder::for(Level::query()->with(['roadmap']))
+            ->allowedFilters([AllowedFilter::exact('roadmap_id', 'roadmap_id')])
+            ->defaultSort('-updated_at')
+            ->Paginate(request()->perPage);
+        return ApiResponse::success(collect($levels->items())->map(function ($level) {
             return LevelResource::make($level)->withRoadmap();
         }), 200, 'Here Is All Levels');
     }
@@ -49,7 +52,10 @@ class LevelController extends Controller
      */
     public function show(string $id)
     {
-        $level = Level::query()->where('id', '=', $id)->with(['roadmap', 'levelDetails'])->get()->first();
+        $level = Level::query()
+            ->where('id', '=', $id)
+            ->with(['roadmap', 'levelDetails'])
+            ->get()->first();
         return ApiResponse::success(LevelResource::make($level)->withRoadmap(), 200);
     }
 

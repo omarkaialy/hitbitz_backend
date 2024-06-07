@@ -21,7 +21,10 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $questions = QueryBuilder::for(Question::query()->with(['quiz', 'choices']))->allowedFilters([AllowedFilter::exact('quiz_id')])->defaultSort('-updated_at')->Paginate();
+        $questions = QueryBuilder::for(Question::query()->with(['quiz', 'choices']))
+            ->allowedFilters([AllowedFilter::exact('quiz_id')])
+            ->defaultSort('-updated_at')
+            ->Paginate();
         return ApiResponse::success(QuestionResource::collection($questions->items()), 200);
     }
 
