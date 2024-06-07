@@ -7,10 +7,9 @@ use App\Http\Requests\StoreRoadmapRequest;
 use App\Http\Resources\RoadmapResource;
 use App\Models\Category;
 use App\Models\Roadmap;
-use App\Models\UserRoadmap;
 use App\Services\ImageService;
 use Illuminate\Http\Request;
-use Kreait\Firebase\Auth;
+use Illuminate\Support\Facades\Auth;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class RoadmapController extends Controller
@@ -91,7 +90,11 @@ class RoadmapController extends Controller
     public function show(string $id)
     {
 
-        $roadmap = Roadmap::query()->where('id', $id)->with(['media', 'category', 'levels'])->get();
+        $roadmap = Roadmap::query()->where('id', $id)->with(['media', 'category', 'levels'])
+            ->withWhereHas('userRoadmap', function ($query) {
+                $query->where('user_id', Auth::user()->id);
+            })
+            ->get();
         if ($roadmap->isEmpty())
             return ApiResponse::error(404, 'Not Found');
         return ApiResponse::success(RoadmapResource::make($roadmap->first()), 200);

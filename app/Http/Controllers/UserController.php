@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ApiResponse;
+use App\Http\Resources\RoadmapResource;
 use App\Models\Roadmap;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -63,7 +64,13 @@ class UserController extends Controller
         if ($user->userRoadmap()->where('roadmap_id', '=', $roadmap->id)->exists()) {
             return ApiResponse::error(400, 'You Already Started This Roadmap');
         } else {
-            return ApiResponse::success($user->userRoadmap()->attach($roadmap, ['completed' => 0]), 200);
+            $user->userRoadmap()->attach($roadmap, ['completed' => 0]);
+            $roadmap = Roadmap::query()->where('id', $roadmap->id)->with(['media', 'category', 'levels'])
+                ->withWhereHas('userRoadmap', function ($query) {
+                    $query->where('user_id', Auth::user()->id);
+                })
+                ->get()->first();
+            return ApiResponse::success(RoadmapResource::make( $roadmap), 200);
 
         }
 

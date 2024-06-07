@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ApiResponse;
 use App\Http\Resources\QuizResource;
+use App\Http\Resources\RoadmapResource;
 use App\Models\LevelDetail;
 use App\Models\Quiz;
+use App\Models\Roadmap;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -127,8 +129,11 @@ class QuizController extends Controller
             }
 
             // Retrieve the updated response
-            $response = $user->userRoadmap()->where('roadmap_id','=',$roadmapId)->get()->first();
-            return ApiResponse::success($response, 200);
+            $response = Roadmap::query()->where('id','=',$roadmapId)
+                ->withWhereHas('userRoadmap', function ($query) {
+                $query->where('user_id', Auth::user()->id);
+            })->get()->first();
+            return ApiResponse::success(RoadmapResource::make($response), 200);
         } catch (\Throwable $exception) {
             return ApiResponse::error(419, $exception->getMessage(), [$exception->getMessage()]);
         }
