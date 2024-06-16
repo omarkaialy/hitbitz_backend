@@ -25,13 +25,14 @@ class UserResource extends JsonResource
         if (isset($this->referrer_id)) {
             $data['referrer'] = $this->referrer_id;
         }
-        if (isset($this->token)) {
+        if (isset($this->token)&& !$request->routeIs(['api.user.login','api.user.register']) ) {
             $data['access_token'] = $this->token;
         }
 
-        if ($this->roles) {
+        if ($this->roles&& $request->routeIs(['api.user.login','api.user.register'])) {
             $data['role']= $this->whenLoaded('roles')->first()->name   ;
         }
+            $data['is_friend']= $this->whenLoaded('friends');
         return $data;
     }
 }

@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ApiResponse;
 use App\Http\Resources\RoadmapResource;
+use App\Http\Resources\UserResource;
 use App\Models\Roadmap;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class UserController extends Controller
 {
@@ -20,7 +23,16 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function indexReferals()
+
+    public function index()
+    {
+        $users = QueryBuilder::for(User::role('user')->whereNot('id', '=', Auth::user()->id)->withWhereHas('friends', function ($query) {
+            $query->where('accepted', '=', 0);
+        }))->paginate();
+        return ApiResponse::success(UserResource::collection($users->items()), 200);
+    }
+
+    public function indexReferees()
     {
         return ApiResponse::success(['numOfReferees' => count(Auth::user()->referees)], 200);
     }
@@ -70,7 +82,7 @@ class UserController extends Controller
                     $query->where('user_id', Auth::user()->id);
                 })
                 ->get()->first();
-            return ApiResponse::success(RoadmapResource::make( $roadmap), 200);
+            return ApiResponse::success(RoadmapResource::make($roadmap), 200);
 
         }
 
@@ -95,9 +107,21 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $id)
     {
-        //
+        if ($id->id != Auth::user()->id) {
+            $user = User::query()->where('id', '=', $id->id)->withWhereHas('friends', function ($query) {
+                return $query->where('accepted', '=', 1);
+            })->get()->first();
+            return ApiResponse::success(UserResource::make($user), 200);
+
+        } else {
+            $profile = User::query()->where('id', '=', $id->id)->with('friends')->get()->first();
+return $profile;
+            return ApiResponse::success(UserResource::make($profile), 200);
+
+
+        }
     }
 
     /**

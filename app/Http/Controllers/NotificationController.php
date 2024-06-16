@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ApiResponse;
+use App\Http\Resources\NotificationResource;
+use App\Jobs\SendNotification;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -14,12 +16,10 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        try {
-            $notifications = QueryBuilder::for(Notification::query())->get();
-            return ApiResponse::success($notifications, 200);
-        } catch (\Exception $exception) {
-            return ApiResponse::error(419, 'Error');
-        }
+
+        $notifications = QueryBuilder::for(Notification::query())->allowedFilters(['topic'])->get();
+        return ApiResponse::success(NotificationResource::collection($notifications), 200);
+
     }
 
     /**
@@ -35,20 +35,15 @@ class NotificationController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $notification = new PushNotificationController();
-            $notification = $notification->sendPushNotification('Hello', 'Hello', 'all');
-            if ($notification == true) {
-                $notifi = new Notification();
-                $notifi->title = $request->title;
-                $notifi->body = $request->body;
-                $notifi->save();
-                return ApiResponse::success(null, 200, 'Sent');
-            }
-        } catch (\Exception $exception) {
-            return ApiResponse::error(411, $exception->getMessage());
-        }
+        $notifi = new Notification();
+        $notifi->title = $request->title;
+        $notifi->body = $request->body;
+        $notifi->topic = 'all';
+        $notifi->save();
+        SendNotification::dispatch($request->title, $request->body, 'all',"http://localhost:8000/media/3/1717416330_363844946.png");
+        return ApiResponse::success(NotificationResource::make($notifi), 200);
     }
+
 
     /**
      * Display the specified resource.
