@@ -26,9 +26,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = QueryBuilder::for(User::role('user')->whereNot('id', '=', Auth::user()->id)->withWhereHas('friends', function ($query) {
-            $query->where('accepted', '=', 0);
-        }))->paginate();
+        $users = QueryBuilder::for(User::role('user')->whereNot('id', '=', Auth::user()->id))->paginate();
         return ApiResponse::success(UserResource::collection($users->items()), 200);
     }
 
@@ -110,14 +108,12 @@ class UserController extends Controller
     public function show(User $id)
     {
         if ($id->id != Auth::user()->id) {
-            $user = User::query()->where('id', '=', $id->id)->withWhereHas('friends', function ($query) {
-                return $query->where('accepted', '=', 1);
-            })->get()->first();
+            $user = User::query()->where('id', '=', $id->id)->get()->first();
             return ApiResponse::success(UserResource::make($user), 200);
 
         } else {
-            $profile = User::query()->where('id', '=', $id->id)->with('friends')->get()->first();
-return $profile;
+            $profile = User::query()->where('id', '=', $id->id)->get()->first();
+
             return ApiResponse::success(UserResource::make($profile), 200);
 
 

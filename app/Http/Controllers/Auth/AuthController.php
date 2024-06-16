@@ -35,7 +35,7 @@ class AuthController extends Controller
                 $user->token=$token;
                 $user->save();
 
-                 return ApiResponse::success(UserResource::make($user), 200);
+                 return ApiResponse::success(UserResource::make($user)->includeToken(true), 200);
             } else {
                 return ApiResponse::error(401, 'Please Check Your Password And Try Again');
             }
@@ -61,7 +61,7 @@ class AuthController extends Controller
                 $user->token = $token;
                 if ($user->hasRole('super_admin')||$user->hasRole('admin')) {
                     $user->save();
-                    return ApiResponse::success(UserResource::make($user),
+                    return ApiResponse::success(UserResource::make($user)->includeToken(true),
                         200);
                 } else {
                     return ApiResponse::error(401, 'Please Check Your Password And Try Again');
@@ -113,7 +113,8 @@ class AuthController extends Controller
                 $user->assignRole('user');
                 $user->save();
                 $user->access_token = $token;
-                return ApiResponse::success(UserResource::make($user), 200, 'Otp Send Successfully');
+
+                return ApiResponse::success(UserResource::make($user)->includeToken(true), 200, 'Otp Send Successfully');
             }
 
         } catch (Throwable $exception) {

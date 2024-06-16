@@ -13,7 +13,7 @@ class FriendshipController extends Controller
     public function indexRequests()
     {
         try {
-            return ApiResponse::success(UserResource::collection(Auth::user()->friends()->where('accepted', '=', '0')->get()), 200);
+            return ApiResponse::success(Auth::user()->pendingFriendRequests, 200);
 
         } catch (\Exception $e) {
             return ApiResponse::error($e->getCode(), $e->getMessage());
@@ -23,7 +23,6 @@ class FriendshipController extends Controller
     public function sendFriendRequest(Request $request)
     {
         try {
-
             $user = Auth::user();
             $friendId = $request->input('friend_id');
             // Check if the user is trying to send a friend request to themselves
@@ -31,12 +30,14 @@ class FriendshipController extends Controller
                 return ApiResponse::error(400, 'You cannot send a friend request to yourself.');
             }
             // Check if the friendship already exists
-            if ($user->friendships()->where('friend_id', $friendId)->exists()) {
-                return ApiResponse::error(400, 'Friend Already Exist');
+
+            // Check if the friend request has already been sent
+            if ($user->sentFriendRequests()->where('friend_id', $friendId)->exists()) {
+                return ApiResponse::error(400, 'You Sent Before');
             }
 
-            // Create a new friend request
-            $user->friendships()->attach($friendId, ['accepted' => false]);
+            // Attach friend to user's sent friend requests
+            $user->sentFriendRequests()->attach($friendId);
 
             return ApiResponse::success(null, 200);
 
@@ -50,20 +51,14 @@ class FriendshipController extends Controller
     public function indexFriends()
     {
         try {
+            $user = Auth::user();
+            $friends = $user->acceptedFriends()->get()->map(function ($friend) use ($user) {
 
-            $userFriends = Auth::user()->friendFriendships()->get();
-            $friendFriends = (Auth::user()->userFriendships()->get());
+                return $friend->id === $user->id ? $friend->pivot->user_id : $friend->pivot->friend_id;
+            });
 
-            $friendIds = $userFriends->push(...$friendFriends);
-
-
-            $friends = User::query()->whereIn('id', $friendIds->pluck('user_id')->reject(function ($id)  {
-                return $id === Auth::user()->id;
-            }))->orWhereIn('id', $friendIds->pluck('friend_id')->reject(function ($id)  {
-                return $id === Auth::user()->id;
-            }))->get();
+$friends=            User::query()->whereIn('id',$friends)->get();
             return ApiResponse::success(UserResource::collection($friends), 200);
-
         } catch (\Exception $exception) {
             return ApiResponse::error(400, $exception->getMessage());
         }
@@ -72,14 +67,11 @@ class FriendshipController extends Controller
     public function acceptRequest(Request $request)
     {
         try {
-            if (count(Auth::user()->friends()->where('id', '=', $request->id)->where('accepted', '=', 0)->get()) != 0) {
-                Auth::user()->friends()->updateExistingPivot($request->id, ['accepted' => 1]);
-                $friendRequest = Auth::user()->friends()->where('id', '=', $request->id)->get()->first();
-                return $friendRequest;
-            } else {
-                return ApiResponse::error(400, 'You Can\'t Accept unExisted Request');
 
-            }
+            $user = Auth::user();
+            $friend = User::find($request->request_id);
+            $user->pendingFriendRequests()->updateExistingPivot($friend->id, ['status' => 'approved']);
+            return ApiResponse::success(null, 200);
         } catch (\Exception $exception) {
             return ApiResponse::error($exception->getCode(), $exception->getMessage());
         }

@@ -7,6 +7,14 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
 {
+    protected $includeToken = false;
+
+    public function includeToken($value = true)
+    {
+        $this->includeToken = $value;
+        return $this;
+    }
+
     /**
      * Transform the resource into an array.
      *
@@ -25,14 +33,13 @@ class UserResource extends JsonResource
         if (isset($this->referrer_id)) {
             $data['referrer'] = $this->referrer_id;
         }
-        if (isset($this->token)&& !$request->routeIs(['api.user.login','api.user.register']) ) {
+        if ($this->includeToken) {
             $data['access_token'] = $this->token;
         }
 
-        if ($this->roles&& $request->routeIs(['api.user.login','api.user.register'])) {
-            $data['role']= $this->whenLoaded('roles')->first()->name   ;
+        if ($this->roles && $request->routeIs(['api.user.login', 'api.user.register'])) {
+            $data['role'] = $this->whenLoaded('roles')->first()->name;
         }
-            $data['is_friend']= $this->whenLoaded('friends');
-        return $data;
+         return $data;
     }
 }

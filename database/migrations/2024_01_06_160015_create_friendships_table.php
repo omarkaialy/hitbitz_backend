@@ -9,15 +9,17 @@ return new class extends Migration
     public function up()
     {
         Schema::create('friendships', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('friend_id');
-            $table->boolean('accepted')->default(false);
+            $table->enum('status', ['pending', 'approved'])->default('pending');
+            $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('friend_id')->references('id')->on('users')->onDelete('cascade');
 
-            $table->primary(['user_id', 'friend_id']);
-            $table->timestamps();
+            // Ensure a user can send only one request to another user
+            $table->unique(['user_id', 'friend_id']);
         });
     }
 

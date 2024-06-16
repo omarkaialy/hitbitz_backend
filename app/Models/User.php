@@ -65,28 +65,35 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
             ->withTimestamps();
     }
 
-
-    public function friendships()
-    {
-        return $this->belongsToMany(User::class, 'friendships', 'user_id', 'friend_id')
-            ->withPivot('accepted');
-    }
-
-
-    public function userFriendships()
-    {
-        return $this->hasMany(Friendship::class, 'user_id', 'id');
-    }
-
-    public function friendFriendships()
-    {
-        return $this->hasMany(Friendship::class, 'friend_id', 'id');
-    }
-
     public function friends()
     {
-        return $this->hasManyThrough(User::class, Friendship::class, 'user_id', 'id', 'id', 'friend_id')
-      ; // Filter by accepted status
+        return $this->belongsToMany(User::class, 'friendships', 'user_id', 'friend_id')
+            ->wherePivot('status', 'approved')->withTimestamps();
+    }
+
+    public function pendingFriendRequests()
+    {
+        return $this->belongsToMany(User::class, 'friendships', 'friend_id', 'user_id')
+            ->wherePivot('status', 'pending')
+            ->withTimestamps();
+    }
+
+    public function sentFriendRequests()
+    {
+        return $this->belongsToMany(User::class, 'friendships', 'user_id', 'friend_id')
+            ->wherePivot('status', 'pending')
+            ->withTimestamps();
+    }
+
+    public function acceptedFriends()
+    {
+        return $this->belongsToMany(User::class, 'friendships', 'user_id', 'friend_id')
+            ->wherePivot('status', 'approved')
+            ->orWhere(function ($query) {
+                $query->where('friendships.friend_id', $this->id)
+                    ->where('friendships.status', 'approved');
+            })
+            ->withTimestamps();
     }
 
     public function notifications()
