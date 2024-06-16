@@ -57,7 +57,7 @@ class FriendshipController extends Controller
                 return $friend->id === $user->id ? $friend->pivot->user_id : $friend->pivot->friend_id;
             });
 
-$friends=            User::query()->whereIn('id',$friends)->get();
+            $friends = User::query()->whereIn('id', $friends)->get();
             return ApiResponse::success(UserResource::collection($friends), 200);
         } catch (\Exception $exception) {
             return ApiResponse::error(400, $exception->getMessage());

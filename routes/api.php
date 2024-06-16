@@ -81,6 +81,7 @@ Route::group(['prefix' => 'user'], function () {
 Route::group(['prefix' => 'user'], function () {
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/users/{id}', [UserController::class, 'show']);
+    Route::get('/profile', [UserController::class, 'showProfile']);
     Route::get('/friendRequests', [\App\Http\Controllers\FriendshipController::class, 'indexRequests']);
     Route::post('/friendRequests', [\App\Http\Controllers\FriendshipController::class, 'sendFriendRequest']);
     Route::post('/acceptRequest', [\App\Http\Controllers\FriendshipController::class, 'acceptRequest']);

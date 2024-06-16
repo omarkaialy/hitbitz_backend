@@ -120,6 +120,14 @@ class UserController extends Controller
         }
     }
 
+    public function showProfile(Request $request)
+    {
+        return ApiResponse::success(UserResource::make(User::query()
+            ->where('id', Auth::user()->id)
+            ->with(['quizzes', 'userRoadmap', 'referrer', 'referees'])
+            ->get()->first()), 200);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
