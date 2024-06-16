@@ -48,12 +48,28 @@ class FriendshipController extends Controller
 
     }
 
+    public function cancelFriendship(Request $request)
+    {
+
+        try {
+            $user = Auth::user();
+            $friend = User::find($request->friend_id);
+
+            if ($user->friends()->where('friend_id', $friend->id)->get()->first()) {
+                return ApiResponse::success($user->friends()->detach($friend->id),200);
+            }
+            return ApiResponse::success($friend->friends()->detach($user->id),200);
+
+        } catch (\Exception $exception) {
+            return ApiResponse::error($exception->getCode(), $exception->getMessage());
+        }
+    }
+
     public function indexFriends()
     {
         try {
             $user = Auth::user();
             $friends = $user->acceptedFriends()->get()->map(function ($friend) use ($user) {
-
                 return $friend->id === $user->id ? $friend->pivot->user_id : $friend->pivot->friend_id;
             });
 
