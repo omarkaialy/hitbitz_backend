@@ -21,7 +21,7 @@ class PushNotificationController extends Controller
                 'notification' => [
                     'title' => $title,
                     'body' => $body,
-                    'image'=>$imageUrl
+                    'image' => $imageUrl
                 ],
                 'image'=>$imageUrl,
                 'topic' => $topic

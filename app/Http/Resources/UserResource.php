@@ -15,6 +15,8 @@ class UserResource extends JsonResource
         return $this;
     }
 
+
+
     /**
      * Transform the resource into an array.
      *
@@ -37,9 +39,11 @@ class UserResource extends JsonResource
             $data['access_token'] = $this->token;
         }
 
-        if ($this->roles && $request->routeIs(['api.user.login', 'api.user.register'])) {
+        if ($this->includeToken) {
             $data['role'] = $this->whenLoaded('roles')->first()->name;
         }
+            $data['category'] = CategoryResource::make($this->whenLoaded('category'));
+
          return $data;
     }
 }

@@ -9,7 +9,7 @@ use App\Http\Controllers\LevelDetailController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RoadmapController;
-use App\Http\Controllers\UserController ;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +34,13 @@ Route::group([], function () {
 });
 Route::group(['prefix' => 'admin'], function () {
     Route::post('/send-notification', [\App\Http\Controllers\NotificationController::class, 'store']);
+
+    Route::post('/validate', [AuthController::class, 'validateToken'])->middleware('auth');
+    Route::post('/verify', [AuthController::class, 'verifyEmail']);
+    Route::post('/resend', [AuthController::class, 'resendOtp']);
+    Route::post('/forgetPassword', [AuthController::class, 'forgetPassword']);
+    Route::post('/resetPassword', [AuthController::class, 'resetPassword']);
+
     Route::post('/login', [AuthController::class, 'loginAdmin']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/roadmaps/store', [RoadmapController::class, 'store']);
@@ -64,6 +71,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::delete('/quizzes/{quiz}', [QuizController::class, 'destroy']);
     Route::get('/quizzes/{id}', [QuizController::class, 'show']);
     Route::get('/suggestions', [\App\Http\Controllers\SuggestionController::class, 'index']);
+    Route::post('/createAdmin', [UserController::class, 'createAdmin']);
 
 });
 Route::group(['prefix' => 'user'], function () {

@@ -22,9 +22,11 @@ class AuthController extends Controller
     //
     public function validateToken(Request $request)
     {
-        $token = $request->bearerToken();
-
-    }
+        try {
+            return ApiResponse::success(Auth::user(),200);
+        }catch (\Exception $e){
+            ApiResponse::error($e->getCode(), $e->getMessage());
+        } }
 
     public function login(LoginRequest $req)
     {
@@ -32,10 +34,10 @@ class AuthController extends Controller
             $token = Auth::attempt(['user_name' => $req->userName, 'password' => $req->password]);
             if ($token) {
                 $user = Auth::user();
-                $user->token=$token;
+                $user->token = $token;
                 $user->save();
 
-                 return ApiResponse::success(UserResource::make($user)->includeToken(true), 200);
+                return ApiResponse::success(UserResource::make($user)->includeToken(true), 200);
             } else {
                 return ApiResponse::error(401, 'Please Check Your Password And Try Again');
             }
@@ -49,17 +51,17 @@ class AuthController extends Controller
 
     public function loginAdmin(Request $req)
     {
-        try {
+          try {
             $req->validate(['userName' => 'required|alpha_dash|min:4|exists:users,user_name',
                 'password' => 'required|min:6'
             ]);
 
             $token = Auth::attempt(['user_name' => $req->userName, 'password' => $req->password]);
-            if ($token) {
-                $user = Auth::user()->with('roles')->get()->first();
 
+            if ($token) {
+                $user = User::query()->where('id',Auth::user()->id)->with(['roles','category'])->get()->first();
                 $user->token = $token;
-                if ($user->hasRole('super_admin')||$user->hasRole('admin')) {
+                if ($user->hasRole('super_admin') || $user->hasRole('admin')) {
                     $user->save();
                     return ApiResponse::success(UserResource::make($user)->includeToken(true),
                         200);
@@ -109,7 +111,7 @@ class AuthController extends Controller
                 return ApiResponse::error(401, 'UnAuthorized');
             } else {
 //                event(new SendOtp($req->email));
-                 $user->token = $token;
+                $user->token = $token;
                 $user->assignRole('user');
                 $user->save();
                 $user->access_token = $token;
@@ -142,9 +144,11 @@ class AuthController extends Controller
 
     public function forgetPassword(Request $request)
     {
-        $validatedData = Validator::make($request->all(), ['email' => 'required|exists:users,users.email']);
+        $validatedData = Validator::make($request->all(),
+            ['email' => 'required|exists:users,users.email']);
         if ($validatedData->valid()) {
-            event(new SendOtp($request->email, true));
+
+            SendOtp::dispatch($request->email, true);
             return ApiResponse::success(null, 200, 'Otp Send');
         } else {
             return ApiResponse::error(425, 'User Not Found');

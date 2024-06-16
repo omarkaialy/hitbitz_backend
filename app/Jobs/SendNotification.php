@@ -16,6 +16,7 @@ class SendNotification implements ShouldQueue
     protected $title;
     protected $body;
     protected $topicOrToken;
+    protected $imageUrl;
 
     /**
      * Create a new job instance.

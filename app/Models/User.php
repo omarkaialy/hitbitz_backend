@@ -121,6 +121,9 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     public function category()
     {
-        return $this->hasOne(User::class);
+        return $this->hasOne(Category::class);
+    }
+    public function studyingCategory(){
+        return $this->hasOne(Category::class);
     }
 }

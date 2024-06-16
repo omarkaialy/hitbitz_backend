@@ -128,6 +128,24 @@ class UserController extends Controller
             ->get()->first()), 200);
     }
 
+    public function createAdmin(Request $req)
+    {
+        try {
+            $user = new User();
+            $user->user_name = $req->userName;
+            $user->email = $req->email;
+            $user->password = $req->password;
+            $user->full_name = $req->fullName;
+            $user->assignRole('admin');
+            $user->save();
+
+            return ApiResponse::success(null, 200);
+        } catch (\Exception $e) {
+            return ApiResponse::error($e->getCode(), $e->getMessage());
+        }
+
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
