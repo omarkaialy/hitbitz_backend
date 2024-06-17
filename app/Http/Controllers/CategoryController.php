@@ -9,6 +9,7 @@ use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Services\ImageService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -23,8 +24,25 @@ class CategoryController extends Controller
      */
     public function index()
     {
+//        if (Auth::user() && Auth::user()->studyingCategory ) {
+//            $categories = QueryBuilder::for(Category::query()
+//                ->with(['media'])->where('type', '=', CategoryTypeEnum::prof)
+//                ->orWhere(function ($query) {
+//                    $query->where('type', CategoryTypeEnum::learn)
+//                        ->where('id', 4);
+//                })
+//                ->whereNull('parent_id'))
+//                ->allowedFilters([
+//                    'name',
+//                    AllowedFilter::exact('type'),
+//                ])->defaultSort('-created_at')
+//                ->Paginate(request()->perPage);
+//            return ApiResponse::success(CategoryResource::collection($categories->items()), 200, 'This Is Categories');
+//
+//        }
+
         $categories = QueryBuilder::for(Category::query()
-            ->with(['media'])
+            ->with(['media'])->where('type', '=', CategoryTypeEnum::prof)
             ->whereNull('parent_id'))
             ->allowedFilters([
                 'name',

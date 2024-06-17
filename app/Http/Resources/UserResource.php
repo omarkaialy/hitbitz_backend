@@ -16,7 +16,6 @@ class UserResource extends JsonResource
     }
 
 
-
     /**
      * Transform the resource into an array.
      *
@@ -40,10 +39,12 @@ class UserResource extends JsonResource
         }
 
         if ($this->includeToken) {
-            $data['role'] = $this->whenLoaded('roles')->first()->name;
+            $data['role'] = $this->whenLoaded('roles', function () {
+                return $this->roles->first()->name;
+            });
         }
-            $data['category'] = CategoryResource::make($this->whenLoaded('category'));
-
-         return $data;
+        $data['category'] = CategoryResource::make($this->whenLoaded('category'));
+        $data['profileImage'] = MediaResource::make($this, 'profile');
+        return $data;
     }
 }

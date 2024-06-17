@@ -83,6 +83,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('/resend', [AuthController::class, 'resendOtp']);
     Route::post('/forgetPassword', [AuthController::class, 'forgetPassword']);
     Route::post('/resetPassword', [AuthController::class, 'resetPassword']);
+    Route::post('/updateProfile', [UserController::class, 'updateProfile']);
 
 });
 

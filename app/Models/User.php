@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements JWTSubject, MustVerifyEmail
+class User extends Authenticatable implements JWTSubject, MustVerifyEmail, HasMedia
 {
-    use  HasFactory, Notifiable, HasRoles;
+    use  HasFactory, Notifiable, HasRoles, InteractsWithMedia;
 
     /**
      * The attributes that are mass assignable.
@@ -121,9 +123,6 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     public function category()
     {
-        return $this->hasOne(Category::class);
-    }
-    public function studyingCategory(){
-        return $this->hasOne(Category::class);
+        return $this->belongsTo(Category::class,);
     }
 }

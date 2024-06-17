@@ -21,8 +21,9 @@ return new class extends Migration {
             $table->longText('token')->nullable();
             $table->rememberToken();
             $table->timestamps();
+
             $table->unsignedBigInteger('referrer_id')->nullable();
-            $table->foreign('referrer_id')->references('id')->on('users');
+           $table->foreign('referrer_id')->references('id')->on('users');
 
         });
     }

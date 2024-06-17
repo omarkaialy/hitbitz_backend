@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Helpers\ApiResponse;
 use App\Http\Resources\RoadmapResource;
 use App\Http\Resources\UserResource;
+use App\Models\Category;
 use App\Models\Roadmap;
 use App\Models\User;
+use App\Services\ImageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -14,7 +16,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 class UserController extends Controller
 {
 
-    public function __construct()
+    public function __construct(protected ImageService $imageService)
     {
         // Apply middleware to specific methods
         $this->middleware('auth')->only(['toggleFavorite', 'indexReferals']);
@@ -139,7 +141,7 @@ class UserController extends Controller
             $user->assignRole('admin');
             $user->save();
 
-            return ApiResponse::success(null, 200);
+            return ApiResponse::success(UserResource::make($user), 200);
         } catch (\Exception $e) {
             return ApiResponse::error($e->getCode(), $e->getMessage());
         }
@@ -154,12 +156,39 @@ class UserController extends Controller
         //
     }
 
+    public function updateProfile(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            if ($request->profileImage) {
+                $this->imageService->updateMedia($user, $request->profileImage, 'profile');
+            }
+            if ($request->categoryId) {
+                $category = Category::find($request->categoryId);
+                $user->category()->associate($request->categoryId);
+            }
+            if ($request->birthDate) {
+                $user->birth_date = date($request->birthDate);
+
+            }
+            if ($request->fullName) {
+                $user->full_name = $request->fullName;
+            }
+            $user->update();
+            $user->load(['media', 'category']);
+            return ApiResponse::success(UserResource::make($user), 200);
+        } catch (\Exception $e) {
+            return ApiResponse::error(400, $e->getMessage());
+        }
+
+    }
+
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+
     }
 
     /**

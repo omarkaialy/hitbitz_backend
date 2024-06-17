@@ -9,6 +9,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Services\ImageService;
 use Ichtrojan\Otp\Otp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,8 @@ use Throwable;
 
 class AuthController extends Controller
 
-{
+{    public function __construct(protected ImageService $imageService)
+{}
     //
     public function validateToken(Request $request)
     {
@@ -57,9 +59,9 @@ class AuthController extends Controller
             ]);
 
             $token = Auth::attempt(['user_name' => $req->userName, 'password' => $req->password]);
-
             if ($token) {
                 $user = User::query()->where('id',Auth::user()->id)->with(['roles','category'])->get()->first();
+
                 $user->token = $token;
                 if ($user->hasRole('super_admin') || $user->hasRole('admin')) {
                     $user->save();
@@ -74,7 +76,7 @@ class AuthController extends Controller
 
 
         } catch (Throwable $throwable) {
-            return ApiResponse::error(401, 'Please Check Your UserName');
+            return ApiResponse::error(401, $throwable->getMessage());
         }
 
     }
