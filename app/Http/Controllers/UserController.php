@@ -164,7 +164,6 @@ class UserController extends Controller
                 $this->imageService->updateMedia($user, $request->profileImage, 'profile');
             }
             if ($request->categoryId) {
-                $category = Category::find($request->categoryId);
                 $user->category()->associate($request->categoryId);
             }
             if ($request->birthDate) {
@@ -186,9 +185,25 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(Request $request, User $user)
     {
+        try {
+            if ($request->categoryId && Auth::user()->hasRole('super_admin')) {
+            $user->categoryAdmin()->associate($request->categoryId);
+            }
+            if ($request->birthDate) {
+                $user->birth_date = date($request->birthDate);
 
+            }
+            if ($request->fullName) {
+                $user->full_name = $request->fullName;
+            }
+            $user->update();
+            $user->load(['media', 'category']);
+            return ApiResponse::success(UserResource::make($user), 200);
+        } catch (\Exception $e) {
+            return ApiResponse::error(400, $e->getMessage());
+        }
     }
 
     /**

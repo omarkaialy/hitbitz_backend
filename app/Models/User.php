@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\CategoryTypeEnum;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -121,8 +122,13 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail, HasMe
         return $this->belongsTo(User::class, 'referrer_id');
     }
 
+    public function categoryAdmin()
+    {
+        return $this->belongsTo(Category::class,'category_id' );
+    }
+
     public function category()
     {
-        return $this->belongsTo(Category::class,);
+        return $this->belongsTo(Category::class,'category_id')->where('type',CategoryTypeEnum::learn);
     }
 }

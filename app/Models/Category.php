@@ -37,7 +37,13 @@ class Category extends Model implements HasMedia
         return $this->hasMany(Roadmap::class);
     }
 
-    public function users(){
-        return $this->hasMany(User::class,'id','category_id');
+    public function admin()
+    {
+        return $this->hasOne(User::class, 'id', 'category_id');
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'id', 'category_id');
     }
 }
