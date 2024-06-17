@@ -40,6 +40,6 @@ class SendNotification implements ShouldQueue
     public function handle()
     {
         $controller = new PushNotificationController();
-        $controller->sendPushNotification($this->title, $this->body, $this->topicOrToken,$this->imageUrl);
+         $controller->sendPushNotification($this->title, $this->body, $this->topicOrToken,$this->imageUrl);
     }
 }

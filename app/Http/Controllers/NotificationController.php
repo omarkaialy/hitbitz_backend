@@ -11,6 +11,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class NotificationController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
@@ -35,13 +36,18 @@ class NotificationController extends Controller
      */
     public function store(Request $request)
     {
-        $notifi = new Notification();
-        $notifi->title = $request->title;
-        $notifi->body = $request->body;
-        $notifi->topic = 'all';
-        $notifi->save();
-        SendNotification::dispatch($request->title, $request->body, 'all',"http://localhost:8000/media/3/1717416330_363844946.png");
-        return ApiResponse::success(NotificationResource::make($notifi), 200);
+        try {
+            $notifi = new Notification();
+            $notifi->title = $request->title;
+            $notifi->body = $request->body;
+            $notifi->topic = $request->topic ?? 'all';
+            $notifi->image = $request->imageUrl;
+            $notifi->save();
+            SendNotification::dispatch($request->title, $request->body, 'all', $request->imageUrl);
+            return ApiResponse::success(NotificationResource::make($notifi), 200);
+        } catch (\Exception $e) {
+            return ApiResponse::error($e->getCode(), $e->getMessage());
+        }
     }
 
 

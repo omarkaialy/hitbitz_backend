@@ -14,10 +14,13 @@ class NotificationResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
-            'id'=>$this->id,
-            'title'=>$this->title,
-            'body'=>$this->body,
-            ];
+        $data = [
+            'id' => $this->id,
+            'title' => $this->title,
+            'body' => $this->body,
+
+        ];
+        $data ['image'] = $this->image ?? MediaResource::defaultMedia($this, 'categories')['media_url'];
+        return $data;
     }
 }
