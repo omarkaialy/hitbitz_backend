@@ -24,34 +24,46 @@ class CategoryController extends Controller
      */
     public function index()
     {
-//        if (Auth::user() && Auth::user()->studyingCategory ) {
-//            $categories = QueryBuilder::for(Category::query()
-//                ->with(['media'])->where('type', '=', CategoryTypeEnum::prof)
-//                ->orWhere(function ($query) {
-//                    $query->where('type', CategoryTypeEnum::learn)
-//                        ->where('id', 4);
-//                })
-//                ->whereNull('parent_id'))
-//                ->allowedFilters([
-//                    'name',
-//                    AllowedFilter::exact('type'),
-//                ])->defaultSort('-created_at')
-//                ->Paginate(request()->perPage);
-//            return ApiResponse::success(CategoryResource::collection($categories->items()), 200, 'This Is Categories');
-//
-//        }
+        $query = QueryBuilder::for(Category::query())
+            ->with(['media'])
+            ->whereNull('parent_id')
+            ->allowedFilters(['name', AllowedFilter::exact('type')])
+            ->defaultSort('-created_at');
 
-        $categories = QueryBuilder::for(Category::query()
-            ->with(['media'])->where('type', '=', CategoryTypeEnum::prof)
-            ->whereNull('parent_id'))
-            ->allowedFilters([
-                'name',
-                AllowedFilter::exact('type'),
-            ])->defaultSort('-created_at')
-            ->Paginate(request()->perPage);
+        // Step 1: Check if the user exists and has the required role
+        if (Auth::user() && Auth::user()->hasRole('user')) {
+            $user = Auth::user();
 
+            // Step 2: Fetch categories with type = 2
+            $categoriesWithType2 = $query->clone()
+                ->where('type', CategoryTypeEnum::prof)
+                ->get(); // Get all matching records
+
+            // Step 3: Fetch associated user-specific category for user with type = 1
+            $userCategory = null;
+            if ($user->category && $user->category->type == CategoryTypeEnum::learn) {
+                $userCategory = QueryBuilder::for(Category::query())
+                    ->with(['media'])
+                    ->where('id', $user->category->id)
+                    ->allowedFilters(['name', AllowedFilter::exact('type')])
+                    ->where('type', CategoryTypeEnum::learn) // Filter by type 2
+                    ->whereNull('parent_id') // Filtering categories without a parent
+                    ->get(); // Get all matching records
+            }
+
+            // Step 4: Merge results if user-specific category exists
+            if ($userCategory && $userCategory->isNotEmpty()) {
+                $categoriesWithType2 = $categoriesWithType2->merge($userCategory);
+            }
+
+            // Step 5: Return response with merged categories
+            return ApiResponse::success(CategoryResource::collection($categoriesWithType2), 200, 'This Is Categories');
+        }
+
+        // Step 6: Fetch categories without filters and return response
+        $categories = $query->where('type',CategoryTypeEnum::prof)->paginate(request()->perPage);
         return ApiResponse::success(CategoryResource::collection($categories->items()), 200, 'This Is Categories');
-    }
+}
 
     public function indexSubs()
     {
