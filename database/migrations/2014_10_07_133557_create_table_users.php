@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->date('birth_date')->nullable();
             $table->string('password');
             $table->longText('token')->nullable();
+            $table->longText('fcm_token')->nullable();
             $table->rememberToken();
             $table->timestamps();
 

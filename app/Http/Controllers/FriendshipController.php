@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ApiResponse;
 use App\Http\Resources\UserResource;
-use App\Models\Friendship;
+use App\Jobs\SendNotification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +26,7 @@ class FriendshipController extends Controller
         try {
             $user = Auth::user();
             $friendId = $request->input('friend_id');
+            $friend = User::find($friendId);
             // Check if the user is trying to send a friend request to themselves
             if ($user->id == $friendId) {
                 return ApiResponse::error(400, 'You cannot send a friend request to yourself.');
@@ -39,7 +40,11 @@ class FriendshipController extends Controller
 
             // Attach friend to user's sent friend requests
             $user->sentFriendRequests()->attach($friendId);
-
+            SendNotification::dispatch(
+                'Friend Request',
+                'A New Friend Request From ' . $user->full_name,
+                'e1-JmNhgQ9msgK8F_E-eTK:APA91bG8DLJo8zDGQU4syK6XDmgUjFTEQm7HWNGWNkShVbh1ZSjdViq47xzu1-J5QE7Qk-wtJePepfEC2NvxZY1KGY7Ops1WDoIrHqMOBAkppFRvy5Bg27tiMQEizer2g7FLKZboFmKv',
+         ''       , 'token');
             return ApiResponse::success(null, 200);
 
         } catch (\Exception $exception) {
@@ -57,9 +62,9 @@ class FriendshipController extends Controller
             $friend = User::find($request->friend_id);
 
             if ($user->friends()->where('friend_id', $friend->id)->get()->first()) {
-                return ApiResponse::success($user->friends()->detach($friend->id),200);
+                return ApiResponse::success($user->friends()->detach($friend->id), 200);
             }
-            return ApiResponse::success($friend->friends()->detach($user->id),200);
+            return ApiResponse::success($friend->friends()->detach($user->id), 200);
 
         } catch (\Exception $exception) {
             return ApiResponse::error($exception->getCode(), $exception->getMessage());

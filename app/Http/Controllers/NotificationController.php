@@ -42,8 +42,9 @@ class NotificationController extends Controller
             $notifi->body = $request->body;
             $notifi->topic = $request->topic ?? 'all';
             $notifi->image = $request->imageUrl;
+            $request->topic;
             $notifi->save();
-            SendNotification::dispatch($request->title, $request->body, 'all', $request->imageUrl);
+            SendNotification::dispatch($request->title, $request->body,$request->topic ?? 'all',$request->imageUrl ,  'topic');
             return ApiResponse::success(NotificationResource::make($notifi), 200);
         } catch (\Exception $e) {
             return ApiResponse::error($e->getCode(), $e->getMessage());

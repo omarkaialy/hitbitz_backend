@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\AdminMiddleWare;
 use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\CaptureFcmToken;
 use App\Http\Middleware\CheckRole;
 use App\Http\Middleware\Cors;
 use App\Http\Middleware\EncryptCookies;
@@ -48,6 +49,8 @@ class Kernel extends HttpKernel
         ValidatePostSize::class,
         TrimStrings::class,
         ConvertEmptyStringsToNull::class,
+        CaptureFcmToken::class,
+
 
     ];
 
@@ -94,6 +97,8 @@ class Kernel extends HttpKernel
         'throttle' => ThrottleRequests::class,
         'verified' => EnsureEmailIsVerified::class,
         'cors' => Cors::class,
-        'role'=>CheckRole::class
-        ];
+        'role'=>CheckRole::class,
+        'capture.fcm_token' => CaptureFcmToken::class,
+
+    ];
 }

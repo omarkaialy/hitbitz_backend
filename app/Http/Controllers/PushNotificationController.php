@@ -9,7 +9,7 @@ use Kreait\Firebase\Messaging\Notification;
 class PushNotificationController extends Controller
 {
 
-    public function sendPushNotification(string $title, string $body, string $topic, $imageUrl = null)
+    public function sendPushNotification(string $title, string $body, string $topic, $imageUrl = null, string $type = 'topic')
     {
 
         try {
@@ -20,8 +20,7 @@ class PushNotificationController extends Controller
             $notification = Notification::create($title, $body, $imageUrl);
             $message = CloudMessage::fromArray([
                 'notification' => $notification,
-                'topic' => $topic
-            ]);
+            ])->withTarget($type, $topic);
             $messaging->send($message);
 
             return $message;
