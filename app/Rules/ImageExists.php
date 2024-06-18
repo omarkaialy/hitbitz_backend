@@ -22,7 +22,7 @@ class ImageExists implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $path = storage_path('images\\temp\\') . $this->image;
+        $path = storage_path('images/temp/') . $this->image;
         if (!File::exists($path))
             $fail("image not exist");
     }

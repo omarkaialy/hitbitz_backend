@@ -13,15 +13,15 @@ class ImageService
             if (!isset($image)) return;
             else if (str_contains($image, config('app.url'))) {
                 $image = str_replace(config('app.url'), '', $image);
-                $hash = BlurHash::encode(storage_path('images\\temp\\') . $image);
+                $hash = BlurHash::encode(storage_path('images/temp/') . $image);
 
 
-                $mediaModel = $model->addMedia(storage_path('images\\temp\\') . $image)->preservingOriginal()->toMediaCollection($collection);
+                $mediaModel = $model->addMedia(storage_path('images/temp/') . $image)->preservingOriginal()->toMediaCollection($collection);
 
             } else {
-                $hash = BlurHash::encode(storage_path('images\\temp\\') . $image);
+                $hash = BlurHash::encode(storage_path('images/temp/') . $image);
 
-                $mediaModel = $model->addMedia(storage_path('images\\temp\\') . $image)->preservingOriginal()->toMediaCollection($collection);
+                $mediaModel = $model->addMedia(storage_path('images/temp/') . $image)->preservingOriginal()->toMediaCollection($collection);
             }
             $mediaModel->setCustomProperty('hash', $hash);
             $mediaModel->save();
@@ -55,15 +55,15 @@ class ImageService
             // Process the new image
             if (str_contains($image, config('app.url'))) {
                 $image = str_replace(config('app.url'), '', $image);
-                $hash = BlurHash::encode(storage_path('images\\temp\\') . $image);
+                $hash = BlurHash::encode(storage_path('images/temp/') . $image);
 
-                $mediaModel = $model->addMedia(storage_path('images\\temp\\') . $image)
+                $mediaModel = $model->addMedia(storage_path('images/temp/') . $image)
                     ->preservingOriginal()
                     ->toMediaCollection($collection);
             } else {
-                $hash = BlurHash::encode(storage_path('images\\temp\\') . $image);
+                $hash = BlurHash::encode(storage_path('images/temp/') . $image);
 
-                $mediaModel = $model->addMedia(storage_path('images\\temp\\') . $image)
+                $mediaModel = $model->addMedia(storage_path('images/temp/') . $image)
                     ->preservingOriginal()
                     ->toMediaCollection($collection);
             }
