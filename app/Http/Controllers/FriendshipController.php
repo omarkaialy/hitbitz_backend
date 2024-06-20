@@ -43,8 +43,8 @@ class FriendshipController extends Controller
             SendNotification::dispatch(
                 'Friend Request',
                 'A New Friend Request From ' . $user->full_name,
-                'e1-JmNhgQ9msgK8F_E-eTK:APA91bG8DLJo8zDGQU4syK6XDmgUjFTEQm7HWNGWNkShVbh1ZSjdViq47xzu1-J5QE7Qk-wtJePepfEC2NvxZY1KGY7Ops1WDoIrHqMOBAkppFRvy5Bg27tiMQEizer2g7FLKZboFmKv',
-         ''       , 'token');
+                $friend->fcm_token,
+                '', 'token');
             return ApiResponse::success(null, 200);
 
         } catch (\Exception $exception) {
