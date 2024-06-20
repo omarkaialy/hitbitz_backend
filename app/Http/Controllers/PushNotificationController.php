@@ -18,12 +18,12 @@ class PushNotificationController extends Controller
 
             $messaging = $firebase->createMessaging();
             $notification = Notification::create($title, $body, $imageUrl);
-            $message = CloudMessage::fromArray([
-                'notification' => $notification,
-            ])->withTarget($type, $topic);
+
+            $message = CloudMessage::new()->withNotification($notification)->withChangedTarget($type,$topic);
             $messaging->send($message);
 
             return $message;
+
         } catch (\Exception $exception) {
             return $exception;
         }

@@ -7,6 +7,8 @@ use App\Http\Resources\NotificationResource;
 use App\Jobs\SendNotification;
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\Messaging\CloudMessage;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class NotificationController extends Controller
@@ -21,14 +23,6 @@ class NotificationController extends Controller
         $notifications = QueryBuilder::for(Notification::query())->allowedFilters(['topic'])->get();
         return ApiResponse::success(NotificationResource::collection($notifications), 200);
 
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
