@@ -25,7 +25,7 @@ class AuthController extends Controller
     public function validateToken(Request $request)
     {
         try {
-            return ApiResponse::success(Auth::user(),200);
+            return ApiResponse::success(UserResource::make( Auth::user()->load(['category','categoryAdmin','roles']))->includeToken(true),200);
         }catch (\Exception $e){
             ApiResponse::error($e->getCode(), $e->getMessage());
         } }
@@ -60,7 +60,7 @@ class AuthController extends Controller
 
             $token = Auth::attempt(['user_name' => $req->userName, 'password' => $req->password]);
             if ($token) {
-                $user = User::query()->where('id',Auth::user()->id)->with(['roles','category'])->get()->first();
+                $user = User::query()->where('id',Auth::user()->id)->with(['roles','category','categoryAdmin'])->get()->first();
 
                 $user->token = $token;
                 if ($user->hasRole('super_admin') || $user->hasRole('admin')) {

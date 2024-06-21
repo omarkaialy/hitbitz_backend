@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Helpers\ApiResponse;
 use App\Http\Resources\RoadmapResource;
 use App\Http\Resources\UserResource;
-use App\Models\Category;
 use App\Models\Roadmap;
 use App\Models\User;
 use App\Services\ImageService;
@@ -29,6 +28,12 @@ class UserController extends Controller
     public function index()
     {
         $users = QueryBuilder::for(User::role('user')->whereNot('id', '=', Auth::user()->id))->paginate();
+        return ApiResponse::success(UserResource::collection($users->items()), 200);
+    }
+
+    public function indexAdmins()
+    {
+        $users = QueryBuilder::for(User::role('admin')->with('categoryAdmin'))->paginate();
         return ApiResponse::success(UserResource::collection($users->items()), 200);
     }
 
@@ -189,7 +194,7 @@ class UserController extends Controller
     {
         try {
             if ($request->categoryId && Auth::user()->hasRole('super_admin')) {
-            $user->categoryAdmin()->associate($request->categoryId);
+                $user->categoryAdmin()->associate($request->categoryId);
             }
             if ($request->birthDate) {
                 $user->birth_date = date($request->birthDate);
@@ -199,7 +204,7 @@ class UserController extends Controller
                 $user->full_name = $request->fullName;
             }
             $user->update();
-            $user->load(['media', 'category']);
+            $user->load(['media', 'categoryAdmin']);
             return ApiResponse::success(UserResource::make($user), 200);
         } catch (\Exception $e) {
             return ApiResponse::error(400, $e->getMessage());

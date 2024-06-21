@@ -44,7 +44,6 @@ class LevelDetailController extends Controller
         $details = new LevelDetail();
         $details->description = $request->description;
         $details->name = $request->name;
-        $details->order = $request->order;
         $details->duration = $request->duration;
         $details->level()->associate($request->levelId);
         $details->save();

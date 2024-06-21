@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Helpers\ApiResponse;
 use App\Http\Resources\QuizResource;
 use App\Http\Resources\RoadmapResource;
-use App\Models\LevelDetail;
 use App\Models\Quiz;
 use App\Models\Roadmap;
 use Illuminate\Http\Request;
@@ -18,10 +17,22 @@ class QuizController extends Controller
 
     public function index()
     {
-        $quizes = QueryBuilder::for(Quiz::query()->with(['levelDetail']))
-            ->allowedFilters([AllowedFilter::exact('level_detail_id')])
-            ->defaultSort('-created_at')
-            ->Paginate(request()->perPage);
+        if (Auth::user()->hasRole('admin')) {
+            $categoryId = Auth::user()->category_id;
+            $quizes = QueryBuilder::for(Quiz::query()->with(['levelDetail'])
+                ->whereHas('levelDetail.level.roadmap.category', function ($query) use ($categoryId) {
+                    $query->where('id', $categoryId);
+                }))
+                ->allowedFilters([AllowedFilter::exact('level_detail_id')])
+                ->defaultSort('-created_at')
+                ->Paginate(request()->perPage);
+
+        } else {
+            $quizes = QueryBuilder::for(Quiz::query()->with(['levelDetail']))
+                ->allowedFilters([AllowedFilter::exact('level_detail_id')])
+                ->defaultSort('-created_at')
+                ->Paginate(request()->perPage);
+        }
         return ApiResponse::success(QuizResource::collection($quizes->items()), 200);
 
     }
@@ -39,11 +50,8 @@ class QuizController extends Controller
         $quiz->required_degree = $request->requiredDegree;
         $quiz->description = $request->description;
         $quiz->levelDetail()->associate($request->stepId);
-        $quiz->order = LevelDetail::find($request->stepId)->quizzes()->get()->count();
         $quiz->save();
         return ApiResponse::success($quiz, 200, 'Quiz Created Successfully');
-
-
     }
 
     /**
@@ -129,10 +137,10 @@ class QuizController extends Controller
             }
 
             // Retrieve the updated response
-            $response = Roadmap::query()->where('id','=',$roadmapId)
+            $response = Roadmap::query()->where('id', '=', $roadmapId)
                 ->withWhereHas('userRoadmap', function ($query) {
-                $query->where('user_id', Auth::user()->id);
-            })->get()->first();
+                    $query->where('user_id', Auth::user()->id);
+                })->get()->first();
             return ApiResponse::success(RoadmapResource::make($response), 200);
         } catch (\Throwable $exception) {
             return ApiResponse::error(419, $exception->getMessage(), [$exception->getMessage()]);

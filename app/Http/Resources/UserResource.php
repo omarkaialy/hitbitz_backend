@@ -43,6 +43,7 @@ class UserResource extends JsonResource
                 return $this->roles->first()->name;
             });
         }
+        $data['categoryAdmin'] = CategoryResource::make($this->whenLoaded('categoryAdmin'));
         $data['category'] = CategoryResource::make($this->whenLoaded('category'));
         $data['profileImage'] = MediaResource::make($this, 'profile');
         return $data;
