@@ -17,22 +17,11 @@ class QuizController extends Controller
 
     public function index()
     {
-        if (Auth::user()->hasRole('admin')) {
-            $categoryId = Auth::user()->category_id;
-            $quizes = QueryBuilder::for(Quiz::query()->with(['levelDetail'])
-                ->whereHas('levelDetail.level.roadmap.category', function ($query) use ($categoryId) {
-                    $query->where('id', $categoryId);
-                }))
-                ->allowedFilters([AllowedFilter::exact('level_detail_id')])
-                ->defaultSort('-created_at')
-                ->Paginate(request()->perPage);
+        $quizes = QueryBuilder::for(Quiz::query()->with(['levelDetail']))
+            ->allowedFilters([AllowedFilter::exact('level_detail_id')])
+            ->defaultSort('-created_at')
+            ->Paginate(request()->perPage);
 
-        } else {
-            $quizes = QueryBuilder::for(Quiz::query()->with(['levelDetail']))
-                ->allowedFilters([AllowedFilter::exact('level_detail_id')])
-                ->defaultSort('-created_at')
-                ->Paginate(request()->perPage);
-        }
         return ApiResponse::success(QuizResource::collection($quizes->items()), 200);
 
     }
