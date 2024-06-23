@@ -39,18 +39,20 @@ class RoadmapResource extends JsonResource
 //        $data['completed'] = $this->whenLoaded('pivot', function () {
 //            return $this->pivot->completed;
 //        });
-        if ($this->whenLoaded('userRoadmap')->first())
-            $data['current_level'] = $this->whenLoaded('userRoadmap', function () {
-                return $this->userRoadmap->first()->current_level;
-            });
-        if ($this->whenLoaded('userRoadmap')->first())
-            $data['current_step'] = $this->whenLoaded('userRoadmap', function () {
-                return $this->userRoadmap->first()->current_step;
-            });
-        if ($this->whenLoaded('userRoadmap')->first())
-            $data['completed'] = $this->whenLoaded('userRoadmap', function () {
-                return $this->userRoadmap->first()->completed;
-            });
+
+        $data['current_level'] = $this->whenLoaded('userRoadmap', function () {
+            $userRoadmap = $this->userRoadmap->first();
+            return $userRoadmap ? $userRoadmap->current_level : null;
+        });
+        $data['current_step'] = $this->whenLoaded('userRoadmap', function () {
+            $userRoadmap = $this->userRoadmap->first();
+            return $userRoadmap ? $userRoadmap->current_step : null;
+        });
+//
+        $data['completed'] = $this->whenLoaded('userRoadmap', function () {
+            $userRoadmap = $this->userRoadmap->first();
+            return $userRoadmap ? $userRoadmap->completed : null;
+        });
         return $data;
     }
 

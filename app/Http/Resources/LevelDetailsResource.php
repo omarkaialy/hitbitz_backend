@@ -21,7 +21,7 @@ class LevelDetailsResource extends JsonResource
             'order' => $this->order,
             'duration' => $this->duration
         ];
-        $data['quizzes'] = QuizResource::collection($this->quizzes);
+        $data['quizzes'] = QuizResource::collection($this->whenLoaded('quizzes'));
         $data['level'] = LevelResource::make($this->whenLoaded('level'));
         return $data;
     }

@@ -95,12 +95,15 @@ class RoadmapController extends Controller
             $roadmap = Roadmap::query()->where('id', $id)->with(['media', 'category', 'levels', 'userRoadmap' => function ($query) {
                 $query->where('user_id', Auth::user()->id);
             }])->get();
+
             if ($roadmap->isEmpty())
                 return ApiResponse::error(404, 'Not Found');
         } else {
             $roadmap = Roadmap::query()->where('id', $id)->with(['media', 'category', 'levels'])
                 ->get();
+
         }
+
         return ApiResponse::success(RoadmapResource::make($roadmap->first()), 200);
     }
 
