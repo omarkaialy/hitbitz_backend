@@ -25,7 +25,7 @@ class QuizResource extends JsonResource
         ];
         if($this->whenLoaded('users')->first()) {
             $data['completed'] = $this->whenLoaded('users')->first()->completed;
-            $data['degree'] = $this->whenLoaded('users')->first()->pivot->degree;
+            $data['degree'] = $this->whenLoaded('users')->first()->pivot->score;
         }
         return $data;
     }
