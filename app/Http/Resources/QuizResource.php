@@ -14,16 +14,18 @@ class QuizResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data=
+         [
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
             'step_id' => $this->level_detail_id,
             'order' => $this->order,
             'required_degree' => $this->required_degree,
-
-
         ];
+        if($this->whenLoaded('users')->first())
+            $data['completed']= $this->whenLoaded('users')->first()->completed;
+        return $data;
     }
 
     public function withQuestions()
