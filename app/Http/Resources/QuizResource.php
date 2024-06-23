@@ -23,8 +23,10 @@ class QuizResource extends JsonResource
             'order' => $this->order,
             'required_degree' => $this->required_degree,
         ];
-        if($this->whenLoaded('users')->first())
-            $data['completed']= $this->whenLoaded('users')->first()->completed;
+        if($this->whenLoaded('users')->first()) {
+            $data['completed'] = $this->whenLoaded('users')->first()->completed;
+            $data['degree'] = $this->whenLoaded('users')->first()->pivot->degree;
+        }
         return $data;
     }
 
