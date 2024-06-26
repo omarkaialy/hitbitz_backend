@@ -32,8 +32,11 @@ class RoadmapResource extends JsonResource
         }
         $data['levels'] = LevelResource::collection($this->whenLoaded('levels'));
         $data['category'] = CategoryResource::make($this->whenLoaded('category'));
-
-//        $data['current_step'] = $this->whenLoaded('pivot', function () {
+        $data['users'] = $this->whenLoaded('userRoadmap', function (){
+            $userRoadmaps=$this->userRoadmap;
+            return $userRoadmaps?count($userRoadmaps) :0;
+        });
+        //        $data['current_step'] = $this->whenLoaded('pivot', function () {
 //            return $this->pivot->current_step;
 //        });
 //        $data['completed'] = $this->whenLoaded('pivot', function () {

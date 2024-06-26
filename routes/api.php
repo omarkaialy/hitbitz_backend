@@ -85,7 +85,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('/resend', [AuthController::class, 'resendOtp']);
     Route::post('/forgetPassword', [AuthController::class, 'forgetPassword']);
     Route::post('/resetPassword', [AuthController::class, 'resetPassword']);
-    Route::post('/updateProfile', [UserController::class, 'updateProfile']);
+    Route::post('/updateProfile', [UserController::class, 'updateProfile'])->middleware('auth');
 
 });
 
@@ -103,11 +103,11 @@ Route::group(['prefix' => 'user'], function () {
     Route::get('/subcategories', [CategoryController::class, 'indexSubs']);
     Route::get('/categories/{category}', [CategoryController::class, 'show']);
     Route::get('/roadmaps', [RoadmapController::class, 'index']);
-    Route::get('/roadmaps/{roadmap}', [RoadmapController::class, 'show']);
-    Route::get('/roadmaps/favorites/index', [RoadmapController::class, 'indexFavorites']);
-    Route::get('/roadmaps/{roadmap}/toggleFavorite', [UserController::class, 'toggleFavorite']);
-    Route::get('/roadmaps/{roadmap}/start', [UserController::class, 'startRoadmap']);
-    Route::post('/roadmaps/{roadmap}/rate', [UserController::class, 'rateRoadmap']);
+    Route::get('/roadmaps/{roadmap}', [RoadmapController::class, 'show'])->middleware('auth');
+    Route::get('/roadmaps/favorites/index', [RoadmapController::class, 'indexFavorites'])->middleware('auth');
+    Route::get('/roadmaps/{roadmap}/toggleFavorite', [UserController::class, 'toggleFavorite'])->middleware('auth');
+    Route::get('/roadmaps/{roadmap}/start', [UserController::class, 'startRoadmap'])->middleware('auth');
+    Route::post('/roadmaps/{roadmap}/rate', [UserController::class, 'rateRoadmap'])->middleware('auth');
     Route::get('/levels', [LevelController::class, 'index']);
     Route::get('/levelStep', [LevelDetailController::class, 'index']);
     Route::get('/questions', [QuestionController::class, 'index']);
@@ -115,7 +115,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::get('/quizzes', [QuizController::class, 'index']);
     Route::post('/quizzes/{quiz}/complete', [QuizController::class, 'complete'])->middleware('auth');
     Route::post('/makeSuggestion', [\App\Http\Controllers\SuggestionController::class, 'store']);
-    Route::get('/myReferrals', [UserController::class, 'indexReferees']);
+    Route::get('/myReferrals', [UserController::class, 'indexReferees'])->middleware('auth');
     Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index']);
 });
 Route::get('/migrate', function () {

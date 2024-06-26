@@ -9,6 +9,7 @@ class Level extends Model
 {
     use HasFactory;
 
+    protected $casts = ['requirements'=> 'array'];
     public static function boot()
     {
         parent::boot();

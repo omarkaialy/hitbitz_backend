@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up()
     {
         Schema::create('levels', function (Blueprint $table) {
@@ -13,6 +12,8 @@ return new class extends Migration
             $table->foreignId('roadmap_id')->constrained('roadmaps')->on('roadmaps');
             $table->string('name');
             $table->integer('order');
+            $table->json('requirements')->default('[requirement 1,requirement 2]');
+            $table->longText('description')->default('level');
             // Add other fields related to levels
 
             $table->timestamps();
@@ -22,4 +23,5 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('levels');
-    }};
+    }
+};

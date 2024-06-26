@@ -19,7 +19,8 @@ class LevelController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->hasRole('admin')) {
+
+        if (Auth::user()&& Auth::user()->hasRole('admin')) {
             $category = Category::find(Auth::user()->category_id);
             $ids = [];
             $categories = $category->childrens;
@@ -66,6 +67,8 @@ class LevelController extends Controller
 
         $level = new Level();
         $level->name = $request->name;
+        $level->description = $request->description;
+        $level->requirements = $request->requirements;
         $level->roadmap()->associate($request->roadmapId);
         $level->save();
         return ApiResponse::success($level, 200, 'Created Successfully');

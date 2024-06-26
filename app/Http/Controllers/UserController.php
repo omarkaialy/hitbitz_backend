@@ -27,8 +27,17 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = QueryBuilder::for(User::role('user')->whereNot('id', '=', Auth::user()->id))->paginate();
-        return ApiResponse::success(UserResource::collection($users->items()), 200);
+        try {
+
+            if (Auth::user()) {
+                $users = QueryBuilder::for(User::role('user')->whereNot('id', '=', Auth::user()->id))->paginate();
+                return ApiResponse::success(UserResource::collection($users->items()), 200);
+            } else {
+                return ApiResponse::error(400, 'UnAuthorized');
+            }
+        } catch (\Exception $e) {
+            return ApiResponse::error(400, $e->getMessage());
+        }
     }
 
     public function indexAdmins()
