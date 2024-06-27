@@ -20,7 +20,7 @@ class QuizController extends Controller
         if (Auth::user()) {
 
             $quizes = QueryBuilder::for(Quiz::query()->with(['levelDetail', 'users' => function ($query) {
-                $query->where('user_id',Auth::user()->id)->select('completed');
+                $query->where('user_id', Auth::user()->id)->select('completed');
             }])
             )
                 ->allowedFilters([AllowedFilter::exact('level_detail_id')])
@@ -106,31 +106,41 @@ class QuizController extends Controller
                 return $quizz->users()->where('user_id', $user->id)->exists();
             })->count();
             $progress = count($quizzes) > 0 ? $completedQuizzes / count($quizzes) : 0;
-            $allQuizzesCompleted = $user->quizzes()->whereIn('level_detail_id', $userRoadmap->levels->flatMap->levelDetails->pluck('id'))->wherePivot('completed', 0)->doesntExist();
-
-            $user->userRoadmap()->sync([$roadmapId => ['completed' => $allQuizzesCompleted ? 1 : 0]], false);
-
             // Update user roadmap progress
             $user->userRoadmap()->sync([$roadmapId => ['progress' => $progress * 100]], false);
             // Check if user completed all quizzes in the current level
-            $currentLevelSteps = $user->quizzes()->where('level_detail_id', $quiz->levelDetail->id)->get();
-            $allQuizzesCompleted = $currentLevelSteps->every(function ($quiz) {
-                return $quiz->pivot->completed == 1;
-            });
+            $currentLevelSteps = Quiz::query()->with(['users'])->where('level_detail_id', $quiz->levelDetail->id)->get();
+
+            $allQuizzesCompleted = true;
+            foreach ($currentLevelSteps as $quiz) {
+                $userPivot = $quiz->users->firstWhere('pivot.user_id', $user->id);
+
+                if (!$userPivot || $userPivot->pivot->completed != 1) {
+                    $allQuizzesCompleted = false;
+                }
+            }
 
             if ($allQuizzesCompleted) {
                 // Get the next level
                 $nextLevel = $userRoadmap->levels()
-                    ->where('order', '>', $userRoadmap->pivot->current_step)
+                    ->where('order', '=', $userRoadmap->pivot->current_level)
                     ->first();
+                $nextLevel = $nextLevel->levelDetails->where('order', '>', $userRoadmap->pivot->current_step)->first();
                 if ($nextLevel) {
+
                     $user->userRoadmap()->sync([$roadmapId => ['current_step' => $nextLevel->order]], false);
+                    $nextLevel = 0;
                 } else {
                     $nextLevel = $userRoadmap->levels()->where('order', '>', $userRoadmap->pivot->current_level)->orderBy('order')->first();
                 }
                 if ($nextLevel) {
                     $user->userRoadmap()->sync([$roadmapId => ['current_level' => $nextLevel->order]], false);
-                } else {
+                    $user->userRoadmap()->sync([$roadmapId => ['current_step' => 1]], false);
+                }
+                $userRoadmap = $user->userRoadmap()
+                    ->where('roadmap_id', $roadmapId)->first();
+
+                if ($userRoadmap->pivot->progress == 100) {
                     $user->userRoadmap()->sync([$roadmapId => ['completed' => 1]], false);
 
                 }

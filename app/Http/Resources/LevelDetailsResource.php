@@ -17,7 +17,7 @@ class LevelDetailsResource extends JsonResource
         $data = [
             'id' => $this->id,
             'name' => $this->name,
-            'description' => $this->descirption,
+            'description' => $this->description,
             'order' => $this->order,
             'duration' => $this->duration
         ];
