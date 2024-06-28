@@ -90,6 +90,9 @@ Route::group(['prefix' => 'user'], function () {
 });
 
 Route::group(['prefix' => 'user'], function () {
+    Route::get('/myRoadmaps', [UserController::class, 'getMyRoadmaps'])->middleware('auth');
+    Route::get('/getHomeRoadmap', [UserController::class, 'getHomeRoadmap'])->middleware('auth');
+
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/users/{id}', [UserController::class, 'show']);
     Route::get('/profile', [UserController::class, 'showProfile']);
@@ -119,7 +122,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index']);
 });
 Route::get('/migrate', function () {
-    Artisan::call('migrate:fresh --seed');
+    Artisan::call('queue:work --stop-when-empty');
     return (ApiResponse::success(null, 200));
 });
 Route::get('/migrate-test', function () {

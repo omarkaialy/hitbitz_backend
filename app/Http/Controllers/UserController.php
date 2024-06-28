@@ -223,6 +223,34 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    public function getMyRoadmaps()
+    {
+        $user = Auth::user();
+        $roadmaps = $user->userRoadmap;
+        $roads = Roadmap::query()->with(['media', 'userRoadmap' => function ($query) {
+            $query->where('user_id', Auth::user()->id);
+        }])->whereIn('id', $roadmaps->pluck('id'))->get();
+        return ApiResponse::success(RoadmapResource::collection($roads), 200);
+    }
+
+    public function getHomeRoadmap()
+    {
+        $user = Auth::user();
+        $roadmaps = $user->userRoadmap;
+        $roads = Roadmap::query()
+            ->join('user_roadmap', function ($join) {
+                $join->on('roadmaps.id', '=', 'user_roadmap.roadmap_id')
+                    ->where('user_roadmap.user_id', '=', Auth::user()->id);
+            })
+            ->with(['media', 'userRoadmap' => function ($query) {
+                $query->where('user_id', Auth::user()->id);
+            }])
+            ->whereIn('roadmaps.id', $roadmaps->pluck('id'))
+            ->orderBy('user_roadmap.progress', 'desc') // Order by progress ascending
+            ->get(['roadmaps.*'])->first();
+        return ApiResponse::success(RoadmapResource::make($roads),200);
+    }
+
     public function destroy(string $id)
     {
         //

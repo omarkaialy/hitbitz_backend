@@ -12,8 +12,8 @@ return new class extends Migration {
             $table->foreignId('roadmap_id')->constrained('roadmaps')->on('roadmaps');
             $table->string('name');
             $table->integer('order');
-            $table->json('requirements')->default('[requirement 1,requirement 2]');
-            $table->longText('description')->default('level');
+            $table->json('requirements');
+            $table->longText('description');
             // Add other fields related to levels
 
             $table->timestamps();
