@@ -59,7 +59,6 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/levelStep/store', [LevelDetailController::class, 'store']);
     Route::delete('/levelStep/{levelDetail}', [LevelDetailController::class, 'destroy']);
     Route::get('/levelStep/{id}', [LevelDetailController::class, 'show']);
-    Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/subcategories', [CategoryController::class, 'indexSubs']);
     Route::get('/roadmaps', [RoadmapController::class, 'index']);
     Route::get('/levels', [LevelController::class, 'index']);

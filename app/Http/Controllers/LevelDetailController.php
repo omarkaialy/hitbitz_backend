@@ -59,8 +59,7 @@ class LevelDetailController extends Controller
         try {
 
             $step = LevelDetail::query()->where('id', '=', $id)
-                ->with(['level', 'quizzes'])
-                ->get()->first();
+                ->with(['level', 'quizzes'])->get()->first();
             return ApiResponse::success(LevelDetailsResource::make($step), 200);
         } catch (\Throwable $e) {
             return ApiResponse::error(419, $e->getMessage());
