@@ -24,11 +24,17 @@ class CategoryController extends Controller
      */
     public function index()
     {
+
         $query = QueryBuilder::for(Category::query())
             ->with(['media'])
             ->whereNull('parent_id')
             ->allowedFilters(['name', AllowedFilter::exact('type')])
             ->defaultSort('-created_at');
+
+        if (Auth::user() && Auth::user()->hasRole('super_admin')) {
+            $categories = $query->get();
+            return ApiResponse::success(CategoryResource::collection($categories), 200);
+        }
 
         // Step 1: Check if the user exists and has the required role
         if (Auth::user() && Auth::user()->hasRole('user')) {
