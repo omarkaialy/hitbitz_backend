@@ -37,7 +37,7 @@ class CategoryController extends Controller
         }
 
         // Step 1: Check if the user exists and has the required role
-        if (Auth::user() && Auth::user()->hasRole('user')) {
+        if (Auth::user() && Auth::user()->hasRole('user')&& !isset(\request()->filter['type'])) {
             $user = Auth::user();
 
             // Step 2: Fetch categories with type = 2
@@ -66,10 +66,12 @@ class CategoryController extends Controller
             return ApiResponse::success(CategoryResource::collection($categoriesWithType2), 200, 'This Is Categories');
         }
 
+
         // Step 6: Fetch categories without filters and return response
-        $categories = $query->where('type',CategoryTypeEnum::prof)->paginate(request()->perPage);
+
+        $categories = $query->where('type', request()->filter['type'] ?? CategoryTypeEnum::prof)->paginate(request()->perPage);
         return ApiResponse::success(CategoryResource::collection($categories->items()), 200, 'This Is Categories');
-}
+    }
 
     public function indexSubs()
     {
