@@ -46,6 +46,12 @@ class UserController extends Controller
         return ApiResponse::success(UserResource::collection($users->items()), 200);
     }
 
+    public function showAdmin(User $user)
+    {
+        $admin = QueryBuilder::for(User::role('admin')->with('categoryAdmin'))->where('id', $user->id)->first();
+        return ApiResponse::success(UserResource::make($admin), 200);
+    }
+
     public function indexReferees()
     {
         return ApiResponse::success(['numOfReferees' => count(Auth::user()->referees)], 200);
@@ -152,6 +158,10 @@ class UserController extends Controller
             $user->email = $req->email;
             $user->password = $req->password;
             $user->full_name = $req->fullName;
+            if ($req->birthDate)
+                $user->birth_date = $req->birthDate;
+            if ($req->categoryId)
+                $user->categoryAdmin()->associate($req->categoryId);
             $user->assignRole('admin');
             $user->save();
 
@@ -212,6 +222,9 @@ class UserController extends Controller
             if ($request->fullName) {
                 $user->full_name = $request->fullName;
             }
+            if ($request->password) {
+                $user->password = $request->password;
+            }
             $user->update();
             $user->load(['media', 'categoryAdmin']);
             return ApiResponse::success(UserResource::make($user), 200);
@@ -248,7 +261,7 @@ class UserController extends Controller
             ->whereIn('roadmaps.id', $roadmaps->pluck('id'))
             ->orderBy('user_roadmap.progress', 'desc') // Order by progress ascending
             ->get(['roadmaps.*'])->first();
-        return ApiResponse::success(RoadmapResource::make($roads),200);
+        return ApiResponse::success(RoadmapResource::make($roads), 200);
     }
 
     public function destroy(string $id)

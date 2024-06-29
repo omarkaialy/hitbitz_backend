@@ -72,8 +72,9 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/quizzes/{id}', [QuizController::class, 'show']);
     Route::get('/suggestions', [\App\Http\Controllers\SuggestionController::class, 'index']);
     Route::post('/createAdmin', [UserController::class, 'createAdmin']);
-    Route::get('/admins', [UserController::class, 'indexAdmins']);
     Route::post('/updateAdmin/{user}', [UserController::class, 'update']);
+    Route::get('/admins', [UserController::class, 'indexAdmins']);
+    Route::get('/admins/{user}', [UserController::class, 'showAdmin']);
 
 });
 Route::group(['prefix' => 'user'], function () {
