@@ -14,7 +14,8 @@ class FriendshipController extends Controller
     public function indexRequests()
     {
         try {
-            return ApiResponse::success(Auth::user()->pendingFriendRequests, 200);
+            return ApiResponse::success(UserResource::collection(Auth::user()->pendingFriendRequests), 200);
+
 
         } catch (\Exception $e) {
             return ApiResponse::error($e->getCode(), $e->getMessage());
