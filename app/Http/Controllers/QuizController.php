@@ -24,7 +24,7 @@ class QuizController extends Controller
             }])
             )
                 ->allowedFilters([AllowedFilter::exact('level_detail_id')])
-                ->defaultSort('-created_at')
+                ->defaultSort('order')
                 ->Paginate(request()->perPage);
 
         } else {
