@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ApiResponse;
+use App\Http\Resources\QuestionResource;
 use App\Http\Resources\QuizResource;
 use App\Http\Resources\RoadmapResource;
+use App\Models\Level;
+use App\Models\LevelDetail;
+use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\Roadmap;
+use App\Rules\OneOf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -184,4 +189,43 @@ class QuizController extends Controller
         return ApiResponse::success(null, 200, 'Deleted Successfully');
         //
     }
+
+    public function createCustomQuiz(Request $request)
+    {
+        try {
+
+            $request->validate([
+                'levelId' => ['required_without_all:stepId,roadmapId', new OneOf($request, ['stepId', 'levelId', 'roadmapId'],)],
+                'stepId' => ['required_without_all:roadmapId,levelId', new OneOf($request, ['stepId', 'levelId', 'roadmapId'],)],
+                'roadmapId' => ['required_without_all:levelId,stepId', new OneOf($request, ['stepId', 'levelId', 'roadmapId'],)],
+            ]);
+            if ($request->roadmapId) {
+                $levels = Level::query()->where('roadmap_id', $request->roadmapId)->get()->pluck('id');
+
+                $steps = LevelDetail::query()->whereIn('level_id', $levels)->select('id')->get();
+                $quizzes = QueryBuilder::for(Quiz::query()->whereIn('level_detail_id', $steps->pluck('id')))->paginate();
+                $questions = Question::query()->with('choices')->whereIn('quiz_id', $quizzes->pluck('id'))->get();
+                return ApiResponse::success(QuestionResource::collection($questions->random($request->num ?? 20),), 200);
+            }
+            if ($request->levelId) {
+                $steps = LevelDetail::query()->where('level_id', $request->levelId)->select('id')->get();
+                $quizzes = QueryBuilder::for(Quiz::query()->whereIn('level_detail_id', $steps->pluck('id')))->paginate();
+                $questions = Question::query()->with('choices')->whereIn('quiz_id', $quizzes->pluck('id'))->get();
+
+                return ApiResponse::success(QuestionResource::collection($questions->random($request->num ?? 15)), 200);
+            }
+            if ($request->stepId) {
+                $quizzes = QueryBuilder::for(Quiz::query()->where('level_detail_id', $request->stepId))->paginate();
+                $questions = Question::query()->with('choices')->whereIn('quiz_id', $quizzes->pluck('id'))->get();
+                return ApiResponse::success(QuestionResource::collection($questions->random($request->num ?? 10)), 200);
+
+            }
+
+
+        } catch (\Exception $e) {
+            return ApiResponse::error(419, $e->getMessage());
+        }
+    }
+
+
 }

@@ -33,6 +33,7 @@ class CategoryStoreRequest extends FormRequest
             'parentId' => ['required_without:type', 'exists:categories,id'],
             'name' => ['required', 'min:4'],
             'image' => ['required', new ImageExists($this->image)]
+            ,
         ];
     }
 

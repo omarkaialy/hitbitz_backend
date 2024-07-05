@@ -90,6 +90,8 @@ Route::group(['prefix' => 'user'], function () {
 });
 
 Route::group(['prefix' => 'user'], function () {
+
+    Route::get('/quizzes/createCustomQuiz', [QuizController::class, 'createCustomQuiz'])->middleware('auth');
     Route::get('/myRoadmaps', [UserController::class, 'getMyRoadmaps'])->middleware('auth');
     Route::get('/getHomeRoadmap', [UserController::class, 'getHomeRoadmap'])->middleware('auth');
 
