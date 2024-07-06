@@ -93,6 +93,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::get('/certificate', [QuizController::class, 'certificate']);
 
     Route::get('/quizzes/createCustomQuiz', [QuizController::class, 'createCustomQuiz'])->middleware('auth');
+    Route::post('/quizzes/completeCustomQuiz', [QuizController::class, 'completeCustomQuiz'])->middleware('auth');
     Route::get('/myRoadmaps', [UserController::class, 'getMyRoadmaps'])->middleware('auth');
     Route::get('/getHomeRoadmap', [UserController::class, 'getHomeRoadmap'])->middleware('auth');
 

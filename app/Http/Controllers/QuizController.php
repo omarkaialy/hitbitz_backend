@@ -237,7 +237,72 @@ class QuizController extends Controller
 
 
         } catch (\Exception $e) {
-            return ApiResponse::error(419, $e->getMessage());
+        }
+    }
+
+    public function completeCustomQuiz(Request $request)
+    {
+        try {
+            $request->validate(
+                ['stepId' => [new OneOf($request, ['stepId', 'levelId', 'roadmapId'])],
+                    'levelId' => [new OneOf($request, ['stepId', 'levelId', 'roadmapId'])],
+                    'roadmapId' => [new OneOf($request, ['stepId', 'levelId', 'roadmapId'])],
+                    'score' => ['required', 'integer', 'min:80']
+                ]
+            );
+            $user = Auth::user();
+            if ($request->stepId) {
+                $step = LevelDetail::find($request->stepId);
+                $level = $step->level()->first();
+                $roadmapId = $level->roadmap_id;
+                $userRoadmap = $user->userRoadmap()->where('roadmap_id', $roadmapId)->first();
+                $nextLevel = $level->levelDetails->where('order', '>', $step->order)->first();
+
+                if ($step->order > $userRoadmap->pivot->current_step - 1 && $step->level()->first()->order == $userRoadmap->pivot->current_level) {
+                    if ($nextLevel) {
+                        $user->userRoadmap()->sync([$roadmapId => ['current_step' => $nextLevel->order]], false);
+                        $nextLevel = 0;
+                    } else {
+                        $nextLevel = $userRoadmap->levels()->where('order', '>', $userRoadmap->pivot->current_level)->orderBy('order')->first();
+                    }
+                    if ($nextLevel) {
+                        $user->userRoadmap()->sync([$roadmapId => ['current_level' => $nextLevel->order]], false);
+                        $user->userRoadmap()->sync([$roadmapId => ['current_step' => 1]], false);
+                    }
+                }
+                $userRoadmap = $user->userRoadmap()->where('roadmap_id', $roadmapId)->first();
+                $roadmap = Roadmap::query()->where('id', $userRoadmap->id)->with(['media', 'category', 'levels', 'userRoadmap' => function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                }])->first();
+                return ApiResponse::success(RoadmapResource::make($roadmap), 200);
+            }
+            if ($request->levelId) {
+                $level = Level::find($request->levelId);
+                $roadmap = $level->roadmap()->first();
+                $userRoadmap = $user->userRoadmap()->where('roadmap_id', $roadmap->id)->first();
+                $nextLevel = $userRoadmap->levels()->where('order', '>', $userRoadmap->pivot->current_level)->orderBy('order')->first();
+                if ($nextLevel) {
+                    $user->userRoadmap()->sync([$roadmap->id => ['current_level' => $nextLevel->order]], false);
+                    $user->userRoadmap()->sync([$roadmap->id => ['current_step' => 1]], false);
+                }
+                $roadmap = Roadmap::query()->where('id', $userRoadmap->id)->with(['media', 'category', 'levels', 'userRoadmap' => function ($query) use ($user) {
+                    $query->where('user_id', $user->id);
+                }])->first();
+                return ApiResponse::success(RoadmapResource::make($roadmap), 200);
+            }
+            if ($request->roadmapId) {
+                $userRoadmap = $user->userRoadmap()->where('roadmap_id', $request->roadmapId)->first();
+                if ($userRoadmap) {
+                    $user->userRoadmap()->sync([$request->roadmapId => ['completed' => 2]], false);
+                    $roadmap = Roadmap::query()->where('id', $request->roadmapId)->with(['media', 'category', 'levels', 'userRoadmap' => function ($query) use ($user) {
+                        $query->where('user_id', $user->id);
+                    }])->first();
+                    return ApiResponse::success(RoadmapResource::make($roadmap), 200);
+                }
+            }
+            return 'api';
+        } catch (\Exception $exception) {
+            return ApiResponse::error(419, $exception->getMessage());
         }
     }
 
@@ -247,7 +312,7 @@ class QuizController extends Controller
 
         try {
             $fullName = Auth::user()->full_name;
-            $road                = Roadmap::find($request->roadmapId);
+            $road = Roadmap::find($request->roadmapId);
             $roadmap = $road->name;
             $levels = $road->levels()->get()->pluck('id');
             $duration = LevelDetail::query()->whereIn('level_id', $levels)->sum('duration');
