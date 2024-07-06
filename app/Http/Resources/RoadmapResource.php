@@ -55,6 +55,7 @@ class RoadmapResource extends JsonResource
             $userRoadmap = $this->userRoadmap->first();
             return $userRoadmap ? $userRoadmap->progress : null;
         });
+
 //
         $data['completed'] = $this->whenLoaded('userRoadmap', function () {
             $userRoadmap = $this->userRoadmap->first();

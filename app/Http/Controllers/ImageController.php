@@ -30,8 +30,6 @@ class ImageController extends Controller
         $image = str_replace('data:image/png;base64,','',$image);
         $image = str_replace(' ','+',$image);
         Storage::disk('public')->put($filename,base64_decode($image));
-
-
         return ApiResponse::success($filename,200);
 
     }

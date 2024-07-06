@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('rate')->default(0);
             $table->integer('progress')->default(0);
             $table->timestamps();
+            $table->integer('average')->default(0);
             $table->boolean('favored')->default(false);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('roadmap_id')->references('id')->on('roadmaps')->onDelete('cascade');
