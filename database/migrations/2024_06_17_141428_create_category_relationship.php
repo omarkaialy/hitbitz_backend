@@ -15,6 +15,7 @@ return new class  extends Migration{
         Schema::table('users', function (Blueprint $table) {
             // Assuming categories table is already created, you can define foreign key constraint
             $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
+            $table->foreignId('roadmap_admin_id')->nullable()->constrained('roadmaps')->onDelete('set null');
         });
     }
 

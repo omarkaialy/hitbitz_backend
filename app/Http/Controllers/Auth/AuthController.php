@@ -59,11 +59,12 @@ class AuthController extends Controller
             ]);
 
             $token = Auth::attempt(['user_name' => $req->userName, 'password' => $req->password]);
+
             if ($token) {
-                $user = User::query()->where('id',Auth::user()->id)->with(['roles','category','categoryAdmin'])->get()->first();
+                $user = User::query()->where('id',Auth::user()->id)->with(['roadmapAdmin','roles','category','categoryAdmin'])->get()->first();
 
                 $user->token = $token;
-                if ($user->hasRole('super_admin') || $user->hasRole('admin')) {
+                if ($user->hasRole('super_admin') || $user->hasRole('admin')|| $user->hasRole('roadmap_admin')) {
                     $user->save();
                     return ApiResponse::success(UserResource::make($user)->includeToken(true),
                         200);

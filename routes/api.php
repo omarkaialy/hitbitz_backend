@@ -33,7 +33,10 @@ Route::group([], function () {
     Route::post('upload64Image', [ImageController::class, 'uploadImage64']);
 });
 Route::group(['prefix' => 'admin'], function () {
-    Route::post('/send-notification', [\App\Http\Controllers\NotificationController::class, 'store']);
+    Route::get('/cvs', [\App\Http\Controllers\CvController::class, 'index']);
+    Route::post('/cvs', [\App\Http\Controllers\CvController::class, 'store']);
+    Route::post('/cvs/{cv}/accept', [\App\Http\Controllers\CvController::class, 'accept']);
+    Route::post('/cvs/{cv}/reject', [\App\Http\Controllers\CvController::class, 'reject']);
 
     Route::post('/validate', [AuthController::class, 'validateToken'])->middleware('auth');
     Route::post('/verify', [AuthController::class, 'verifyEmail']);
@@ -41,6 +44,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/forgetPassword', [AuthController::class, 'forgetPassword']);
     Route::post('/resetPassword', [AuthController::class, 'resetPassword']);
 
+    Route::post('/send-notification', [\App\Http\Controllers\NotificationController::class, 'store']);
     Route::post('/login', [AuthController::class, 'loginAdmin']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/roadmaps/store', [RoadmapController::class, 'store']);

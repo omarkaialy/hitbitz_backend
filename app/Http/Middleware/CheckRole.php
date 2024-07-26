@@ -5,10 +5,11 @@ namespace App\Http\Middleware;
 use App\Helpers\ApiResponse;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckRole
+class CheckRole extends Middleware
 {
     /**
      * Handle an incoming request.

@@ -17,6 +17,9 @@ class Category extends Model implements HasMedia
         'type' => CategoryTypeEnum::class
     ];
 
+    public function cvs(){
+        return $this->morphMany(cv::class,'categorize');
+    }
     public function parent()
     {
         return $this->belongsTo(Category::class, 'parent_id')->whereNotNull('type');

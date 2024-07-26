@@ -103,7 +103,9 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail, HasMe
     {
         return $this->belongsToMany(Notification::class)->withTimestamps();
     }
-
+    public function roadmapAdmin(){
+        return $this->belongsTo(Roadmap::class,);
+    }
     public function userRoadmap()
     {
         return $this->

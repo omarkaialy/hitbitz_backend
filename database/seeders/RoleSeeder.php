@@ -19,6 +19,9 @@ class RoleSeeder extends Seeder
         $admin = new Role();
         $admin->name = 'admin';
         $admin->save();
+        $roadmapAdmin = new Role();
+        $roadmapAdmin->name = 'roadmap_admin';
+        $roadmapAdmin->save();
         $userRole = new Role();
         $userRole->name = 'user';
         $userRole->save();
