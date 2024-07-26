@@ -13,8 +13,10 @@ return new class extends Migration {
             $table->unsignedBigInteger('quiz_id');
             $table->boolean('completed')->default(false);
             // Add other fields for tracking user quiz progress
-            $table->integer('score')->nullable();
 
+            $table->integer('score')->nullable();
+            $table->integer('failed')->default(0);
+            $table->integer('success')->default(0);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

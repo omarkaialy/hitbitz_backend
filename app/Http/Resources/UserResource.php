@@ -43,7 +43,10 @@ class UserResource extends JsonResource
                 return $this->roles->first()->name;
             });
         }
-        $data['roadmapAdmin']= RoadmapResource::make($this->whenLoaded('roadmapAdmin'));
+        $data['totalRoadmaps']=$this->userRoadmap->count();
+        $data['totalFails']= $this->quizzes->sum('pivot.failed');
+        $data['totalSuccess']= $this->quizzes->sum('pivot.success');
+        $data['roadmapAdmin'] = RoadmapResource::make($this->whenLoaded('roadmapAdmin'));
         $data['categoryAdmin'] = CategoryResource::make($this->whenLoaded('categoryAdmin'));
         $data['category'] = CategoryResource::make($this->whenLoaded('category'));
         $data['profileImage'] = MediaResource::make($this, 'profile');

@@ -85,19 +85,27 @@ class QuizController extends Controller
             $user = Auth::user();
             $quizUser = $quiz->users()->where('user_id', $user->id)->first();
 
-            // Check if the user has completed the quiz before
-            if ($quizUser && $quizUser->pivot->completed == 1) {
-                return ApiResponse::success(QuizResource::make($quizUser)->withUserPivot(), 200, 'You Completed This Quiz Before');
-            }
 
             // Attach or update the pivot record
             $score = $validatedData['score'];
             $completed = $score >= $quiz->required_degree ? 1 : 0;
 
+            // Check if the user has completed the quiz before
+            if ($quizUser ) {
+                if ($completed == 0) {
+                    $quiz->users()->updateExistingPivot($user->id, ['failed' => $quizUser->pivot->failed + 1]);
+                } else {
+                    $quiz->users()->updateExistingPivot($user->id, ['success' => $quizUser->pivot->success + 1]);
+                }if($quizUser->pivot->completed == 1)
+                return ApiResponse::success(QuizResource::make($quizUser)->withUserPivot(), 200, 'You Completed This Quiz Before');
+            }
             if ($quizUser) {
                 $quiz->users()->updateExistingPivot($user->id, compact('score', 'completed'));
+
             } else {
-                $quiz->users()->attach($user->id, compact('score', 'completed'));
+                $success = $completed == 1;
+                $failed = $completed == 0;
+                $quiz->users()->attach($user->id, compact('score', 'completed', 'failed', 'success'));
             }
 
             // Update user roadmap
