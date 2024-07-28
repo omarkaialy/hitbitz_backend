@@ -25,7 +25,7 @@ class AuthController extends Controller
     public function validateToken(Request $request)
     {
         try {
-            return ApiResponse::success(UserResource::make( Auth::user()->load(['category','categoryAdmin','roles']))->includeToken(true),200);
+            return ApiResponse::success(UserResource::make( Auth::user()->load(['category','categoryAdmin','roadmapAdmin','roles']))->includeToken(true),200);
         }catch (\Exception $e){
             ApiResponse::error($e->getCode(), $e->getMessage());
         } }

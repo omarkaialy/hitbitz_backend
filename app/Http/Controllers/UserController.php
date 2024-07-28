@@ -130,11 +130,12 @@ class UserController extends Controller
     public function show(User $id)
     {
         if ($id->id != Auth::user()->id) {
-            $user = User::query()->where('id', '=', $id->id)->get()->first();
+            $user = User::query()->where('id', '=', $id->id)->with('category')->get()->first();
             return ApiResponse::success(UserResource::make($user), 200);
 
         } else {
-            $profile = User::query()->where('id', '=', $id->id)->get()->first();
+            $profile = User::query()->where('id', '=', $id->id)  ->with(['quizzes', 'userRoadmap', 'referrer', 'referees','category'])
+            ->get()->first();
 
             return ApiResponse::success(UserResource::make($profile), 200);
 
@@ -146,7 +147,7 @@ class UserController extends Controller
     {
         return ApiResponse::success(UserResource::make(User::query()
             ->where('id', Auth::user()->id)
-            ->with(['quizzes', 'userRoadmap', 'referrer', 'referees'])
+            ->with(['quizzes', 'userRoadmap', 'referrer', 'referees','category'])
             ->get()->first()), 200);
     }
 
