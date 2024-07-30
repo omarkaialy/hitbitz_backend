@@ -130,7 +130,7 @@ class UserController extends Controller
     public function show(User $id)
     {
         if ($id->id != Auth::user()->id) {
-            $user = User::query()->where('id', '=', $id->id)->with('category')->get()->first();
+            $user = User::query()->where('id', '=', $id->id)->with(['category','userRoadmap'])->get()->first();
             return ApiResponse::success(UserResource::make($user), 200);
 
         } else {
