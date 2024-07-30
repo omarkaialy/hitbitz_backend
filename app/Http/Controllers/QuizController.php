@@ -90,6 +90,7 @@ class QuizController extends Controller
             $score = $validatedData['score'];
             $completed = $score >= $quiz->required_degree ? 1 : 0;
 
+
             // Check if the user has completed the quiz before
             if ($quizUser ) {
                 if ($completed == 0) {
@@ -98,6 +99,10 @@ class QuizController extends Controller
                     $quiz->users()->updateExistingPivot($user->id, ['success' => $quizUser->pivot->success + 1]);
                 }if($quizUser->pivot->completed == 1)
                 return ApiResponse::success(QuizResource::make($quizUser)->withUserPivot(), 200, 'You Completed This Quiz Before');
+            }
+            if(\request()->challengeId) {
+                $controller =new ChallengeController();
+                $controller->updateDegrees(\request()->score,\request()->challengeId);
             }
             if ($quizUser) {
                 $quiz->users()->updateExistingPivot($user->id, compact('score', 'completed'));
@@ -178,6 +183,7 @@ class QuizController extends Controller
                 ->withWhereHas('userRoadmap', function ($query) {
                     $query->where('user_id', Auth::user()->id);
                 })->get()->first();
+
             return ApiResponse::success(RoadmapResource::make($response), 200);
         } catch (\Throwable $exception) {
             return ApiResponse::error(419, $exception->getMessage(), [$exception->getMessage()]);

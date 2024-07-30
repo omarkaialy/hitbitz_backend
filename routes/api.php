@@ -3,6 +3,7 @@
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ChallengeController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\LevelDetailController;
@@ -94,6 +95,8 @@ Route::group(['prefix' => 'user'], function () {
 });
 
 Route::group(['prefix' => 'user'], function () {
+    Route::post('/challenge',[ChallengeController::class,'store'])->middleware('auth');
+    Route::get('/challenges',[ChallengeController::class,'index'])->middleware('auth');
     Route::get('/certificate', [QuizController::class, 'certificate']);
 
     Route::get('/quizzes/createCustomQuiz', [QuizController::class, 'createCustomQuiz'])->middleware('auth');

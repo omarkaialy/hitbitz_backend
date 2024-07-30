@@ -67,7 +67,13 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail, HasMe
             ->withPivot(['completed', 'score', 'id','success','failed'])
             ->withTimestamps();
     }
+    public function hostedChallenges() {
+        return $this->hasMany(Challenge::class, 'host_user_id');
 
+    }
+    public function guestedChallenges(){
+        return $this->hasMany(Challenge::class,'guest_user_id');
+    }
     public function friends()
     {
         return $this->belongsToMany(User::class, 'friendships', 'user_id', 'friend_id')
