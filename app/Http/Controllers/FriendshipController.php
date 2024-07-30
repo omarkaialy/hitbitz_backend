@@ -30,13 +30,15 @@ class FriendshipController extends Controller
             $friend = User::find($friendId);
             // Check if the user is trying to send a friend request to themselves
             if ($user->id == $friendId) {
-                return ApiResponse::error(400, 'You cannot send a friend request to yourself.');
+                return ApiResponse::error(400, 'you_cannot_send_a_friend_request_to_yourself
+');
             }
             // Check if the friendship already exists
 
             // Check if the friend request has already been sent
             if ($user->sentFriendRequests()->where('friend_id', $friendId)->exists()) {
-                return ApiResponse::error(400, 'You Sent Before');
+                return ApiResponse::error(400, 'you_sent_before
+');
             }
 
             // Attach friend to user's sent friend requests

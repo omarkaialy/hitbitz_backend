@@ -41,7 +41,7 @@ class AuthController extends Controller
 
                 return ApiResponse::success(UserResource::make($user)->includeToken(true), 200);
             } else {
-                return ApiResponse::error(401, 'Please Check Your Password And Try Again');
+                return ApiResponse::error(401, 'please_check_your_password_and_try_again');
             }
         } catch (Throwable$e) {
 
@@ -69,10 +69,12 @@ class AuthController extends Controller
                     return ApiResponse::success(UserResource::make($user)->includeToken(true),
                         200);
                 } else {
-                    return ApiResponse::error(401, 'Please Check Your Password And Try Again');
+                    return ApiResponse::error(401, 'please_check_your_password_and_try_again
+');
                 }
             } else {
-                return ApiResponse::error(401, 'Please Check Your Password And Try Again');
+                return ApiResponse::error(401, 'please_check_your_password_and_try_again
+');
             }
 
 
