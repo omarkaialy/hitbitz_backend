@@ -93,38 +93,38 @@ class LevelSeeder extends Seeder
                 "requirements" => ["requirements 1", "requirements 2"]
             ],
                    [
-                "name" => "القسم النظري",
+                "name" => "Theoretical Section",
                 "roadmapId" => 25,
                 "description" => "level",
                 "requirements" => ["requirements 1", "requirements 2"]
             ],
             [
-                "name" => "القسم العملي",
+                "name" => "Practical Section",
                 "roadmapId" => 25,
                 "description" => "level",
                 "requirements" => ["requirements 1", "requirements 2"]
             ],
 
             [
-                "name" => "اسئلة الدورات",
+                "name" => "Courses Questions",
                 "roadmapId" => 25,
                 "description" => "level",
                 "requirements" => ["requirements 1", "requirements 2"]
             ],
             [
-                "name" => "القسم النظري",
+                "name" => "Theoretical Section",
                 "roadmapId" => 26,
                 "description" => "level",
                 "requirements" => ["requirements 1", "requirements 2"]
             ],
             [
-                "name" => "القسم العملي",
+                "name" => "Practical Section",
                 "roadmapId" => 26,
                 "description" => "level",
                 "requirements" => ["requirements 1", "requirements 2"]
             ],
            [
-                "name" => "اسئلة الدورات",
+                "name" =>  "Courses Questions",
                 "roadmapId" => 26,
                 "description" => "level",
                 "requirements" => ["requirements 1", "requirements 2"]
@@ -173,14 +173,14 @@ class LevelSeeder extends Seeder
             ['name' => 'B1 Grammar', 'description' => 'Refine Italian grammar skills at the B1 level', 'level_id' => 9, 'duration' => random_int(1,50)],
             ['name' => 'B2 Vocabulary', 'description' => 'Acquire advanced Italian vocabulary and idiomatic expressions at the B2 level', 'level_id' => 10, 'duration' => random_int(1,50)],
             ['name' => 'B2 Grammar', 'description' => 'Master complex Italian grammar structures and usage at the B2 level', 'level_id' => 10, 'duration' => random_int(1,50)],
-           ['name' => 'الفصل 1', 'description' => 'الفصل الاول من مادة نظم الشتغيل 1', 'level_id' => 14, 'duration' => random_int(1,50)],
-            ['name' => 'الفصل 2', 'description' => 'الفصل الثاني من مادة نظم الشتغيل 1', 'level_id' => 14, 'duration' => random_int(1,50)],
-            ['name' => 'الفصل 3', 'description' => 'الفصل الثالث من مادة نظم الشتغيل 1', 'level_id' => 14, 'duration' => random_int(1,50)],
-            ['name' => 'الفصل 4', 'description' => 'الفصل الرابع من مادة نظم الشتغيل 1', 'level_id' => 14, 'duration' => random_int(1,50)],
-            ['name' => 'الفصل 5', 'description' => 'الفصل الخامس من مادة نظم الشتغيل 1', 'level_id' => 14, 'duration' => random_int(1,50)],
-           ['name' => 'الفصل 12', 'description' => 'الفصل الثاني عشر من مادة نظم الشتغيل 1', 'level_id' => 17, 'duration' => random_int(1,50)],
-            ['name' => 'الفصل 13', 'description' => 'الفصل الثالث عشر من مادة نظم الشتغيل 1', 'level_id' => 17, 'duration' => random_int(1,50)],
-            ['name' => 'الفصل 14', 'description' => 'الفصل الرابع عشر من مادة نظم الشتغيل 1', 'level_id' => 17, 'duration' => random_int(1,50)],
+           ['name' => 'Chapter #1', 'description' => 'الفصل الاول من مادة نظم الشتغيل 1', 'level_id' => 14, 'duration' => random_int(1,50)],
+            ['name' => 'Chapter #2', 'description' => 'الفصل الثاني من مادة نظم الشتغيل 1', 'level_id' => 14, 'duration' => random_int(1,50)],
+            ['name' => 'Chapter #3', 'description' => 'الفصل الثالث من مادة نظم الشتغيل 1', 'level_id' => 14, 'duration' => random_int(1,50)],
+            ['name' => 'Chapter #4', 'description' => 'الفصل الرابع من مادة نظم الشتغيل 1', 'level_id' => 14, 'duration' => random_int(1,50)],
+            ['name' => 'Chapter #5', 'description' => 'الفصل الخامس من مادة نظم الشتغيل 1', 'level_id' => 14, 'duration' => random_int(1,50)],
+           ['name' => 'Chapter #12', 'description' => 'الفصل الثاني عشر من مادة نظم الشتغيل 1', 'level_id' => 17, 'duration' => random_int(1,50)],
+            ['name' => 'Chapter #13', 'description' => 'الفصل الثالث عشر من مادة نظم الشتغيل 1', 'level_id' => 17, 'duration' => random_int(1,50)],
+            ['name' => 'Chapter #14', 'description' => 'الفصل الرابع عشر من مادة نظم الشتغيل 1', 'level_id' => 17, 'duration' => random_int(1,50)],
 
 
             ];

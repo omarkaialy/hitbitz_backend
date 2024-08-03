@@ -49,23 +49,23 @@ class QuizSeeder extends Seeder
             ['name' => 'B2 Vocabulary Quiz', 'step_id' => 30, 'description' => 'Test your vocabulary knowledge at the B2 level in Italian', 'required_degree' => 75],
             ['name' => 'B2 Grammar Quiz', 'step_id' => 31, 'description' => 'Quiz to assess your understanding of grammar at the B2 level in Italian', 'required_degree' => 80],
 // Quizzes for capitolu 1
-            ['name' => 'الاختبار الاول', 'step_id' => 32, 'description' => 'Test your vocabulary knowledge at the B2 level in Italian', 'required_degree' => 75],
-            ['name' => 'الاختبار الثاني', 'step_id' => 32, 'description' => 'Quiz to assess your understanding of grammar at the B2 level in Italian', 'required_degree' => 80],
+            ['name' => 'Quiz #1', 'step_id' => 32, 'description' => 'Test your vocabulary knowledge at the B2 level in Italian', 'required_degree' => 75],
+            ['name' => 'Quiz #2', 'step_id' => 32, 'description' => 'Quiz to assess your understanding of grammar at the B2 level in Italian', 'required_degree' => 80],
 // Quizzes for capitolu 2
-            ['name' => 'الاختبار الاول', 'step_id' => 33, 'description' => 'Test your vocabulary knowledge at the B2 level in Italian', 'required_degree' => 75],
-            ['name' => 'الاختبار الثاني', 'step_id' => 33, 'description' => 'Quiz to assess your understanding of grammar at the B2 level in Italian', 'required_degree' => 80],
+            ['name' => 'Quiz #1', 'step_id' => 33, 'description' => 'Test your vocabulary knowledge at the B2 level in Italian', 'required_degree' => 75],
+            ['name' => 'Quiz #2', 'step_id' => 33, 'description' => 'Quiz to assess your understanding of grammar at the B2 level in Italian', 'required_degree' => 80],
 // Quizzes for capitolu 3
-            ['name' => 'الاختبار الاول', 'step_id' => 34, 'description' => 'Test your vocabulary knowledge at the B2 level in Italian', 'required_degree' => 75],
-            ['name' => 'الاختبار الثاني', 'step_id' => 34, 'description' => 'Quiz to assess your understanding of grammar at the B2 level in Italian', 'required_degree' => 80],
+            ['name' => 'Quiz #1', 'step_id' => 34, 'description' => 'Test your vocabulary knowledge at the B2 level in Italian', 'required_degree' => 75],
+            ['name' => 'Quiz #2', 'step_id' => 34, 'description' => 'Quiz to assess your understanding of grammar at the B2 level in Italian', 'required_degree' => 80],
 // Quizzes for capitolu 1
-            ['name' => 'الاختبار الاول', 'step_id' => 37, 'description' => 'Test your vocabulary knowledge at the B2 level in Italian', 'required_degree' => 75],
-            ['name' => 'الاختبار الثاني', 'step_id' => 37, 'description' => 'Quiz to assess your understanding of grammar at the B2 level in Italian', 'required_degree' => 80],
+            ['name' => 'Quiz #1', 'step_id' => 37, 'description' => 'Test your vocabulary knowledge at the B2 level in Italian', 'required_degree' => 75],
+            ['name' => 'Quiz #2', 'step_id' => 37, 'description' => 'Quiz to assess your understanding of grammar at the B2 level in Italian', 'required_degree' => 80],
 // Quizzes for capitolu 2
-            ['name' => 'الاختبار الاول', 'step_id' => 38, 'description' => 'Test your vocabulary knowledge at the B2 level in Italian', 'required_degree' => 75],
-            ['name' => 'الاختبار الثاني', 'step_id' => 38, 'description' => 'Quiz to assess your understanding of grammar at the B2 level in Italian', 'required_degree' => 80],
+            ['name' => 'Quiz #1', 'step_id' => 38, 'description' => 'Test your vocabulary knowledge at the B2 level in Italian', 'required_degree' => 75],
+            ['name' => 'Quiz #2', 'step_id' => 38, 'description' => 'Quiz to assess your understanding of grammar at the B2 level in Italian', 'required_degree' => 80],
 // Quizzes for capitolu 3
-            ['name' => 'الاختبار الاول', 'step_id' => 39, 'description' => 'Test your vocabulary knowledge at the B2 level in Italian', 'required_degree' => 75],
-            ['name' => 'الاختبار الثاني', 'step_id' => 39, 'description' => 'Quiz to assess your understanding of grammar at the B2 level in Italian', 'required_degree' => 80],
+            ['name' => 'Quiz #1', 'step_id' => 39, 'description' => 'Test your vocabulary knowledge at the B2 level in Italian', 'required_degree' => 75],
+            ['name' => 'Quiz #2', 'step_id' => 39, 'description' => 'Quiz to assess your understanding of grammar at the B2 level in Italian', 'required_degree' => 80],
 
 
 
