@@ -14,84 +14,70 @@ class QuizSeeder extends Seeder
      */
     public function run(): void
     {
-        $quiz = new Quiz();
-        $quiz->name = 'Column Quiz';
-        $quiz->order = 1;
-        $quiz->levelDetail()->associate(1);
-        $quiz->description = 'A "column widget" typically refers to a feature or component in a software application or website that organizes content into columns. This can be particularly useful for displaying information in a structured and visually appealing manner, especially when dealing with large amounts of data or varied types of content.';
-        $quiz->required_degree = 60;
-        $quiz->save();
-        $titles = ["Which of the following is a benefit of using a column widget in a website or application?",
-            "What is the purpose of responsive design in a column widget?",
-            "How can a column widget improve user experience in navigating content?",
+        $quizzes = [
+            // Quizzes for Level 1 steps
+            ['name' => 'Introduction to Flutter Quiz', 'step_id' => 11, 'description' => 'Test your knowledge about the basics of Flutter', 'required_degree' => 70],
+            ['name' => 'Flutter Widgets Quiz', 'step_id' => 11, 'description' => 'Check your knowledge about Flutter widgets and layout system', 'required_degree' => 75],
+            ['name' => 'Stateless vs Stateful Widgets Quiz', 'step_id' => 11, 'description' => 'Quiz to distinguish between stateless and stateful widgets in Flutter', 'required_degree' => 80],
+            ['name' => 'Building UIs Quiz', 'step_id' => 11, 'description' => 'Evaluate your skills in building user interfaces using Flutter widgets', 'required_degree' => 70],
+
+            // Quizzes for Level 2 steps
+            ['name' => 'Navigation and Routing Quiz', 'step_id' => 12, 'description' => 'Test your understanding of navigation and routing in Flutter', 'required_degree' => 75],
+            ['name' => 'State Management Quiz', 'step_id' => 12, 'description' => 'Quiz to assess your grasp on state management techniques in Flutter', 'required_degree' => 80],
+            ['name' => 'Working with APIs Quiz', 'step_id' => 12, 'description' => 'Evaluate your ability to integrate APIs and handle asynchronous data in Flutter', 'required_degree' => 70],
+            ['name' => 'Local Data Storage Quiz', 'step_id' => 12, 'description' => 'Assess your knowledge about storing and retrieving data locally in Flutter apps', 'required_degree' => 65],
+
+            // Quizzes for Level 3 steps
+            ['name' => 'Advanced UI Design Quiz', 'step_id' => 13, 'description' => 'Test your expertise in advanced UI design concepts and animations in Flutter', 'required_degree' => 85],
+            ['name' => 'Platform-Specific Features Quiz', 'step_id' => 13, 'description' => 'Quiz to evaluate your understanding of implementing platform-specific features in Flutter', 'required_degree' => 80],
+            ['name' => 'Testing and Debugging Quiz', 'step_id' => 13, 'description' => 'Assess your skills in writing tests and debugging Flutter applications', 'required_degree' => 75],
+            ['name' => 'Deployment and Publishing Quiz', 'step_id' => 13, 'description' => 'Quiz to test your knowledge about deploying Flutter apps to app stores and publishing them', 'required_degree' => 70],
+
+            // Quizzes for A1 level steps
+            ['name' => 'A1 Vocabulary Quiz', 'step_id' => 24, 'description' => 'Test your vocabulary knowledge at the A1 level in Italian', 'required_degree' => 60],
+            ['name' => 'A1 Grammar Quiz', 'step_id' => 25, 'description' => 'Quiz to assess your understanding of grammar at the A1 level in Italian', 'required_degree' => 65],
+
+            // Quizzes for A2 level steps
+            ['name' => 'A2 Vocabulary Quiz', 'step_id' => 26, 'description' => 'Test your vocabulary knowledge at the A2 level in Italian', 'required_degree' => 65],
+            ['name' => 'A2 Grammar Quiz', 'step_id' => 27, 'description' => 'Quiz to assess your understanding of grammar at the A2 level in Italian', 'required_degree' => 70],
+
+            // Quizzes for B1 level steps
+            ['name' => 'B1 Vocabulary Quiz', 'step_id' => 28, 'description' => 'Test your vocabulary knowledge at the B1 level in Italian', 'required_degree' => 70],
+            ['name' => 'B1 Grammar Quiz', 'step_id' => 29, 'description' => 'Quiz to assess your understanding of grammar at the B1 level in Italian', 'required_degree' => 75],
+
+            // Quizzes for B2 level steps
+            ['name' => 'B2 Vocabulary Quiz', 'step_id' => 30, 'description' => 'Test your vocabulary knowledge at the B2 level in Italian', 'required_degree' => 75],
+            ['name' => 'B2 Grammar Quiz', 'step_id' => 31, 'description' => 'Quiz to assess your understanding of grammar at the B2 level in Italian', 'required_degree' => 80],
+// Quizzes for capitolu 1
+            ['name' => 'الاختبار الاول', 'step_id' => 32, 'description' => 'Test your vocabulary knowledge at the B2 level in Italian', 'required_degree' => 75],
+            ['name' => 'الاختبار الثاني', 'step_id' => 32, 'description' => 'Quiz to assess your understanding of grammar at the B2 level in Italian', 'required_degree' => 80],
+// Quizzes for capitolu 2
+            ['name' => 'الاختبار الاول', 'step_id' => 33, 'description' => 'Test your vocabulary knowledge at the B2 level in Italian', 'required_degree' => 75],
+            ['name' => 'الاختبار الثاني', 'step_id' => 33, 'description' => 'Quiz to assess your understanding of grammar at the B2 level in Italian', 'required_degree' => 80],
+// Quizzes for capitolu 3
+            ['name' => 'الاختبار الاول', 'step_id' => 34, 'description' => 'Test your vocabulary knowledge at the B2 level in Italian', 'required_degree' => 75],
+            ['name' => 'الاختبار الثاني', 'step_id' => 34, 'description' => 'Quiz to assess your understanding of grammar at the B2 level in Italian', 'required_degree' => 80],
+// Quizzes for capitolu 1
+            ['name' => 'الاختبار الاول', 'step_id' => 37, 'description' => 'Test your vocabulary knowledge at the B2 level in Italian', 'required_degree' => 75],
+            ['name' => 'الاختبار الثاني', 'step_id' => 37, 'description' => 'Quiz to assess your understanding of grammar at the B2 level in Italian', 'required_degree' => 80],
+// Quizzes for capitolu 2
+            ['name' => 'الاختبار الاول', 'step_id' => 38, 'description' => 'Test your vocabulary knowledge at the B2 level in Italian', 'required_degree' => 75],
+            ['name' => 'الاختبار الثاني', 'step_id' => 38, 'description' => 'Quiz to assess your understanding of grammar at the B2 level in Italian', 'required_degree' => 80],
+// Quizzes for capitolu 3
+            ['name' => 'الاختبار الاول', 'step_id' => 39, 'description' => 'Test your vocabulary knowledge at the B2 level in Italian', 'required_degree' => 75],
+            ['name' => 'الاختبار الثاني', 'step_id' => 39, 'description' => 'Quiz to assess your understanding of grammar at the B2 level in Italian', 'required_degree' => 80],
+
+
+
         ];
-        $answers = [[
-            ['title' => 'Improved content organization', 'correct' => true],
-            ['title' => 'Enhanced user engagement', 'correct' => true],
-            ['title' => 'Efficient use of screen space', 'correct' => true],
-            ['title' => 'Render Text On Screens', 'correct' => false],
-        ],
-            [
-                ['title' => 'To ensure compatibility with older browsers', 'correct' => false],
-                ['title' => 'To adapt to different screen sizes and devices', 'correct' => true],
-                ['title' => 'To increase server performance', 'correct' => false],
-                ['title' => 'To provide additional security measures', 'correct' => false],
-            ], [
-                ['title' => 'By organizing content into distinct sections', 'correct' => true],
-                ['title' => 'By displaying all content in a single column', 'correct' => false],
-                ['title' => 'By removing all images and multimedia content', 'correct' => false],
-                ['title' => 'By decreasing font size to fit more content', 'correct' => false],
-            ],];
-        $index = 0;
-        foreach ($titles as $title) {
-            $question = new Question();
-            $question->title = $title;
-            $question->quiz()->associate(1);
-            $question->type = 2;
-            $question->save();
-            foreach ($answers[$index] as $answer) {
-                Choices::create(['question_id' => $question->id,
-                    'title' => $answer['title'],
-                    'correct' => $answer['correct']
-                ]);
-            }
-            $index = $index + 1;
+
+        foreach ($quizzes as $quiz) {
+            $quiz1 = new Quiz();
+            $quiz1->name = $quiz['name'];
+            $quiz1->level_detail_id = $quiz['step_id'];
+            $quiz1->description = $quiz['description'];
+            $quiz1->required_degree = $quiz['required_degree'];
+            $quiz1->save();
         }
-        $answers = [
-            ['title' => 'Column(', 'correct' => true],
-            ['title' => 'children:[', 'correct' => false],
-            ['title' => 'Text(\'data\',)', 'correct' => false],
-            ['title' => '],),', 'correct' => false],
-        ];
-
-        $question = new Question();
-        $question->title = 'Order This Statements To Make A Correct Widget';
-        $question->type = 5;
-        $question->quiz()->associate(1);
-        $question->save();
-        $index = 0;
-        foreach ($answers as $answer) {
-            Choices::create(['question_id' => $question->id,
-                'title' => $answer['title'],
-                'order' => $index + 1
-            ]);
-            $index = $index + 1;
-        }
-
-        $question = new Question();
-        $question->title = "True or False: A column widget is only useful for displaying text content.";
-        $question->type = 1;
-        $question->isTrue = true;
-        $question->quiz()->associate(1);
-        $question->save();
-
-        $question = new Question();
-        $question->title = "...... Widget Is Used To Layout Other Widgets Vertically";
-        $question->type = 4;
-        $question->quiz()->associate(1);
-        $question->save();
-        Choices::create(['title'=>'column','question_id'=>$question->id]);
-        Quiz::factory()->count(10)->create();
-        Question::factory()->count(50)->create();
     }
 }
