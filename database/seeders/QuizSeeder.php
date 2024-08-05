@@ -19,7 +19,6 @@ class QuizSeeder extends Seeder
             ['name' => 'Introduction to Flutter Quiz', 'step_id' => 11, 'description' => 'Test your knowledge about the basics of Flutter', 'required_degree' => 70],
             ['name' => 'Flutter Widgets Quiz', 'step_id' => 11, 'description' => 'Check your knowledge about Flutter widgets and layout system', 'required_degree' => 75],
             ['name' => 'Stateless vs Stateful Widgets Quiz', 'step_id' => 11, 'description' => 'Quiz to distinguish between stateless and stateful widgets in Flutter', 'required_degree' => 80],
-            ['name' => 'Building UIs Quiz', 'step_id' => 11, 'description' => 'Evaluate your skills in building user interfaces using Flutter widgets', 'required_degree' => 70],
 
             // Quizzes for Level 2 steps
             ['name' => 'Navigation and Routing Quiz', 'step_id' => 12, 'description' => 'Test your understanding of navigation and routing in Flutter', 'required_degree' => 75],
