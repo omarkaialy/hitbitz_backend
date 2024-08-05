@@ -45,7 +45,7 @@ class UserResource extends JsonResource
             });
         }
         if($this->userRoadmap)
-        $data['roadmaps']=RoadmapResource::collection($this->userRoadmap);
+        $data['roadmaps']=RoadmapResource::collection($this->userRoadmap->load('userRoadmap'));
 
         $data['totalRoadmaps']=$this->userRoadmap->count();
         $data['totalFails']= $this->quizzes->sum('pivot.failed');

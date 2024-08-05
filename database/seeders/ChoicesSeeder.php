@@ -1304,8 +1304,8 @@ class ChoicesSeeder extends Seeder
             $question1->title = $question['title'];
             $question1->quiz()->associate($question['quiz_id']);
             $question1->type = $question['type'];
-            if (isset($question['isTrue'])) {
-                $question1->isTrue = $question['isTrue'];
+            if (isset($question['is_true'])) {
+                $question1->isTrue = $question['is_true'];
             }
 
             $question1->save();

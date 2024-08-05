@@ -37,8 +37,7 @@ class FriendshipController extends Controller
 
             // Check if the friend request has already been sent
             if ($user->sentFriendRequests()->where('friend_id', $friendId)->exists()) {
-                return ApiResponse::error(400, 'you_sent_before
-');
+                return ApiResponse::error(400, 'you_sent_before');
             }
 
             // Attach friend to user's sent friend requests
