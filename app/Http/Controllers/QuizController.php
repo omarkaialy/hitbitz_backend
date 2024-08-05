@@ -346,7 +346,7 @@ class QuizController extends Controller
             $path = $fullName . $roadmap . 'certificate.png';
             $set = Browsershot::html($certificate)->windowSize(640, 360)->paperSize(640, 360)->fit(Fit::Fill)->base64Screenshot();
             Storage::disk('local')->put('public/' . $path, base64_decode($set));
-            return response()->json(asset('storage/' . $path));
+            return ApiResponse::success(['image'=>asset('storage/' . $path)],200);
 
         } catch (\Exception $e) {
             return $e->getMessage();

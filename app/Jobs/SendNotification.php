@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Http\Controllers\PushNotificationController;
+use App\Models\Notification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -26,6 +27,7 @@ class SendNotification implements ShouldQueue
      */
     public function __construct($title, $body, $topicOrToken, $imageUrl = null,$type)
     {
+
         $this->title = $title;
         $this->body = $body;
         $this->topicOrToken = $topicOrToken;
@@ -41,6 +43,13 @@ class SendNotification implements ShouldQueue
      */
     public function handle()
     {
+        $notifi = new Notification();
+        $notifi->title = $this->title;
+        $notifi->body = $this->body;
+        $notifi->topic = $this->topic ?? 'all';
+        $notifi->image = $this->imageUrl;
+        $notifi->save();
+
         $controller = new PushNotificationController();
      return    $controller->sendPushNotification($this->title, $this->body, $this->topicOrToken,$this->imageUrl,$this->type);
 

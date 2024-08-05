@@ -31,15 +31,8 @@ class NotificationController extends Controller
     public function store(Request $request)
     {
         try {
-            $notifi = new Notification();
-            $notifi->title = $request->title;
-            $notifi->body = $request->body;
-            $notifi->topic = $request->topic ?? 'all';
-            $notifi->image = $request->imageUrl;
-            $request->topic;
-            $notifi->save();
             SendNotification::dispatch($request->title, $request->body,$request->topic ?? 'all',$request->imageUrl ,  'topic');
-            return ApiResponse::success(NotificationResource::make($notifi), 200);
+            return ApiResponse::success(null, 200);
         } catch (\Exception $e) {
             return ApiResponse::error($e->getCode(), $e->getMessage());
         }
