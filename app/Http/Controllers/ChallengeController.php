@@ -86,7 +86,7 @@ class ChallengeController extends Controller
         // Update the challenge
         $challenge->save();
         // Check if both degrees have been set
-        if ($challenge->host_degree !== null && $challenge->guest_degree !== null) {
+        if ($challenge->host_degree !== 0 && $challenge->guest_degree !== 0) {
             $guest=User::find($challenge->guest_user_id);
             $host=User::find($challenge->host_user_id);
 

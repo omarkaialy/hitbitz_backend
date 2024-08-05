@@ -92,17 +92,18 @@ class QuizController extends Controller
 
 
             // Check if the user has completed the quiz before
-            if ($quizUser ) {
+            if ($quizUser) {
                 if ($completed == 0) {
                     $quiz->users()->updateExistingPivot($user->id, ['failed' => $quizUser->pivot->failed + 1]);
                 } else {
                     $quiz->users()->updateExistingPivot($user->id, ['success' => $quizUser->pivot->success + 1]);
-                }if($quizUser->pivot->completed == 1)
-                return ApiResponse::success(QuizResource::make($quizUser)->withUserPivot(), 200, 'You Completed This Quiz Before');
+                }
+                if ($quizUser->pivot->completed == 1)
+                    return ApiResponse::success(QuizResource::make($quizUser)->withUserPivot(), 200, 'You Completed This Quiz Before');
             }
-            if(\request()->challengeId) {
-                $controller =new ChallengeController();
-                $controller->updateDegrees(\request()->score,\request()->challengeId);
+            if (\request()->challengeId) {
+                $controller = new ChallengeController();
+                $controller->updateDegrees(\request()->score, \request()->challengeId);
             }
             if ($quizUser) {
                 $quiz->users()->updateExistingPivot($user->id, compact('score', 'completed'));
@@ -233,22 +234,33 @@ class QuizController extends Controller
                 $steps = LevelDetail::query()->whereIn('level_id', $levels)->select('id')->get();
                 $quizzes = QueryBuilder::for(Quiz::query()->whereIn('level_detail_id', $steps->pluck('id')))->paginate();
                 $questions = Question::query()->with('choices')->whereIn('quiz_id', $quizzes->pluck('id'))->get();
-                return ApiResponse::success(QuestionResource::collection($questions->random($request->num ?? 20),), 200);
+
+                if ($questions->isEmpty()) {
+                    return ApiResponse::error(419, 'Sorry We Can\'t Handle Your Request Now');
+                }                return ApiResponse::success(QuestionResource::collection($questions->random($request->num ?? 5),), 200);
             }
             if ($request->levelId) {
                 $steps = LevelDetail::query()->where('level_id', $request->levelId)->select('id')->get();
                 $quizzes = QueryBuilder::for(Quiz::query()->whereIn('level_detail_id', $steps->pluck('id')))->paginate();
                 $questions = Question::query()->with('choices')->whereIn('quiz_id', $quizzes->pluck('id'))->get();
 
-                return ApiResponse::success(QuestionResource::collection($questions->random($request->num ?? 15)), 200);
+
+                if ($questions->isEmpty()) {
+                    return ApiResponse::error(419, 'Sorry We Can\'t Handle Your Request Now');
+                }
+                return ApiResponse::success(QuestionResource::collection($questions->random($request->num ?? 5)), 200);
             }
             if ($request->stepId) {
                 $quizzes = QueryBuilder::for(Quiz::query()->where('level_detail_id', $request->stepId))->paginate();
                 $questions = Question::query()->with('choices')->whereIn('quiz_id', $quizzes->pluck('id'))->get();
-                return ApiResponse::success(QuestionResource::collection($questions->random($request->num ?? 10)), 200);
+
+                if ($questions->isEmpty()) {
+                    return ApiResponse::error(419, 'Sorry We Can\'t Handle Your Request Now');
+                }
+                return ApiResponse::success(QuestionResource::collection($questions->random($request->num ?? 5)), 200);
 
             }
-
+            return 'success';
 
         } catch (\Exception $e) {
         }
