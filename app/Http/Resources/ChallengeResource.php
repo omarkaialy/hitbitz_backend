@@ -21,7 +21,7 @@ class ChallengeResource extends JsonResource
             'guest' => UserResource::make($this->guestUser),
 
             'quiz' => QuizResource::make($this->quiz)->withQuestions()
-            , 'is_winner' => $this->winner_user_id == Auth::user()->id
+            , 'is_winner' => $this->winner_user_id==null?null :$this->winner_user_id == Auth::user()->id
         ];
     }
 }

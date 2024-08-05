@@ -8,7 +8,7 @@
 
 <body style="object-fit: cover;  width: 640px; height: 360px ">
 <div style=" position: relative;
-    display: inline-block;"><img src="https://i.ibb.co/xJfD2DD/Certificate.png" alt="Certificate Image"
+    display: inline-block;"><img src="http://localhost/Certificate.png" alt="Certificate Image"
                                  style=" object-fit: cover;width: 100%; " >
     <div style="  position: absolute;
     width: 100%;
