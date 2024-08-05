@@ -19,16 +19,20 @@ use Throwable;
 
 class AuthController extends Controller
 
-{    public function __construct(protected ImageService $imageService)
-{}
+{
+    public function __construct(protected ImageService $imageService)
+    {
+    }
+
     //
     public function validateToken(Request $request)
     {
         try {
-            return ApiResponse::success(UserResource::make( Auth::user()->load(['category','categoryAdmin','roadmapAdmin','roles']))->includeToken(true),200);
-        }catch (\Exception $e){
+            return ApiResponse::success(UserResource::make(Auth::user()->load(['category', 'categoryAdmin', 'roadmapAdmin', 'roles']))->includeToken(true), 200);
+        } catch (\Exception $e) {
             ApiResponse::error($e->getCode(), $e->getMessage());
-        } }
+        }
+    }
 
     public function login(LoginRequest $req)
     {
@@ -53,7 +57,7 @@ class AuthController extends Controller
 
     public function loginAdmin(Request $req)
     {
-          try {
+        try {
             $req->validate(['userName' => 'required|alpha_dash|min:4|exists:users,user_name',
                 'password' => 'required|min:6'
             ]);
@@ -61,10 +65,10 @@ class AuthController extends Controller
             $token = Auth::attempt(['user_name' => $req->userName, 'password' => $req->password]);
 
             if ($token) {
-                $user = User::query()->where('id',Auth::user()->id)->with(['roadmapAdmin','roles','category','categoryAdmin'])->get()->first();
+                $user = User::query()->where('id', Auth::user()->id)->with(['roadmapAdmin', 'roles', 'category', 'categoryAdmin'])->get()->first();
 
                 $user->token = $token;
-                if ($user->hasRole('super_admin') || $user->hasRole('admin')|| $user->hasRole('roadmap_admin')) {
+                if ($user->hasRole('super_admin') || $user->hasRole('admin') || $user->hasRole('roadmap_admin')) {
                     $user->save();
                     return ApiResponse::success(UserResource::make($user)->includeToken(true),
                         200);

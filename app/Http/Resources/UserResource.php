@@ -29,6 +29,7 @@ class UserResource extends JsonResource
             'full_name' => $this->full_name,
             'birth_date' => $this->birth_date,
             'email' => $this->email,
+            'status' => $this->status,
 
         ];
         if (isset($this->referrer_id)) {

@@ -210,6 +210,11 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    public function blockAdmin(Request $request,User $user){
+    $user->status = $user->status==1?0:1;
+    $user->save();
+    return ApiResponse::success($user,200);
+    }
     public function update(Request $request, User $user)
     {
         try {

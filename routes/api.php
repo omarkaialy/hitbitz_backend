@@ -77,6 +77,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/suggestions', [\App\Http\Controllers\SuggestionController::class, 'index']);
     Route::post('/createAdmin', [UserController::class, 'createAdmin']);
     Route::post('/updateAdmin/{user}', [UserController::class, 'update']);
+    Route::post('/blockAdmin/{user}', [UserController::class, 'blockAdmin']);
     Route::get('/admins', [UserController::class, 'indexAdmins']);
     Route::get('/admins/{user}', [UserController::class, 'showAdmin']);
 
