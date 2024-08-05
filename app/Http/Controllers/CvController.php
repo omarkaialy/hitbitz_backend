@@ -54,8 +54,8 @@ class CvController extends Controller
             $cv->categorize()->associate($category);
         }
         $cv->save();
-        if ($request->hasFile('file')) {
-            $mediaModel = $cv->addMediaFromRequest('file')->toMediaCollection('cvs');
+        if ($request->hasFile('cv')) {
+            $mediaModel = $cv->addMediaFromRequest('cv')->toMediaCollection('cvs');
             $mediaModel->save();
         }
 

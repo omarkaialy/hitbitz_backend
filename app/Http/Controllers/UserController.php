@@ -42,7 +42,7 @@ class UserController extends Controller
 
     public function indexAdmins()
     {
-        $users = QueryBuilder::for(User::role('admin')->with('categoryAdmin'))->paginate();
+        $users = QueryBuilder::for(User::role(['admin','roadmap_admin'])->with('categoryAdmin'))->paginate();
         return ApiResponse::success(UserResource::collection($users->items()), 200);
     }
 

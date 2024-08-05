@@ -33,10 +33,10 @@ class ChoicesSeeder extends Seeder
             [
                 'title' => 'Which programming language is used for Flutter app development?',
                 'answers' => ([
-                    ['title' => 'Java', 'is_correct' => 0],
-                    ['title' => 'Dart', 'is_correct' => 1],
-                    ['title' => 'Swift', 'is_correct' => 0],
-                    ['title' => 'Kotlin', 'is_correct' => 0]
+                    ['title' => 'Java', 'isCorrect' => 0],
+                    ['title' => 'Dart', 'isCorrect' => 1],
+                    ['title' => 'Swift', 'isCorrect' => 0],
+                    ['title' => 'Kotlin', 'isCorrect' => 0]
                 ]),
                 'type' => 2, // multiple choice question
                 'quiz_id' => 1
@@ -44,10 +44,10 @@ class ChoicesSeeder extends Seeder
             [
                 'title' => 'What is Flutter?',
                 'answers' => ([
-                    ['title' => 'A programming language', 'is_correct' => 0],
-                    ['title' => 'A UI framework', 'is_correct' => 1],
-                    ['title' => 'An operating system', 'is_correct' => 0],
-                    ['title' => 'A database management system', 'is_correct' => 0]
+                    ['title' => 'A programming language', 'isCorrect' => 0],
+                    ['title' => 'A UI framework', 'isCorrect' => 1],
+                    ['title' => 'An operating system', 'isCorrect' => 0],
+                    ['title' => 'A database management system', 'isCorrect' => 0]
                 ]),
                 'type' => 2, // multiple choice question
                 'quiz_id' => 1
@@ -56,10 +56,10 @@ class ChoicesSeeder extends Seeder
             [
                 'title' => 'Flutter uses the _____ programming language.',
                 'answers' => ([
-                    ['title' => 'dart', 'is_correct' => 1],
-                    ['title' => 'dar', 'is_correct' => 1],
-                    ['title' => 'dat', 'is_correct' => 1],
-                    ['title' => 'drt', 'is_correct' => 1]
+                    ['title' => 'dart', 'isCorrect' => 1],
+                    ['title' => 'dar', 'isCorrect' => 1],
+                    ['title' => 'dat', 'isCorrect' => 1],
+                    ['title' => 'drt', 'isCorrect' => 1]
                 ]),
                 'type' => 4, // fill gap question
                 'quiz_id' => 1
@@ -67,10 +67,10 @@ class ChoicesSeeder extends Seeder
             [
                 'title' => 'Flutter is developed by _____.',
                 'answers' => ([
-                    ['title' => 'google', 'is_correct' => 1],
-                    ['title' => 'gogle', 'is_correct' => 1],
-                    ['title' => 'googl', 'is_correct' => 1],
-                    ['title' => 'googe', 'is_correct' => 1]
+                    ['title' => 'google', 'isCorrect' => 1],
+                    ['title' => 'gogle', 'isCorrect' => 1],
+                    ['title' => 'googl', 'isCorrect' => 1],
+                    ['title' => 'googe', 'isCorrect' => 1]
                 ]),
                 'type' => 4, // fill gap question
                 'quiz_id' => 1
@@ -95,10 +95,10 @@ class ChoicesSeeder extends Seeder
             [
                 'title' => 'Which widget is used to build a row of child widgets?',
                 'answers' => ([
-                    ['title' => 'Column', 'is_correct' => 0],
-                    ['title' => 'Stack', 'is_correct' => 0],
-                    ['title' => 'Row', 'is_correct' => 1],
-                    ['title' => 'Container', 'is_correct' => 0]
+                    ['title' => 'Column', 'isCorrect' => 0],
+                    ['title' => 'Stack', 'isCorrect' => 0],
+                    ['title' => 'Row', 'isCorrect' => 1],
+                    ['title' => 'Container', 'isCorrect' => 0]
                 ]),
                 'type' => 2, // multiple choice question
                 'quiz_id' => 2
@@ -106,10 +106,10 @@ class ChoicesSeeder extends Seeder
             [
                 'title' => 'Which widget is used to display text in Flutter?',
                 'answers' => ([
-                    ['title' => 'Text', 'is_correct' => 1],
-                    ['title' => 'Image', 'is_correct' => 0],
-                    ['title' => 'Button', 'is_correct' => 0],
-                    ['title' => 'ListView', 'is_correct' => 0]
+                    ['title' => 'Text', 'isCorrect' => 1],
+                    ['title' => 'Image', 'isCorrect' => 0],
+                    ['title' => 'Button', 'isCorrect' => 0],
+                    ['title' => 'ListView', 'isCorrect' => 0]
                 ]),
                 'type' => 2, // multiple choice question
                 'quiz_id' => 2
@@ -118,10 +118,10 @@ class ChoicesSeeder extends Seeder
             [
                 'title' => 'To create a container with a red background color, you can use the ______ widget.',
                 'answers' => [
-                    ['title' => 'container', 'is_correct' => 1],
-                    ['title' => 'containe', 'is_correct' => 1],
-                    ['title' => 'containr', 'is_correct' => 1],
-                    ['title' => 'conainer', 'is_correct' => 1]
+                    ['title' => 'container', 'isCorrect' => 1],
+                    ['title' => 'containe', 'isCorrect' => 1],
+                    ['title' => 'containr', 'isCorrect' => 1],
+                    ['title' => 'conainer', 'isCorrect' => 1]
                 ],
                 'type' => 4, // fill gap question
                 'quiz_id' => 2
@@ -129,10 +129,10 @@ class ChoicesSeeder extends Seeder
             [
                 'title' => 'The Flutter widget used for handling user gestures is called ______.',
                 'answers' => ([
-                    ['title' => 'gesturedetecto', 'is_correct' => 1],
-                    ['title' => 'gesturdetector', 'is_correct' => 1],
-                    ['title' => 'inkwell', 'is_correct' => 1],
-                    ['title' => 'inkwel', 'is_correct' => 1]
+                    ['title' => 'gesturedetecto', 'isCorrect' => 1],
+                    ['title' => 'gesturdetector', 'isCorrect' => 1],
+                    ['title' => 'inkwell', 'isCorrect' => 1],
+                    ['title' => 'inkwel', 'isCorrect' => 1]
                 ]),
                 'type' => 4, // fill gap question
                 'quiz_id' => 2
@@ -157,10 +157,10 @@ class ChoicesSeeder extends Seeder
             [
                 'title' => 'Which widget is an example of a stateless widget in Flutter?',
                 'answers' => ([
-                    ['title' => 'TextField', 'is_correct' => 1],
-                    ['title' => 'Checkbox', 'is_correct' => 0],
-                    ['title' => 'DropdownButton', 'is_correct' => 0],
-                    ['title' => 'Slider', 'is_correct' => 0]
+                    ['title' => 'TextField', 'isCorrect' => 1],
+                    ['title' => 'Checkbox', 'isCorrect' => 0],
+                    ['title' => 'DropdownButton', 'isCorrect' => 0],
+                    ['title' => 'Slider', 'isCorrect' => 0]
                 ]),
                 'type' => 2, // multiple choice question
                 'quiz_id' => 3
@@ -168,10 +168,10 @@ class ChoicesSeeder extends Seeder
             [
                 'title' => 'Which widget is an example of a stateful widget in Flutter?',
                 'answers' => ([
-                    ['title' => 'IconButton', 'is_correct' => 0],
-                    ['title' => 'ListView', 'is_correct' => 1],
-                    ['title' => 'FlatButton', 'is_correct' => 0],
-                    ['title' => 'Scaffold', 'is_correct' => 0]
+                    ['title' => 'IconButton', 'isCorrect' => 0],
+                    ['title' => 'ListView', 'isCorrect' => 1],
+                    ['title' => 'FlatButton', 'isCorrect' => 0],
+                    ['title' => 'Scaffold', 'isCorrect' => 0]
                 ]),
                 'type' => 2, // multiple choice question
                 'quiz_id' => 3
