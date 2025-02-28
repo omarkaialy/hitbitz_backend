@@ -11,15 +11,10 @@ return new class extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('quiz_id');
-            $table->string('type');
+            $table->integer('type');
             $table->string('title');
-            $table->json('choices'); // Or you can create separate choice tables
-            $table->text('hint')->nullable();
-            $table->string('correct_answer');
-            // Add a field for image or file path
-
+            $table->integer('isTrue')->nullable();
             $table->timestamps();
-
             $table->foreign('quiz_id')->references('id')->on('quizzes')->onDelete('cascade');
         });
     }

@@ -1,8 +1,10 @@
 /.phpunit.cache
 /node_modules
 /public/build
+/public
 /public/hot
 /public/storage
+/public/media
 /storage/*.key
 /vendor
 .env
